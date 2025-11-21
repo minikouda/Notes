@@ -1,0 +1,207 @@
+% TeX root = ../Main.tex
+
+% First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
+\section[Lecture 9 (Sept 25) -- {\it Properties of MLE}]{Lecture 9}
+
+\subsection{MLE}
+
+Under two additional conditions (also satisfied by \textit{iid} observations under 
+exponential family models), we have
+
+\begin{itemize}
+    \item \textbf{Asymptotic normality:} 
+    \[
+    \sqrt{n}(\hat{\theta}_n - \theta) \;\; \overset{D}{\longrightarrow} \;\; N\!\left(0,\tfrac{1}{I(\theta)}\right)
+    \]
+
+    \item \textbf{Asymptotic efficiency:} 
+    If $\tilde{\theta}_n$ is some other estimator such that 
+    \[
+    \sqrt{n}(\tilde{\theta}_n - \theta) \;\; \overset{D}{\longrightarrow} \;\; N(0, v(\theta)),
+    \]
+    then $v(\theta) \geq 1/I(\theta)$ for all $\theta$.
+\end{itemize}
+
+Asymptotic normality still holds replacing $I(\theta)$ by $I(\hat{\theta})$, that is,
+\[
+\frac{\sqrt{n}(\hat{\theta}_n - \theta)}{\sqrt{1/I(\hat{\theta}_n)}} 
+\;\; \overset{D}{\longrightarrow} \;\; N(0,1)
+\]
+
+We can use this to construct approximate $1-\alpha$ confidence intervals for $\theta$.
+
+Rmk.:
+In terms of exponential families, 
+MLE has such nice properties because it is a solution to the likelihood equation, which involves the sufficient statistic.
+$$
+f(x;\theta) = h(x)c(\theta)\exp\{\sum_{i=1}^k \eta_i(\theta)T_i(x)\}
+$$
+i.e. the estimator is sufficient. The Rao-Blackwell theorem says that if we have an unbiased estimator, then conditioning on a sufficient statistic will give us a better (lower variance) unbiased estimator. MLE is already a function of the sufficient statistic, so it is already optimal in this sense.
+
+\begin{proof}
+$$
+\dfrac{\partial \ell}{\partial \theta} \mid_{\theta^*} = 0
+$$
+\begin{tb}[CLT]
+Let $X_1, X_2, \ldots, X_n$ be iid with mean $\mu$ and variance $\sigma^2 < \infty$. Then
+\[
+\frac{\sqrt{n}(\bar{X}_n - \mu)}{\sigma} \;\; \overset{D}{\longrightarrow} \;\; N(0,1)
+\]
+\end{tb}
+\begin{tb}[Slutsky's theorem]
+If $X_n \overset{D}{\longrightarrow} X$ and $Y_n \overset{P}{\longrightarrow} c$, then 
+$X_n Y_n \overset{D}{\longrightarrow} cX$.
+
+\end{tb}
+
+$$
+\dfrac{\partial}{\partial \theta} \ell_n(\hat{\theta}_n) - \dfrac{\partial}{\partial \theta} \ell_n(\theta^*) \overset{Taylor}{\approx} (\hat{\theta}_n - \theta^*) \dfrac{\partial^2}{\partial \theta^2} \ell_n(\theta^*)
+$$
+$$
+\sqrt{n}(\hat{\theta}_n - \theta^*) \approx -\dfrac{\sqrt{n}\frac{\partial}{\partial \theta} \ell_n(\theta^*)}{\frac{\partial^2}{\partial \theta^2} \ell_n(\theta^*)}
+$$
+
+The expectation of the numerator:
+\[
+\mathbb{E}\left[\sum_{i=1}^n \frac{\partial}{\partial \theta} \log f(X_i;\theta^*)\right] = 0
+\]
+The variance of the numerator:
+\[
+\text{Var}\left[\frac{\partial}{\partial \theta} \log f(X_i;\theta^*)\right] = I(\theta^*)
+\]
+
+Rearrange the terms:
+\[
+ \dfrac{\dfrac{\sqrt{n}}{n}\sum\limits_{i=1}^n \frac{\partial}{\partial \theta} \log f(X_i;\theta^*)}{\sqrt{I(\theta^*)}} \;\; \overset{D}{\longrightarrow} \;\; N(0,1)
+\]
+And
+\[
+\dfrac{n \sqrt{ I(\theta^*)}}{- \dfrac{\partial^2}{\partial \theta^2} \ell_n(\theta^*)} \;\; \overset{P}{\longrightarrow}  \dfrac{1}{\sqrt{I(\theta^*)}}
+\]
+
+Thus by Slutsky's theorem,
+\[
+\sqrt{n}(\hat{\theta}_n - \theta^*) \;\; \overset{D}{\longrightarrow} \;\; N\left(0, \frac{1}{I(\theta^*)}\right)
+\]
+
+\end{proof}
+
+
+
+\begin{eb}[$X \iid Exp(\theta)$]
+Suppose $X_1, \ldots, X_n \iid Exp(\theta)$, with pdf
+$$
+f(x;\theta) = \theta e^{-\theta x}, \quad x > 0, \theta > 0
+$$
+The log-likelihood is
+$$
+\ell(\theta) = n \log \theta - \theta \sum_{i= 1}^n x_i
+$$
+The score function is
+$$
+S(\theta) = \frac{\partial}{\partial \theta} \ell(\theta) = \frac{n}{\theta} - \sum_{i=1}^n x_i
+$$
+
+The MLE is
+$$
+\hat{\theta} = \frac{n}{\sum_{i=1}^n x_i} = \frac{1}{\bar{X}_n}
+$$
+The Fisher information is
+$$
+I_n(\theta) = -\mathbb{E}\left[\frac{\partial^2}{\partial \theta^2} \ell(\theta)\right] = \frac{n}{\theta^2}
+$$
+Thus by asymptotic normality,
+$$
+\sqrt{n}(\hat{\theta} - \theta) \;\; \overset{D}{\longrightarrow} \;\; N\left(0, \theta^2\right)
+$$
+So an approximate $1-\alpha$ confidence interval for $\theta$ is
+$$
+\hat{\theta} \pm z_{\alpha/2} \frac{\hat{\theta}}{\sqrt{n}}
+$$
+
+\end{eb}
+
+\subsection{Fisher Information Matrix} % (fold)
+
+For a $p$-dimensional parameter $\theta = (\theta_1, \ldots, \theta_p)$, the Fisher information matrix is
+$$
+I(\theta)_n = \mathbb{E}\left[\left(\frac{\partial}{\partial \theta} \ell(\theta)\right)\left(\frac{\partial}{\partial \theta} \ell(\theta)\right)^T\right] = -\mathbb{E}\left[\frac{\partial^2}{\partial \theta \partial \theta^T} \ell(\theta)\right]
+$$
+\[
+= \begin{pmatrix}
+I_{1,1}(\theta) & I_{1,2}(\theta) & \cdots & I_{1,p}(\theta) \\
+I_{2,1}(\theta) & I_{2,2}(\theta) & \cdots & I_{2,p}(\theta) \\
+\vdots & \vdots & \ddots & \vdots \\
+I_{p,1}(\theta) & I_{p,2}(\theta) & \cdots & I_{p,p}(\theta)
+\end{pmatrix}
+\]
+
+Let $\hat{\theta}_n$ be the (vector valued) MLE, and let 
+$J_n(\theta) = I_n(\theta)^{-1}$. Then under appropriate regularity conditions and for large $n$,
+
+\[
+\sqrt{n}(\hat{\theta}_n - \theta) \;\overset{D}{\approx}\; N(0,\, nJ_n(\theta))
+\]
+
+We can use the marginal densities 
+\[
+\hat{\theta}_{n,i} \;\overset{D}{\approx}\; N\big(\theta_i,\, J_{n,ii}(\theta)\big)
+\]
+to construct 95\% confidence intervals for the individual parameters.
+
+\begin{eb}[$X \sim N(\mu, \sigma^2)$]
+The log-likelihood is
+$$
+\ell(\mu, \sigma^2) = -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^n (x_i - \mu)^2
+$$
+The information matrix is
+$$
+I(\mu, \sigma^2)_n = \begin{pmatrix}
+\frac{n}{\sigma^2} & 0 \\
+0 & \frac{n}{2\sigma^4}
+\end{pmatrix}
+$$
+The inverse is
+$$
+J(\mu, \sigma^2)_n = \begin{pmatrix}
+\frac{\sigma^2}{n} & 0 \\
+0 & \frac{2\sigma^4}{n}
+\end{pmatrix}
+$$
+Thus by asymptotic normality,
+$$
+\sqrt{n}\begin{pmatrix}
+\hat{\mu} - \mu \\
+\hat{\sigma}^2 - \sigma^2
+\end{pmatrix} \;\; \overset{D}{\longrightarrow} \;\; N\left(\mathbf{0}, \begin{pmatrix}
+\sigma^2 & 0 \\
+0 & 2\sigma^4
+\end{pmatrix}\right)
+$$
+
+\end{eb}
+
+
+\subsection{Multiparameter Delta method} % (fold)
+\label{sub:Multiparameter Delta method}
+
+
+Suppose $\tau = g(\theta_1, \ldots, \theta_k)$ is a differentiable function.  
+Let $\nabla g = \left( \frac{\partial}{\partial \theta_1} g(\theta), \ldots, \frac{\partial}{\partial \theta_k} g(\theta) \right)'$ be the gradient of $g$, and suppose that $\nabla g$ evaluated at $\hat{\theta}_n$ is not zero. Then
+
+\[
+\frac{\hat{\tau}_n - \tau}{\hat{s}e(\hat{\tau}_n)} \xrightarrow{D} N(0,1)
+\]
+
+where
+
+\[
+\hat{s}e(\hat{\tau}_n) = 
+\sqrt{ (\nabla\hat{ g})' J_n(\hat{\theta}_n) (\nabla\hat{ g}) }
+\]
+
+and $\nabla\hat{ g}$ is $\nabla g$ evaluated at $\hat{\theta}_n$.
+
+\textbf{Example:} Continuing the example on page 19, let $\tau = g(\mu, \sigma) = \mu / \sigma$.  
+Find the MLE for $\tau$ and its limiting normal distribution.
+% subsection Multiparameter Delta method (end)

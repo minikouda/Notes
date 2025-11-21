@@ -1,0 +1,168 @@
+% TeX root = ../Main.tex
+
+% First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
+\section[Lecture 11 (Oct 7) -- {\it Hypothesis Testing}]{Lecture 11}
+
+
+\subsection{Hypothesis Testing}
+
+A \textbf{statistical hypothesis} is a statement about a parameter (or a statistical functional in nonparametric models).
+
+A hypothesis test partitions the parameter space $\Theta$ into two disjoint sets $\Theta_0$ and $\Theta_1$, and produces a decision rule for choosing between
+
+\[
+H_0 : \theta \in \Theta_0 \quad \text{and} \quad H_1 : \theta \in \Theta_1
+\]
+
+$H_0$ is called the \emph{null hypothesis} and $H_1$ is the \emph{alternative hypothesis}.  
+The possible choices are:
+
+\begin{itemize}
+  \item Reject $H_0$
+  \item Fail to reject $H_0$
+\end{itemize}
+
+We evaluate a test using its \emph{power function}, defined as
+\[
+\beta(\theta) = P_\theta(X \in R)
+\]
+
+
+
+
+\subsection{Reject Rule} % (fold)
+\label{sub:Reject Rule}
+
+The decision of whether to reject $H_0$ is determined by whether the sample $X = (X_1, \ldots, X_n)$ falls into a predefined rejection region $R$.
+
+Usually, the rejection region has the form
+\[
+R = \{ (x_1, \ldots, x_n) : T(x_1, \ldots, x_n) > c \}
+\]
+where $T$ is called a \emph{test statistic} and $c$ is the \emph{critical value}.
+
+The idea is to construct $R$ so that the probability of the data falling into it when $H_0$ is true is small.
+
+And the test size would be $\alpha = \sup_{\theta \in \Theta_0} \beta(\theta)$.
+
+
+\begin{eb}[Normal distribution]
+Suppose $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$, and let $\hat{\mu}_n$ and $\hat{\sigma}^2_n$ be the MLEs.  
+If $H_0: \mu = 0$, one test statistic we might consider is $T = |\hat{\mu}_n / \hat{\sigma}_n|$, reasoning that if $H_0$ is true, $T$ will tend to be small.
+
+
+\bigskip
+Let $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$, with $\sigma^2$ known.  
+
+Test $H_0 : \mu = 0$ vs $H_1 : \mu \ne 0$ using rejection region
+\[
+R = \{ (x_1, \ldots, x_n) : |\bar{X}_n| > c \}
+\]
+Find and plot $\beta(\mu)$.
+
+\begin{solution}
+\[
+\beta(\mu) = P_{\mu} (\|(\bar{X}_n) > c|) = P_{\mu} \left( \bar{X}_n > c \right) + P_{\mu} \left( \bar{X}_n < -c \right)
+\]
+\[
+= 1 - \Phi(\sqrt{n}(c - \mu)) + \Phi(\sqrt{n}(-c - \mu))
+\]
+\end{solution}
+
+\begin{lstlisting}[language=python]
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import norm
+# parameters
+n = 10
+sigma = 1
+c = 1
+x = np.linspace(-5, 5, 400)
+f = 1 - norm.cdf(np.sqrt(n) * (c-x) / sigma) + norm.cdf(-np.sqrt(n) * (c+x) / sigma)
+
+\end{lstlisting}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{images/reject.png}
+\caption{}
+\label{fig:}
+\end{figure}
+\end{eb}
+% subsection Reject Rule (end)
+
+\begin{eb}
+Let $X \sim \text{Bin}(5, p)$. Test $H_0 : p \le \frac{1}{2}$ vs $H_1 : p > \frac{1}{2}$ with rejection regions:
+\[
+R_1 = \{x : x = 5\}, \quad R_2 = \{x : x \ge 3\}
+\]
+Plot and compare $\beta_1(p)$ and $\beta_2(p)$.
+
+\begin{solution}
+For a rejection region $R$, the power function is
+\[
+\beta(p) = P_p(X \in R).
+\]
+
+\noindent
+For $R_1 = \{x = 5\}$,
+\[
+\beta_1(p) = P_p(X = 5) = {5 \choose 5} p^5 (1-p)^0 = p^5.
+\]
+
+\noindent
+For $R_2 = \{x \ge 3\}$,
+\[
+\begin{aligned}
+\beta_2(p) 
+&= P_p(X \ge 3)
+= \sum_{x=3}^{5} {5 \choose x} p^x (1-p)^{5-x} \\[6pt]
+&= 10p^3(1-p)^2 + 5p^4(1-p) + p^5.
+\end{aligned}
+\]
+
+\noindent
+At $p = \tfrac{1}{2}$, the test sizes are
+\[
+\alpha_1 = \beta_1(0.5) = (0.5)^5 = 0.03125, 
+\quad
+\alpha_2 = \beta_2(0.5) = P_{0.5}(X \ge 3) = 0.5.
+\]
+
+Hence $R_2$ gives higher power but also much larger size.
+\end{solution}
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/2R.png}
+\caption{}
+\label{fig:}
+\end{figure}
+\end{eb}
+
+
+\subsection{Size and Level of a Test}
+
+A test has \emph{level} $\alpha$ if its size $\le \alpha$, where
+\[
+\alpha = \sup_{\theta \in \Theta_0} \beta(\theta)
+\]
+
+That is, $\alpha$ is the largest probability of rejecting $H_0$ when $H_0$ is true (Type I error).
+
+\[
+\begin{array}{c|c|c}
+ & \text{Fail to reject } H_0 & \text{Reject } H_0 \\ \hline
+H_0 \text{ true} & \text{Correct} & \text{Type I error} \\
+H_1 \text{ true} & \text{Type II error} & \text{Correct}
+\end{array}
+\]
+
+\[
+P_{H_0 \text{\ True}}(\text{Type I error}) = P_{H_0}(X\in R) \le \sup_{\theta \in \Theta_0} \beta(\theta) = \alpha
+\]
+\[
+P_{H_1 \text{\ True}}(\text{Type II error}) = P_{H_1}(X \notin R) = 1 - P_{H_1}(X \in R) \le 1 - \inf_{\theta \in \Theta_1} \beta(\theta)
+\]
+

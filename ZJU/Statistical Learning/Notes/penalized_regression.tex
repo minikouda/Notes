@@ -1,0 +1,55 @@
+
+\section{Penalized Linear Regression}
+
+\subsection{Ridge Regression}
+$$
+\hat \beta_{ridge} = \underset{\beta}{\arg\min} \left( (y-X\beta)^T(y-X\beta) + \lambda \beta^T\beta \right)
+$$
+
+An equivalent formulation is:
+
+\begin{align*}
+\hat \beta_{ridge} = \underset{\beta}{\arg\min} \left( RSS \right) \\
+subject \ to \ ||\beta||_2^2 \leq s
+\end{align*}
+
+$$
+\hat \beta_{ridge} = (X^TX + \lambda I)^{-1}X^Ty
+$$
+\begin{center}
+    Bias of the ridge estimator $:= E(\hat \beta_{ridge}) - \beta = \dfrac{-\lambda}{1+\lambda}\beta_j= $ is biased.
+\end{center}
+
+ $$
+ Var = \dfrac{1}{(1+\lambda)^{2} }Var(\hat \beta ^{OLS}_j)
+ $$
+ 
+
+If we have orthogonal features, i.e., $X^TX = I$, then: 
+$$
+\hat \beta_{ridge} = \dfrac{1}{1+\lambda} X^Ty
+$$
+
+Understanding the shrinkage effect of ridge regression: P20 of the slides.
+
+\subsection{Lasso} % (fold)
+\label{sub:Lasso}
+$$
+\hat \beta_{lasso} = \underset{\beta}{\arg\min} \left( (y-X\beta)^T(y-X\beta) + \lambda ||\beta||_1 \right)
+$$
+If we have orthogonal features, i.e., $X^TX = I$, then:
+$$
+  \hat \beta^{lasso} = 
+\begin{cases}
+    \hat \beta^{ols} - \lambda/2  &\text{ if } ols > \lambda / 2\\
+    \hat \beta^{ols} + \lambda/2  &\text{ if } ols < -\lambda / 2\\
+    0 & \text{ if } -\lambda / 2 \leq ols \leq \lambda / 2
+\end{cases}
+$$
+The equivalent formulation is similar to ridge regression with L1 norm.
+
+Elastic Net:
+$$
+\hat \beta_{elastic} = \underset{\beta}{\arg\min} \left( (y-X\beta)^T(y-X\beta) + \lambda_1 ||\beta||_1 + \lambda_2 ||\beta||_2^2 \right)
+$$
+% subsection Lasso (end)

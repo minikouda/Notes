@@ -1,0 +1,41 @@
+
+\section{KNN}
+
+Training data $\mathcal{D}_n = \{x_i,y_i\}^n_{i=1} $, Estimate the $\hat{f}$
+
+KNN: $\hat{y} = \dfrac{1}{k} \sum\limits_{x_i \in N_k(x_0)}^{~} y_i $
+
+Bias and Variance trade-off:
+
+For a target point $ x_0 $ \textbf{Bias} of which: $f(x_0) - E_{D_n} \hat f(x_0)$ 
+
+The variance of the estimator: $\mathbb{E}_{D_n}[(\hat{y} - \mathbb{E}_{D_n} [\hat{y}])^2] = \mathbb{E}[[ \hat{f}(x_0) - \mathbb{E}\hat f(x_0) ]^2]$
+
+\vspace{1em}
+
+\begin{align*}
+& \operatorname{Err}\left(x_{0}\right) \\
+= &\ \mathbb{E}_{\mathcal{D}_{n}, Y_{0}}\left[\left(Y_{0}-\widehat{f}\left(x_{0}\right)\right)^{2}\right] \\
+= &\ \mathbb{E}_{\mathcal{D}_{n}, Y_{0}}\Bigg[\Bigg(Y_{0}-f\left(x_{0}\right) + f\left(x_{0}\right)-\ \mathbb{E}_{\mathcal{D}_{n}}\widehat{f}\left(x_{0}\right) + \mathbb{E}_{\mathcal{D}_{n}}\widehat{f}\left(x_{0}\right) - \widehat{f}\left(x_{0}\right)\Bigg)^{2}\Bigg] \\
+= &\ \ldots \\
+= &\ \underbrace{\mathbb{E}_{Y_{0}}\left[\left(Y_{0}-f\left(x_{0}\right)\right)^{2}\right]}_{\text{\color{orange}Irreducible Error}} 
+   + \underbrace{\left(f\left(x_{0}\right)-\mathbb{E}_{\mathcal{D}_{n}}\widehat{f}\left(x_{0}\right)\right)^{2}}_{\text{\color{orange}Bias$^{2}$}} + \underbrace{\mathbb{E}_{\mathcal{D}_{n}}\left[\left(\widehat{f}\left(x_{0}\right)-\mathbb{E}_{\mathcal{D}_{n}}\widehat{f}\left(x_{0}\right)\right)^{2}\right]}_{\text{\color{orange}Variance}}
+\end{align*}
+
+Irreducible error cannot be reduced.
+
+Model complexity: \textbf{1/k}
+
+Degree of freedom: $df(\hat f) = \dfrac{1}{\sigma^2} \sum\limits_{i=1}^{n} Cov(\hat Y_i,Y_i)$
+
+1-NN df = n, k-NN df = n/k, n-NN df = 1
+
+?? Why the variance of 1-nn is $\sigma^2$
+\vspace{2em}
+
+Drawbacks:
+\begin{itemize}
+    \item Need to store all training data
+    \item Distance measure may affect the performance
+    \item Curse of dimensionality: As the number of features increases, the volume of the space increases exponentially, making the data sparse. This sparsity makes it difficult to find neighbors that are close enough to be relevant.
+\end{itemize}

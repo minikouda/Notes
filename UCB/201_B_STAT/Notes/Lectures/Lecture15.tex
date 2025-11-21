@@ -1,0 +1,90 @@
+% TeX root = ../Main.tex
+
+% First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
+\section[Lecture 15 (Oct 30) -- {\it TBD}]{Lecture 15}
+
+\subsection{Hypothesis Testing using Posterior Odds}
+
+
+\begin{eb}
+
+Albert Pujols (St. Louis Cardinals) and Ichiro Suzuki (Seattle Mariners) had very similar batting averages over 2001--2010. Their career totals in that span were:
+\[
+\text{Pujols: } n=5146 \text{ at-bats, } x=1717 \text{ hits}\qquad
+\text{Suzuki: } m=6099 \text{ at-bats, } y=2030 \text{ hits.}
+\]
+Let $X\mid p_1\sim \mathrm{Bin}(n,p_1)$ be Pujols' hits and $Y\mid p_2\sim \mathrm{Bin}(m,p_2)$ be Suzuki's hits. We wish to assess evidence for/against the hypothesis $p_{\text{Pujols}}=p_{\text{Suzuki}}$.
+
+Under $H_1:\;p_1\neq p_2$, assign independent priors $p_1\sim \mathrm{Unif}(0,1)$ and $p_2\sim \mathrm{Unif}(0,1)$. Compute the marginal likelihood
+\[
+f(x,y\mid H_1)=\int_0^1\!\int_0^1 f(x\mid p_1)\,f(y\mid p_2)\,dp_1\,dp_2.
+\]
+
+\end{eb}
+\begin{solution}
+With $X\mid p_1\sim\mathrm{Bin}(n,p_1)$ and $Y\mid p_2\sim\mathrm{Bin}(m,p_2)$,
+\[
+f(x\mid p_1,H_1)=\binom{n}{x}p_1^{x}(1-p_1)^{n-x},\qquad
+f(y\mid p_2,H_1)=\binom{m}{y}p_2^{y}(1-p_2)^{m-y}.
+\]
+Using independence and the Uniform$(0,1)=\mathrm{Beta}(1,1)$ priors,
+\[
+\begin{aligned}
+f(x,y\mid H_1)
+&= \iint f(x_1\mid p_1, H_1) \, \underset{1}{f(p_1|H_1)}\,f(y\mid p_2,H_1) \underset{1}{f(p_2|H_1)}\,dp_1\,dp_2 \\ 
+&=\binom{n}{x}\binom{m}{y}\!\left(\int_0^1 p_1^{x}(1-p_1)^{n-x}\,dp_1\right)
+\left(\int_0^1 p_2^{y}(1-p_2)^{m-y}\,dp_2\right)\\
+&=\binom{n}{x}\binom{m}{y}\,B(x+1,n-x+1)\,B(y+1,m-y+1),
+\end{aligned}
+\]
+where $B(a,b)=\dfrac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$ is the Beta function. Since
+\[
+\binom{n}{x}B(x+1,n-x+1)=\frac{n!}{x!(n-x)!}\cdot\frac{x!(n-x)!}{(n+1)!}=\frac{1}{n+1},
+\]
+and similarly for $m,y$, the marginal likelihood simplifies to
+\[
+\boxed{\,f(x,y\mid H_1)=\frac{1}{(n+1)(m+1)}\,}.
+\]
+
+\paragraph{Numerical value for these data.}
+With $n=5146$ and $m=6099$,
+\[
+f(x,y\mid H_1)=\frac{1}{(5146+1)(6099+1)}=\frac{1}{31{,}396{,}700}\approx 3.19\times 10^{-8}.
+\]
+
+And for the null hypothesis $H_0:\;p_1=p_2=p$, with prior $p\sim \mathrm{Unif}(0,1)$,
+\[\begin{aligned}
+f(x,y\mid H_0)
+&= \int_0^1 f(x,y\mid p,H_0)\,dp \\
+&= \int_0^1 f(x\mid p,H_0)\,f(y\mid p,H_0)\,dp \\
+&= \binom{n}{x}\binom{m}{y}\int_0^1 p^{x+y}(1-p)^{(n-x)+(m-y)}\,dp \\
+&= \binom{n}{x}\binom{m}{y}B(x+y+1,n+m-(x+y)+1).
+\end{aligned}\]
+\end{solution}
+
+Let $p=P(H_1)$, so $P(H_0)=1-p$, and let $p^*=P(H_1\mid \text{Data})$.
+By Bayes’ rule,
+\[
+p^* \;=\; \frac{f(\text{Data}\mid H_1)P(H_1)}
+                {f(\text{Data}\mid H_1)P(H_1)+f(\text{Data}\mid H_0)P(H_0)}.
+\]
+Divide numerator and denominator by $f(\text{Data}\mid H_0)P(H_0)$:
+\[
+p^* \;=\; \frac{\displaystyle
+\frac{f(\text{Data}\mid H_1)}{f(\text{Data}\mid H_0)}
+\cdot \frac{p}{1-p}}
+{\,1+\displaystyle
+\frac{f(\text{Data}\mid H_1)}{f(\text{Data}\mid H_0)}
+\cdot \frac{p}{1-p}}.
+\]
+Define the Bayes factor $BF_{10}=\dfrac{f(\text{Data}\mid H_1)}{f(\text{Data}\mid H_0)}$ to obtain
+\[
+\boxed{\;
+p^* \;=\; \frac{\dfrac{p}{1-p}\,BF_{10}}
+{1+\dfrac{p}{1-p}\,BF_{10}}
+\;}
+\]
+which is equivalent to the odds form
+\[
+\frac{p^*}{1-p^*} \;=\; \frac{p}{1-p}\,BF_{10}.
+\]

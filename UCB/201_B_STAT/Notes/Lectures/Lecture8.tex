@@ -1,0 +1,281 @@
+% TeX root = ../Main.tex
+
+% First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
+\section[Lecture 8 (Sept 23) -- {\it TBD}]{Lecture 8}
+
+\subsection{MLE} % (fold)
+
+\begin{itemize}
+    \item If $\hat{\theta}_n$ is MLE of $\theta$, then $g(\hat{\theta}_n)$ is MLE of $g(\theta)$.
+    \item Under certain conditions $\hat{\theta}_n \overset{p}{\rightarrow} \theta$.
+\end{itemize}
+
+\emph{
+We assert:
+}
+The following conditions are sufficient for consistency of the MLE:
+
+\begin{enumerate}
+    \item $X_1, \ldots, X_n$ are \textit{iid} with density $f(x; \theta)$.
+    
+    \item Identifiability, i.e.\ if $\theta \neq \theta'$, then $f(x; \theta) \neq f(x; \theta')$.
+    
+    \item The densities $f(x; \theta)$ have common support, i.e.\ 
+    $\{x : f(x; \theta) > 0\}$ is the same for all $\theta$.
+    
+    \item The parameter space $\Theta$ contains an open set $\omega$ of which the true 
+    parameter value $\theta^*$ is an interior point.
+    
+    \item The function $f(x; \theta)$ is differentiable with respect to $\theta$ in $\omega$.
+\end{enumerate}
+
+These conditions ensure uniform convergence in probability of a normalized
+form of the log-likelihood to its expected value.
+
+Note that
+\[
+\ell_n(\theta)
+= \sum_{i=1}^n \log f(X_i; \theta)
+\propto \frac{1}{n}\sum_{i=1}^n \log f(X_i; \theta)
+\xrightarrow{P} \mathbb{E}_{\theta^*}\!\left[\log f(X_1; \theta)\right]
+\quad \text{for any fixed } \theta \ \text{by WLLN}.
+\]
+
+where $\theta^*$ denotes the true value of $\theta$. Showing consistency requires
+that the convergence is uniform in $\theta$. We also need to show that
+\[
+\mathbb{E}_{\theta^*}\!\left[\log f(X_1; \theta)\right]
+\]
+is maximized at $\theta = \theta^*$ since $\hat{\theta}_n$ maximizes $\ell_n(\theta)$.
+
+\begin{proof}
+By property of $iid$ and common support, we have
+$$
+\E_{\theta^*}[\log f(X_1;\theta)] - \E_{\theta^*}[\log f(X_1;\theta^*)] = \int f(x;\theta^*) \log \frac{f(x;\theta)}{f(x;\theta^*)} \, dx
+$$
+Since $\log$ is a concave function, by Jensen's inequality we have
+$$
+\int f(x;\theta^*) \log \frac{f(x;\theta)}{f(x;\theta^*)} \, dx \le \log \int f(x;\theta^*) \frac{f(x;\theta)}{f(x;\theta^*)} \, dx = 0
+$$
+Given by the fact that $\int f(x;\theta) \, dx = 1$ for any $\theta$.
+
+Thus
+$$
+\E_{\theta^*}[\log f(X_1;\theta)] \le \E_{\theta^*}[\log f(X_1;\theta^*)] \text{\quad for any \ }\theta
+$$
+\end{proof}
+
+
+One class of distributions that satisfies the conditions is known as the 
+\textbf{exponential family}. For $\Theta \subseteq \mathbb{R}$, these have densities 
+that can be written as
+\[
+f(x; \theta) = h(x)c(\theta) \exp\{\eta(\theta) T(x)\}.
+\]
+
+\begin{eb}[ Exponential $\lambda$ ]
+    For the exponential family, we have
+    \[
+    f(x; \lambda) = \lambda e^{-\lambda x} \text{ for } x \ge 0, \lambda > 0.
+    \]
+    Here, $h(x) = 1_{[0,\infty)}(x)$, $c(\lambda) = \lambda$, $\eta(\lambda) = -\lambda$, and $T(x) = x$.
+\end{eb}
+\begin{eb}[ Binomial $n,p$]
+    For the exponential family, we have
+    \[
+    f(x; n, p) = \binom{n}{x} p^x (1-p)^{n-x} \text{ for } x = 0, 1, \ldots, n, n \in \mathbb{N}, p \in (0,1).
+    \]
+    Here, $h(x) = \binom{n}{x}$, $c(p) = (1-p)^n$, $\eta(p) = \log\frac{p}{1-p}$, and $T(x) = x$.
+
+\end{eb}
+\begin{eb}[ Normal $\mu, \sigma^2$]
+    For the exponential family, we have
+    \[
+    f(x; \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \text{ for } x \in \mathbb{R}, \mu \in \mathbb{R}, \sigma^2 > 0.
+    \]
+    $$
+    = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{x^2}{2\sigma^2} + \frac{\mu x}{\sigma^2} - \frac{\mu^2}{2\sigma^2}\right)
+    $$
+    
+    Here, $h(x) = \frac{1}{\sqrt{2\pi}} e^{-x^2/2}$, $c(\mu,\sigma^2) = \frac{1}{\sqrt{\sigma^2}} e^{-\mu^2/(2\sigma^2)}$, $\eta^\top(\theta) = (-\dfrac{1}{2\sigma^2},\dfrac{\mu}{\sigma^2})$, and $T(x)^\top= (x,x^2)$.
+\end{eb}
+
+
+\begin{db}[Fisher Information] % (fold)
+Define the score function $s(X; \theta) = \dfrac{\partial}{\partial \theta} \log f(X; \theta)$.
+
+Then the \textbf{Fisher information} (based on $n$ observations) is
+\[
+I_n(\theta) 
+= V_{\theta} \!\left( \frac{\partial}{\partial \theta} \ell_n(\theta) \right)
+= V_{\theta} \!\left( \sum_{i=1}^n s(X_i; \theta) \right).
+\]
+
+\[
+= \sum_{i=1}^n V_{\theta}(s(X_i; \theta)) 
+\quad \text{(if $X_1, \ldots, X_n$ are independent)}
+\]
+
+\[
+= n V_{\theta}(s(X_1; \theta)) 
+\quad \text{(if $X_1, \ldots, X_n$ are identically distributed)}
+\]
+
+\[
+= n I_1(\theta) \equiv n I(\theta).
+\]
+
+where $V_\theta(\cdot)$ stands for variance.
+\end{db}
+
+
+\subsection{Fisher Information Identity}
+
+
+For a single observation $X \sim f(x;\theta)$, the score function is
+\[
+s(X;\theta) = \frac{\partial}{\partial \theta} \log f(X;\theta).
+\]
+
+The \textbf{Fisher information} is defined as
+\[
+I(\theta) = \mathrm{Var}_\theta\!\left( s(X;\theta) \right).
+\]
+
+For $n$ i.i.d.\ observations $X_1,\ldots,X_n$, the Fisher information is
+\[
+I_n(\theta) = \mathrm{Var}_\theta\!\left( \frac{\partial}{\partial \theta} 
+\ell_n(\theta) \right)
+= \mathrm{Var}_\theta\!\left( \sum_{i=1}^n s(X_i;\theta) \right),
+\]
+where
+\[
+\ell_n(\theta) = \sum_{i=1}^n \log f(X_i;\theta).
+\]
+
+If $X_i$ are i.i.d., then
+\[
+I_n(\theta) = n I(\theta).
+\]
+
+---
+
+
+\begin{proposition}[Sufficient Conditions for Fisher Information Identity]
+Let $X \sim f(x;\theta)$ with pdf (or pmf) $f(x;\theta)$. 
+If the following conditions hold:
+\begin{enumerate}
+    \item \textbf{Differentiability:} $f(x;\theta)$ is twice differentiable with respect to $\theta$.
+    \item \textbf{Support stability:} The support $\{x : f(x;\theta) > 0\}$ does not depend on $\theta$.
+    \item \textbf{Interchange of differentiation and integration:} 
+    Differentiation under the integral sign is valid, i.e.
+    \[
+    \frac{\partial}{\partial \theta} \int f(x;\theta)\, dx 
+    = \int \frac{\partial}{\partial \theta} f(x;\theta)\, dx,
+    \]
+    and similarly for the second derivative. This is satisfied if there exists a function $g(x)$ such that
+    \[
+    \left| \frac{\partial}{\partial \theta} f(x;\theta) \right| \leq g(x)
+    \quad \text{and} \quad
+    \left| \frac{\partial^2}{\partial \theta^2} f(x;\theta) \right| \leq g(x)
+    \]
+    for all $\theta$ in an open interval containing the true parameter value, and $$\int g(x)\, dx < \infty$$
+\end{enumerate}
+then the Fisher information admits the equivalent forms
+\[
+I(\theta) 
+= \mathbb{E}_\theta[s(X;\theta)^2]
+= -\mathbb{E}_\theta\!\left[\frac{\partial}{\partial \theta}s(X;\theta)\right]
+= -\mathbb{E}_\theta\!\left[\frac{\partial^2}{\partial \theta^2}\log f(X;\theta)\right],
+\]
+where $s(X;\theta) = \frac{\partial}{\partial \theta}\log f(X;\theta)$ is the score function.
+\end{proposition}
+These are satisfied by exponential family distributions (e.g.\ Normal, Bernoulli, Poisson).
+
+\begin{proof}
+
+Start with the definition of the score:
+\[
+s(X;\theta) = \frac{\partial}{\partial \theta} \log f(X;\theta).
+\]
+
+Then
+\[
+I(\theta) = \mathbb{E}_\theta \!\left[ s(X;\theta)^2 \right].
+\]
+
+Note that
+\[
+\mathbb{E}_\theta[s(X;\theta)] = 
+\int \frac{\partial}{\partial \theta}\log f(x;\theta) \, dF(x;\theta).
+\]
+
+Simplify:
+\[
+\int \frac{1}{f(x;\theta)} \frac{\partial}{\partial \theta} f(x;\theta)\, f(x;\theta)\, dx
+= \int \frac{\partial}{\partial \theta} f(x;\theta)\, dx
+= \frac{\partial}{\partial \theta} \int f(x;\theta)\, dx
+= \frac{\partial}{\partial \theta}(1) = 0.
+\]
+
+Thus the score has mean zero.
+
+Now differentiate $s(X;\theta)$:
+\[
+\frac{\partial}{\partial \theta}s(X;\theta) 
+= \frac{\partial^2}{\partial \theta^2}\log f(X;\theta).
+\]
+
+Taking expectation:
+\[
+\mathbb{E}_\theta\!\left[\frac{\partial}{\partial \theta}s(X;\theta)\right] 
+= \mathbb{E}_\theta\!\left[\frac{\partial^2}{\partial \theta^2}\log f(X;\theta)\right].
+\]
+
+Note that
+\[
+s(x;\theta) = \frac{f'(x;\theta)}{f(x;\theta)},
+\]
+so
+\[
+\frac{\partial^2}{\partial \theta^2}\log f(x;\theta)
+= \frac{f''(x;\theta)}{f(x;\theta)}
+- \left(\frac{f'(x;\theta)}{f(x;\theta)}\right)^2.
+\]
+
+Multiply by $f(x;\theta)$:
+\[
+\frac{\partial^2}{\partial \theta^2}\log f(x;\theta)\, f(x;\theta)
+= f''(x;\theta) - \frac{f'(x;\theta)^2}{f(x;\theta)}.
+\]
+
+\[
+\mathbb{E}_\theta\!\left[\frac{\partial}{\partial \theta}s(X;\theta)\right]
+= \int f''(x;\theta)\, dx
+- \int \frac{f'(x;\theta)^2}{f(x;\theta)}\, dx.
+\]
+
+Since $\int f(x;\theta)\, dx = 1$ for all $\theta$,
+\[
+\int f''(x;\theta)\, dx
+= \frac{\partial^2}{\partial \theta^2}\int f(x;\theta)\, dx
+= \frac{\partial^2}{\partial \theta^2}(1) = 0.
+\]
+
+Thus
+\[
+\mathbb{E}_\theta\!\left[\frac{\partial}{\partial \theta}s(X;\theta)\right]
+= - \int \left(\frac{f'(x;\theta)}{f(x;\theta)}\right)^2 f(x;\theta)\, dx
+= - \mathbb{E}_\theta[s(X;\theta)^2].
+\]
+
+
+Using integration by parts (or dominated convergence), one can show
+\[
+I(\theta) = \mathbb{E}_\theta[s(X;\theta)^2]
+= - \mathbb{E}_\theta \!\left[ \frac{\partial^2}{\partial \theta^2} \log f(X;\theta) \right].
+\]
+
+
+\end{proof}
+

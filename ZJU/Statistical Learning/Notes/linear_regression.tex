@@ -1,0 +1,52 @@
+
+\section{Linear Regression}
+    $$
+    Y =X\beta + \epsilon
+    $$
+
+Loss function measrues the distance between the predicted values and the actual values.
+
+$$
+Risk \ function \ R(f) := E(L(Y,f(X)))
+$$
+
+$$
+\hat f = \underset{f \in \mathcal{F}}{\arg\min} R(f) = \underset{f \in \mathcal{F}}{\arg\min} E(L(Y,f(X))) = \dfrac{1}{n} \sum\limits_{i=1}^{n} L(Y_i,f(X_i)) = \dfrac{1}{n} \sum\limits_{i=1}^{n} (Y_i - f(X_i))^2
+$$
+
+$$
+y_{n\times 1} = X_{n \times p} \beta_{p \times 1} + \epsilon_{n \times 1}
+$$
+
+RSS: resuidual sum of squares := $(y-X\beta)^T(y-X\beta)$
+
+If $X^TX$ is invertible, then the solution is given by:
+$$
+\hat \beta = (X^TX)^{-1}X^Ty
+$$
+$$
+Var(\hat \beta) = \sigma^2 (X^TX)^{-1}
+$$
+
+Residual: $r = \hat e = y - \hat y = (I-X(X^TX)^{-1} X^T )y$
+
+$$
+\hat \sigma^2 = \dfrac{1}{n-p} \sum\limits_{i=1}^{n} r_i^2 = \dfrac{1}{n-p} (y-X\hat \beta)^T(y-X\hat \beta) = \dfrac{1}{n-p} RSS
+$$
+
+Among all unbiased linear estimators, the OLS estimator has the minimum variance.Further assuming $\epsilon$ is normal,
+$\hat \beta $ is also UMVUE.
+
+\begin{enumerate}
+    \item $E(test\ error) = E(y^* - X \hat \beta)^2 = E((y^* - X \beta + X \beta - X \hat \beta)^2)$
+     = $E(e^2) + Trace(X^TXCov(\hat \beta)) = n\sigma^2 + p \sigma^2$ 
+
+     \item $E(training\ error) = E((I-H)y^2) = (n-p)\sigma^2$
+\end{enumerate}
+
+Mallow $C_p$ criterion:
+$$
+C_p = \dfrac{RSS}{\sigma^2} + 2p - n$$
+
+where $p$ is the number of parameters in the model, $n$ is the number of observations, and $\sigma^2$ is the variance of the errors.
+

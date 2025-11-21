@@ -1,0 +1,184 @@
+\section{Support Vector Machines (SVM)}
+Support Vector Machines (SVM) are a powerful class of supervised learning algorithms used for classification and regression tasks. 
+They work by finding the optimal hyperplane that separates different classes in the feature space.
+
+$y_i \in \{-1,1\}$
+
+\subsection{separable} % (fold)
+\label{sub:separable}
+Maximize the separation margin:
+
+$$
+\begin{aligned}
+\max_{\boldsymbol{\beta}, \beta_0, \|\beta\| = 1} \quad & M \\
+\text{s.t.} \quad & y_i (x_i^\top \boldsymbol{\beta}+\beta_0) \geq M, \quad i = 1, \ldots, n
+\end{aligned}
+$$
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figure/cut_plane.png}
+    \caption{SVM with separable data}
+    \label{fig:svm_separable}
+\end{figure}
+
+$$
+\min_{\boldsymbol{\beta},\beta_0} \quad \frac{1}{2} \|\boldsymbol{\beta}\|^2 
+\text{ subject to } y_i (x_i^\top \boldsymbol{\beta}+\beta_0) \geq 1, \quad i = 1, \ldots, n
+$$
+
+Consider the Lagrangian:
+$$
+\mathcal{L}(\boldsymbol{\beta}, \beta_0, \boldsymbol{\alpha}) = \frac{1}{2} \|\boldsymbol{\beta}\|^2 - \sum_{i=1}^{n} \alpha_i (y_i (x_i^\top \boldsymbol{\beta}+\beta_0) - 1)
+$$
+
+Dual problem:
+$$
+\max_{\boldsymbol{\alpha}} \quad \sum_{i=1}^{n} \alpha_i - \frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n} \alpha_i \alpha_j y_i y_j (x_i^\top x_j)
+\text{ subject to } \sum_{i=1}^{n} \alpha_i y_i = 0, \quad \alpha_i \geq 0, \quad i = 1, \ldots, n
+$$
+
+The two problem are the same if 1. both g and h are convex, 2. the constraint h are feasible.
+
+Advantages of the duality:
+\begin{itemize}
+    \item SMO algorithms
+    \item Change the problem from p dimension into n dimension.
+    \item Kernel trick: we can use the kernel function to transform the data into a higher-dimensional space without explicitly computing the coordinates in that space.
+\end{itemize}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{figure/svm_procedure.png}
+\end{figure}
+
+线性可分的时候，logistic的likelihood是正无穷，不好。
+
+当满足高斯分布的时候，lda是最好的，但是这个条件苛刻。
+
+% subsection separable (end)
+
+\subsection{Nonseparable SVM} % (fold)
+\label{sub:Nonseparable SVM}
+引入松弛变量
+$$
+\begin{aligned}
+\min_{\boldsymbol{\beta}, \beta_0, \boldsymbol{\xi}} \quad & \frac{1}{2} \|\boldsymbol{\beta}\|^2 + C \sum_{i=1}^{n} \xi_i \\
+\text{s.t.} \quad & y_i (x_i^\top \boldsymbol{\beta}+\beta_0) \geq 1 - \xi_i, \quad i = 1, \ldots, n \\
+& \xi_i \geq 0, \quad i = 1, \ldots, n
+\end{aligned}
+$$
+C 越大，尽量分对。 C越小，尽量扩大间隔。
+
+The Lagrangian is:
+$$
+\mathcal{L}(\boldsymbol{\beta}, \beta_0, \boldsymbol{\xi}, \boldsymbol{\alpha}, \boldsymbol{\nu}) = \frac{1}{2} \|\boldsymbol{\beta}\|^2 + C \sum_{i=1}^{n} \xi_i - \sum_{i=1}^{n} \alpha_i (y_i (x_i^\top \boldsymbol{\beta}+\beta_0) - 1 + \xi_i) - \sum_{i=1}^{n} \gamma_i \xi_i
+$$
+$\alpha_i,\gamma_i > 0$
+
+Gradient：
+$$
+\begin{aligned}
+\nabla_{\boldsymbol{\beta}} \mathcal{L} &= \boldsymbol{\beta} - \sum_{i=1}^{n} \alpha_i y_i x_i = 0 \\
+\nabla_{\beta_0} \mathcal{L} &= -\sum_{i=1}^{n} \alpha_i y_i = 0 \\
+\nabla_{\boldsymbol{\xi}} \mathcal{L} &= C - \boldsymbol{\alpha_i} - \boldsymbol{\gamma_i} = 0
+\end{aligned}
+$$
+
+Dual problem:
+$$
+\max_{\boldsymbol{\alpha}, \boldsymbol{\gamma}} \quad \sum_{i=1}^{n} \alpha_i - \frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n} \alpha_i \alpha_j y_i y_j  \langle x_i, x_j\rangle
+\text{ subject to } \sum_{i=1}^{n} \alpha_i y_i = 0, \quad 0 \leq \alpha_i \leq C, \quad i = 1, \ldots, n
+$$
+
+Useless data points are those with $\alpha_i = 0$.
+
+Support vectors are those with $\alpha_i > 0$.
+
+1. $0<\alpha_i < C$ and $\xi_i = 0$
+
+2. $\alpha_i = C$ and $\xi_i= 1- y_i(x_i^\top \boldsymbol{\beta} +\beta_0) > 0$
+
+
+
+\subsection{Kernel Trick} % (fold)
+\label{sub:Kernel Trick}
+
+我们只关心映射到另一个空间之后的样本之间的内积，而不是映射到另一个空间之后的样本本身。
+
+The kernel trick allows us to compute the inner product in a high-dimensional space without explicitly mapping the data points to that space. This is particularly useful when dealing with non-linear decision boundaries.
+
+The kernel function $K(x_i, x_j)$ is defined as:
+$$
+K(x_i, x_j) = \langle \phi(x_i), \phi(x_j) \rangle
+$$
+where $\phi(x)$ is a mapping function that transforms the input data into a higher-dimensional space.
+
+Common kernel functions include:
+
+\begin{itemize}
+    \item Linear kernel: $K(x_i, x_j) = x_i^\top x_j$
+    \item Polynomial kernel: $K(x_i, x_j) = (x_i^\top x_j + c)^d$, where $c$ is a constant and $d$ is the degree of the polynomial.
+    \item Radial basis function (RBF) kernel: $K(x_i, x_j) = \exp(-\gamma \|x_i - x_j\|^2)$, where $\gamma$ is a parameter that controls the width of the Gaussian function.
+\end{itemize}
+
+% subsection Kernel Trick (end)
+
+\subsection{Convexity of SVM} % (fold)
+\label{sub:Convexity of SVM}
+
+$$
+\sum\limits_{i,j = 1}^{n} y_i y_j \alpha_i \alpha_j K(x_i, x_j) = \alpha^\top diag(y) K diag(y) \alpha
+$$
+
+Convexity will be guaranteed if the Kernel matrix K is positive semi definite.
+
+\textbf{Mercer's theorem} states that a kernel function is positive semi-definite if it can be expressed as an inner product in some feature space.
+
+% subsection Convexity of SVM (end)
+
+
+\subsection{Penalized version of svm} % (fold)
+\label{sub:Penalized version of svm}
+
+Recall that the prime objective function for SVM is:
+$$
+\min_{\boldsymbol{\beta}, \beta_0} \quad \frac{1}{2} \|\boldsymbol{\beta}\|^2 + C \sum\limits_{i=1}^{n} \xi_i
+$$
+$$
+\text{s.t. } y_i (x_i^\top \boldsymbol{\beta}+\beta_0) \geq 1 - \xi_i, \quad i = 1, \ldots, n \qquad
+\xi_i \ge 0, \quad i = 1, \ldots, n
+$$
+
+$$
+\min_{\boldsymbol{\beta}, \beta_0} \quad \frac{1}{2} \|\boldsymbol{\beta}\|^2 + C \sum\limits_{i=1}^{n} \max(0, 1 - y_i (x_i^\top \boldsymbol{\beta}+\beta_0))
+$$
+
+Other forms of loss function:
+\begin{enumerate}
+    \item Logistic loss: $log(1+e^{-yf(x)} )$
+    \item Modified Huber Loss: 
+$L = \begin{cases}
+    max(0,1-yf(x))^2, & \text{for } yf(x) \ge -1 \\ 
+    -4yf(x), & \text{o.w. }  \\
+\end{cases}$
+    
+
+\end{enumerate}
+Some of which is differentiable, like logistic,modified huber, squared.
+Hinge loss is not differentiable at 0, but subgradient is available.
+0,1 loss is not differentiable.
+
+
+
+
+
+% subsection Penalized version of svm (end)
+
+
+
+
+
+
+
+
+

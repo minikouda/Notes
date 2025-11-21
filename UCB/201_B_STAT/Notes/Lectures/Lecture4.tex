@@ -1,0 +1,98 @@
+\section[Lecture 4 (Sept 9) -- {\it Bootstrap}]{Lecture 4}
+
+We know $F$. The bootstrap procedure to estimate $V_F(T_n)$ is:
+
+At the $j$-th iteration, for $j = 1, \ldots, B$:
+\begin{enumerate}
+  \item Sample $X_{1,j} \dots X_{n,j}  \sim F $
+  \item Compute $T_{n,j} = g(X_{1,j}, \dots, X_{n,j}) $
+  \item The bootstrap estimate of $V_F(T_n)$ is
+    $$
+      \hat{V}_{\hat{F}_n} = \frac{1}{B} \sum_{j=1}^B (T_{n,j}^* - \bar{T}_n^*)^2, \quad \text{where } \bar{T}_n^* = \frac{1}{B} \sum_{j=1}^B T_{n,j}^*
+    $$
+\end{enumerate}
+
+
+\subsection{Bootstrapping method for estimating bias} % (fold)
+\label{sub:Bootstrapping method for estimating bias}
+
+$X_1,\dots, X_n \overset{i.i.d.}{\sim} F_0$. Let $F_1$ be the corresponding empirical distribution. (i.e. $\hat{F_n}$)
+Then $\theta(F_1)$ is an empirical Plug-in estimate of $\theta(F_0)$. How to estimate
+$$
+t_0 = E_{F_0}(\theta(F_0) - \theta(F_1)) 
+$$
+
+Answer: Draw $Y_1, \dots ,Y_n \sim F_1$ and derive the empirical distribution $F_2$ based on $Y_1, \dots ,Y_n$.
+Then $\theta(F_2)$ is an empirical Plug-in estimate of $\theta(F_1)$. 
+$$
+\hat{t}_0 = E_{F_1}(\theta(F_1) - \theta(F_2)) 
+$$
+
+Mimicing the $F_0$ with $F_1$.
+
+$$
+E_{F_1}(Y) = \sum\limits_{i=1}^{n}  X_i P(Y = X_i) = \sum\limits_{i=1}^{n}  X_i \dfrac{1}{n} = \bar{X}_n
+$$
+$$
+Var_{F_1}(Y) = \dfrac{1}{n} \sum\limits_{i=1}^{n} (X_i - \bar{X}_n)^2
+$$
+
+\begin{eb}[Why this is good?]
+$$
+T_n = median(X_1, \dots, X_n)
+$$$$
+C_n = T_n \pm z_{\alpha/2} \sqrt{\hat{V}_{F_1}(T_n)}
+$$
+This only works well if the distribution of $T_n$ is close to Normal.
+Note that asymptotic normality does not always hold. For example, if $X_i \sim U(0, \theta)$, then $T_n = \max(X_1, \dots, X_n)$ and
+the asymptotic distribution relies on $n$ instead of $B$.
+\end{eb}
+
+\begin{eb}[Bias correction]
+  We want to estimate $\theta(F_0) = (E_{F_0}X)^2 = \mu^2$ where $X \sim F$ with mean $\mu$ and variance $\sigma^2$.
+  The EPI is $\theta(F_1) = (\bar{X}_n)^2$. The bias is 
+  $$
+  t_0 = E_{F_0}(\theta(F_0) - \theta(F_1)) = E_{F_0}(\mu^2 - (\bar{X}_n)^2) = \mu^2 - Var_{F_0}(\bar{X}_n) - [ E_{F_0}(\bar{X}_n) ]^2 =  -Var(X)/n
+  $$
+
+  Now we consider $$
+  \tilde{\theta} = \theta(F_1) + \hat{t_0} = \theta(F_1) + E_{F_1}(\theta(F_1) - \theta(F_2)) = \theta(F_1) + \theta(F_1) - E_{F_1}(\theta(F_2))
+  $$
+
+  $Z_1 \dots Z_k \sim F_2 $ and $E_{F_2}(Z) = \bar{Y}_m$ and $Var_{F_2}(Z) = \dfrac{1}{m} \sum\limits_{i=1}^{m} (Y_i - \bar{Y}_m)^2$
+
+  By definition, $$
+  \theta(F_2) = (E_{F_1}Z)^2 = (\bar{Y})^2 = \bar{Y}_n^2 + Var_{F_1}(\bar{Y_n}) = \dfrac{1}{m}(\dfrac{1}{n} \sum\limits_{i=1}^{n} (X_i - \bar{X})^2) + (E_{F_1}(\bar{Y}) )^2
+  $$
+  \begin{align*}
+   \tilde{\theta} &   = 2(\bar{X})^2 - [(\bar{X})^2 + \dfrac{1}{m}(\dfrac{1}{n} \sum\limits_{i=1}^{n} (X_i - \bar{X})^2)] = (\bar{X})^2 - \dfrac{1}{mn} \sum\limits_{i=1}^{n} (X_i - \bar{X})^2  \\
+   E_{F_0}(\tilde{\theta}) & =  Var_{F_0}(\bar{X}) + E_{F_0}(\mu^2 - \dfrac{1}{mn} \sum\limits_{i=1}^{n} (X_i - \bar{X})^2) = \mu^2 - \dfrac{m-n+1}{mn} \sigma^2
+   \end{align*}
+
+   If $m = n$, $E_{F_0}(\tilde{\theta}) = \mu^2 + \dfrac{1}{n} \sigma^2$
+   If $m = n-1$, $E_{F_0}(\tilde{\theta}) = \mu^2$ -- unbiased! 
+\end{eb}
+
+% subsection Bootstrapping method for estimating bias (end)
+
+
+\subsection{Parametric Inference} % (fold)
+\label{sub:Parametric Inference}
+
+$\mathcal{F} = \{F(x;\theta): \theta \in \Theta\}$ where $\Theta \subseteq \mathbb{R}^k$ is the parameter space.
+Choose class of distributions $\mathcal{F}$ based on knowledge of the problem.
+
+\begin{itemize}
+  \item Sufficient statistic: $T(X_1, \dots, X_n)$ is sufficient for $\theta$ if the conditional distribution of $X_1, \dots, X_n$ given $T = t$ does not depend on $\theta$. Keep the information about the parameters.
+  \item Likelihood functions summarizes the information about $\theta$ contained in the data. Into a parameter-based function that drives inference.
+\end{itemize}
+
+\begin{db}[Sufficient Statistic]
+    $X_1, \dots, X_n \overset{i.i.d.}{\sim} \mathcal{P} = {P_\theta : \theta \in \Omega}$ .
+
+    A statistic $T$ is \textbf{sufficient} for $\theta$ if , for every $t$ in the range of $\mathcal{T} of\ T$, the conditional distribution of $P_\theta(X| T(X) = t)$ is independent of $\theta$.
+\end{db}
+% subsection Parametric Inference (end)
+
+
+

@@ -1,0 +1,123 @@
+% TeX root = ../Main.tex
+
+% First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
+\section[Lecture 1 (Aug 28) -- {\it Intro}]{Lecture 1}
+
+\subsection{Information}
+Instructor: Dr. Haiyan Huang
+Tu/Th 11:00am-12:29pm Lecture, 106 Stanley
+Office: 317 Evans
+
+GSI: Karissa Huang (krhuang@berkeley.edu)
+W 12:00pm-1:59pm (101 Discussion Section), 334 Evans
+W 2:00pm-3:59pm (102 Discussion Section), 334 Evans
+
+GSI: Drew Thanh Nguyen (drew.t.nguyen@berkeley.edu)
+W 4:00pm-5:59pm (103 Discussion Section), 344 Evans
+Online tools:
+\begin{enumerate}
+    \item Bcourses
+    \item Ed discussion
+    \item Gradescope
+\end{enumerate}
+
+Grade:
+\begin{enumerate}
+    \item Homework: 30\% 
+
+    Problem sets will be assigned roughly each Wednesday,
+for a total of 9 assignments. You should download the assignments from
+Bcourses. Each problem set is to be turned in on Friday a week later. No
+late assignments will be accepted. The homework with lowest score will
+not be included in the final homework grade. Some problems may not be
+graded, and you should review the solutions carefully for those problems.
+Students can discuss homework assignments. Each student must write
+up his/her own solutions individually. Any evidence of cheating will be
+subject to disciplinary action.
+
+    \item Midterm: 25\%
+
+    October 16, A double sided A4 page of handwritten notes is allowed.
+    \item Final: 45\%
+
+    Dec 17 8-11am, Two double sided A4 pages of handwritten notes are allowed.
+\end{enumerate}
+
+Office hour:
+Thursday 1-2pm 317 Evans
+
+\subsection{Introduction to Inference}
+
+Different types of inference:
+\begin{itemize}
+    \item Nonparametric
+    \item Parametric: Frequentist; Bayesian
+
+    Treats parameters as unknown fixed constants; Focuses on point estimation, confidence intervals, and hypothesis tests.
+
+    Makes probability statements about parameters, reflecting beliefs. Bases all inference on the posterior distribution, which we can summarize in various ways.
+
+    e.g. Assume $\sigma^2 \sim \chi^2(1)$ and use the data to modify it.
+\end{itemize}
+
+\subparagraph{Parametric models}
+can be described by a finite number of parameters.
+Generally we consider a family of distributions that are parameterized by a finite set of parameters.
+e.g.
+$Y_i \sim \mathcal{N}(\beta_0 + \beta_1 x_i, \sigma^2), \qquad i = 1,\dots ,n$
+
+Use $\theta $ to indicate an arbitrary parameter. Use $P_{\theta}(Y\in A)$ to emphasize the $F_Y$'s dependence on $\theta$.
+
+\subparagraph{Nonparametric models}
+require an infinite number of parameters to describe the distribution.
+They are called distribution free to indicate that we make few restirctions on the family of distributions.
+
+
+\subsection{Point Estimation} % (fold)
+\label{sub:Point Estimation}
+
+A statistic is any function of the data. A point estimator $\hat{\theta}_n$ is a statistic that provides a single value as an estimate of an unknown parameter $\theta$.
+
+We call $\hat{\theta}(X_1,\dots,X_n)$ the \textbf{RV} an \textbf{estimator}, while we call $\hat{\theta}(x_1,\dots,x_n)$ an \textbf{estimate}
+
+Note that $$
+\hat{X}_n \sim N(\mu, \dfrac{\sigma^2}{n})
+$$
+
+Bias: $bias(\hat{\theta}) = E[\hat{\theta}] - \theta$
+
+Standard error: $se(\hat{\theta}) = \sqrt{Var_{\theta} (\hat{\theta})}$
+
+Standard deviation for the population $sd(Y) = \sigma$
+
+Mean squared error:
+$$
+MSE(\hat{\theta}_n) = E_n[(\hat{\theta}_n - \theta)^2] = Var_n(\hat{\theta}_n) + bias(\hat{\theta}_n)^2
+$$
+
+Trick is $E[(\hat{\theta}_n - E(\hat{\theta}_n))(E(\hat{\theta}_n) - \theta)] = 0$
+
+% subsection Point Estimation (end)
+
+\begin{db}
+    If $\hat{\theta}_n \xrightarrow{p} \theta$, then $\hat{\theta}_n$ is a weakly consistent estimator of $\theta$.
+\end{db}
+
+\begin{eb}
+    For $X_1 \dots , X_n \sim N(\mu, \sigma^2)$, we have
+    
+    $$
+    \bar{X}_n, \hat{S}_n^2 \xrightarrow{p} \mu, \sigma^2
+    $$
+    
+    
+\end{eb}
+
+\begin{db}
+    Asymptotic normality:
+    $$
+    \dfrac{\hat{\theta}_n - \theta}{\sqrt{Var(\hat{\theta}_n)}} \xrightarrow{d} N(0,1)
+    $$
+    
+    Note Slutsky's Thm allow us to replace $se$ by some weakly consistent estimator $\hat{\sigma}_n$
+\end{db}

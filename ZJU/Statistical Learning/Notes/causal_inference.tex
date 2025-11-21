@@ -1,0 +1,73 @@
+\section{Causal Inference}
+
+
+Defining causal quantities, this will be done in terms of counterfactuals.
+
+Stating assumptions necessary to identify causal quantitiees.
+
+Defining a mathematical model to deal with the curse of dimensionality.
+
+Aspirin has no effect if $Y^1 = Y^0$
+
+$$
+Y = Y^1 \cdot A + Y^0 \cdot (1-A)
+$$
+
+$$
+ATE: \psi = E[Y^1 - Y^0] = E[Y^1|A=1] - E[Y^0|A=0]=  E[Y|A=1] - E[Y|A=0]
+$$
+
+\begin{itemize}
+    \item CA consistency assumption $Y =Y^A$ w.p. 1
+    \item RA randomization assumption $A \perp (Y^1, Y^0)$
+    \item PA positivity assumption $0 < P(A=1) < 1$
+\end{itemize}
+
+$E(Y^a) = E(T|A=a) = \sum_{l}^{}E(Y|A=a,L=l)f_L(l|a) \\= \sum_{l}^{}E(Y|A=a,L=l)f_L(l)$ if $L \perp A$
+
+
+\textbf{NUCA} no unmeasured confounding assumption: $(Y^1,Y^0) \perp A | L$
+
+positivity $f_L(l)>0 \rightarrow P(A=a|L=l) > 0$
+
+$$
+E(Y^a) = \sum_{l}^{}E(Y|A=a,L=l)P(L=l) \text{ or } \int E(Y|A=a,L=l)f_L(l) dl
+$$
+
+$$
+\begin{aligned}
+E(Y^{a}) &= E(E(Y^{a}|L)) \\
+&= \sum_{l} E(Y^{a}|L=l)f_{L}(l) \\
+&= \sum_{l} E(Y^{a}|A=a,L=l)f_{L}(l) \quad \text{(NUCA)} \\
+&= \sum_{l} E(Y|A=a,L=l)f_{L}(l) \quad \text{(CA)}
+\end{aligned}
+$$
+
+G-formula 
+
+
+Assume both $A$ and $L$ are categorical variables with low to moderate number of levels, so that $b(a,l)$ is given by the stratified sample average:
+$$
+\hat{b}(a,l) = \frac{\sum_{i=1}^{n} I(A_{i}=a,L_{i}=l)Y_{i}}{\sum_{i=1}^{n} I(A_{i}=a,L_{i}=l)}
+$$
+and
+$$
+\hat{f}_{L}(l) = \frac{1}{n}\sum_{i=1}^{n} I(L_{i}=l)
+$$
+
+The nonparametric estimator of the G-formula is given by:
+\begin{align*}
+\hat{g}(a) &= \sum_{l}\hat{b}(a,l)\hat{f}_{L}(l) \\
+&= \sum_{l}\hat{b}(a,l)\frac{1}{n}\sum_{i=1}^{n}I(L_{i}=l) \\
+&= \frac{1}{n}\sum_{i=1}^{n}\sum_{l}\hat{b}(a,l)I(L_{i}=l) \\
+&= \frac{1}{n}\sum_{i=1}^{n}\hat{b}(a,L_{i})
+\end{align*}
+
+Crude association estimator:
+$$
+E(Y|A=a)
+$$
+
+$$
+IPTW = E[Y^a] = E[\dfrac{1(A=a)}{f(A|L)}Y]
+$$

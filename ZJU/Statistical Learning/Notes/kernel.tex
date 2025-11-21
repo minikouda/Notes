@@ -1,0 +1,64 @@
+\section{Kernel}
+
+Histogram kernel:
+$$
+\hat f(x) = \sum\limits_{i=1}^{n} \dfrac{\mathbf{1\{x_i \in [x-\lambda/2,x+\lambda/2]\}}}{\lambda\cdot n}
+$$
+Bumpy and not smooth!
+
+Denote K as a kernel function:
+\begin{itemize}
+    \item $\int K(u) du = 1$
+    \item  $K(u) = K(-u)$
+    \item $\int K(u) u^2 \le \infty$
+    \item $K_\lambda(u) = \dfrac{1}{\lambda} K(u/\lambda)$
+\end{itemize}
+
+Asymptotically unbiased for a target point $x$:
+\begin{align*}
+\mathbb{E}[\widehat{f}(x)] &= \mathbb{E}\left[\frac{K\left(\frac{x-x_{1}}{\lambda}\right)}{\lambda}\right] \\
+&= \int_{-\infty}^{\infty} \frac{1}{\lambda} K\left(\frac{x-x_{1}}{\lambda}\right) f(x_{1}) \, dx_{1} \\
+&= \int_{\infty}^{-\infty} \frac{1}{\lambda} K(t) f(x - t\lambda) \, d(x - t\lambda) \\
+\text{(Taylor expansion)} &= f(x) + \frac{\lambda^{2}}{2} f''(x) \int_{-\infty}^{\infty} K(t) t^{2} \, dt + o(\lambda^{2}) \\
+&\rightarrow f(x) \quad \text{as } \lambda \rightarrow 0
+\end{align*}
+
+$$
+Integrated\ Bias^2 = \int (E[\hat f(x)] - f(x))^2 dx = \dfrac{\lambda^4 \sigma^4_K}{4} \int [f''(x)]^2 dx
+$$
+$$
+where\quad  \sigma^2_K = \int K(t) t^2 dt
+$$
+$$
+Integrated\ Var \approx \dfrac{1}{n\lambda}\int K^2 (t) dt
+$$
+
+\subsection{Kernel Regression} % (fold)
+\label{sub:Kernel Regression}
+K-nn 容易导致 boundary 上的样本有bias due to asymmetry.
+
+$$
+\hat f(x) = \dfrac{\sum\limits_{i}^{}K_\lambda(x,x_i)y_i}{\sum\limits_{i}^{} K_\lambda(x,x_i)}
+$$
+
+Greater $\lambda$ leads to smoother estimates, i.e., less variance but more bias.
+
+Smaller $\lambda$ leads to more variance but less bias.
+
+% subsection Kernel Regression (end)
+
+$$
+\min_{\beta_0(x_0),\beta_1(x_0)} \sum\limits_{i=1}^{n} (y_i - \beta_0(x_0) - \beta_1(x_0)x_{i})^2 K_\lambda(x_0,x_i)
+$$
+
+solution $\hat f(x_0) = \hat \beta_0(x_0) + \hat \beta_1(x_0)\cdot x_0$
+
+这样权重自然就调整好了
+
+\paragraph{Local Linear Regression}
+
+Let $\boldsymbol{W}(x_0) = diag(K_\lambda(x_0,x_1),K_\lambda(x_0,x_2),\dots,K_\lambda(x_0,x_n))$
+
+Object: $l(\beta) = \boldsymbol{(y-X\beta)^\top W(x_0) (y-X\beta)}$
+
+Solution is given by: $\hat \beta = (X^\top W X)^{-1} X^\top Wy$

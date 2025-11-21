@@ -1,0 +1,147 @@
+% TeX root = ../Main.tex
+
+% First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
+\section[Lecture 16 (Nov 6) -- {\it Decision Theory}]{Lecture 16}
+
+\subsection{Decision theory basics}
+
+\begin{db}
+Define a loss function:
+\[
+\mathcal{L}(\theta,\hat \theta): (\Theta \times \mathcal{A}) \to [0,\infty)
+\]
+e.g. squared error loss:
+$\mathcal{L}(\theta,\hat \theta) = (\theta - \hat \theta)^2$
+
+\textbf{Risk} (Average loss over all possible data) a.k.a. frequentist risk:
+\[
+R(\theta,\hat \theta) = \mathbb{E}_{X|\theta} \left[ \mathcal{L}(\theta,\hat \theta(X)) \right] = \int \mathcal{L}(\theta,\hat \theta(x)) f(x|\theta) dx
+\]
+\textbf{Posterior risk} (Average loss over posterior distribution of $\theta$):
+\[
+r(\hat \theta | \mathbf{x}) = E_{\theta | \bf{x}}  \left[ \mathcal{L}(\theta,\hat \theta) \right] = \int \mathcal{L}(\theta,\hat \theta) f(\theta | \bf{x}) d\theta
+\]
+
+where $\mathbf{x} \triangleq (x_1,\dots,x_n)$
+\end{db}
+
+\begin{eb}
+Prior: $X_1,\dots,X_n \iid N(\theta,1), \qquad f(\theta) \sim N(0,\tau^2)$
+
+\[
+f(\theta|\mathbf{x}) \propto \exp\{- \dfrac{\sum\limits_{i=1}^{n} (x_i - \theta)^2}{2}\} \exp\{- \dfrac{\theta^2}{2\tau^2}\} \propto \exp\{- \dfrac{1}{2} \left( (n + \dfrac{1}{\tau^2}) \theta^2 - 2n\bar{x} \theta \right) \}
+\]
+\[
+\theta | x \sim N(\dfrac{n\tau^2}{n\tau^2 + 1} \bar X_n, \dfrac{\tau^2}{n\tau^2 + 1})
+\]
+
+\[
+r(\hat \theta | x)  = E_{\theta|x} (\theta - \hat \theta)^2
+= E_{\theta |x} (\theta^2) - 2 \hat \theta \cdot E_{\theta | x} (\theta) +\hat \theta^2
+\]
+\[
+= -(\hat \theta - \frac{n\tau^2}{n\tau^2 + 1}\bar X_n)^2 + \dfrac{\tau^2}{n\tau^2 + 1} 
+\]
+
+Posterior risk is minimized at $\hat \theta = E[\theta | x] = \dfrac{n\tau^2}{n\tau^2 + 1} \bar X_n$
+
+
+\end{eb}
+
+\begin{eb}[Frequentist risk]
+\[
+\mathcal{L} (\theta, \hat \theta) = (\theta - \hat \theta)^2 
+\]
+
+\[
+R(\theta ,\hat \theta ) = E_{x|\theta} (\hat \theta)^2 - 2\theta \cdot E_{x|\theta} (\hat \theta) + \theta^2
+\]
+\[
+= Var_{x|\theta}(\hat \theta) + (E_{x|\theta}(\hat \theta) - \theta)^2 = MSE(\hat \theta)
+\]
+\end{eb}
+
+Consider two estimators, $\hat{\theta}$ and $\hat{\theta}'$. 
+We say $\hat{\theta}'$ \textbf{dominates} $\hat{\theta}$ if
+\[
+R(\theta, \hat{\theta}') \le R(\theta, \hat{\theta}) \quad \text{for all } \theta,
+\]
+and
+\[
+R(\theta, \hat{\theta}') < R(\theta, \hat{\theta}) \quad \text{for at least one } \theta.
+\]
+
+The estimator $\hat{\theta}$ is called \textbf{inadmissible} if there is at least one other estimator 
+$\hat{\theta}'$ that dominates it. Otherwise it is called \textbf{admissible}.
+
+
+\begin{db}[Bayes risk]
+The Bayes risk is defined as:
+
+\[
+\begin{aligned}
+r(f, \hat{\theta}) 
+&= \int \underbrace{R(\theta, \hat{\theta})}_{\text{frequentist risk}} f(\theta)\, d\theta \\[6pt]
+&= \int \left[ \int L(\theta, \hat{\theta}(x)) f(x \mid \theta)\, dx \right] f(\theta)\, d\theta \\[6pt]
+&= \int \!\!\int L(\theta, \hat{\theta}(x)) f(x, \theta)\, dx\, d\theta \\[6pt]
+&= \int \left[ \int L(\theta, \hat{\theta}(x)) f(\theta \mid x)\, d\theta \right] f(x)\, dx \\[6pt]
+&= \int \underbrace{r(\hat \theta \mid x)}_{\text{posterior risk}}\, f(x)\, dx
+\end{aligned}
+\]
+
+\noindent
+This expression averages over both $\theta$ and $X$. It depends on the particular form of $\hat{\theta}$,
+and on the probability models for the data $f(x \mid \theta)$ and the parameter $\theta$ ($f(\theta)$).
+\end{db}
+
+
+\begin{eb}
+\[
+X \sim N(\theta, 1), \hat \theta_c (x) = cx, \theta \sim N(0,\tau^2), \mathcal{L}(\theta,\hat \theta) = (\theta - \hat \theta)^2 = (\theta - cX)^2
+\]
+
+\paragraph{Frequentist -> Integral over the parameter} % (fold)
+\label{par:Frequentist -> Integral over the parameter}
+
+\[
+R(\theta,\hat \theta_c) = E_{x\mid \theta} (\theta -cx)^2 = (c - 1)^2 \theta^2 + c^2
+\]
+
+Bayes risk:
+\[
+r(f,\hat \theta_c) = \int R(\theta,\hat \theta_c) f(\theta) d\theta = (c - 1)^2 \tau^2 + c^2
+\]
+
+F.O.C. w.r.t. $c$:
+\[
+\implies c = \dfrac{\tau^2}{\tau^2 + 1}
+\]
+
+Thus, the Bayes rule is $\hat \theta_{\text{Bayes}} = \dfrac{\tau^2}{\tau^2 + 1} X$.
+% paragraph Frequentist -> Integral over the parameter (end)
+
+\paragraph{Bayesian -> Integral over the data} % (fold)
+\label{par:Bayesian -> Integral over the data}
+
+\[
+f(\theta \mid x) \propto f(x | \theta) f(\theta) \propto \exp\{-\dfrac{(x - \theta)^2}{2}\} \exp\{- \dfrac{\theta^2}{2\tau^2}\} \propto \exp\{- \dfrac{1}{2} \left( (1 + \dfrac{1}{\tau^2}) \theta^2 - 2x \theta \right) \}
+\]
+Posterior distribution:
+\[
+\theta | x \sim N(\dfrac{\tau^2}{\tau^2 + 1} x, \dfrac{\tau^2}{\tau^2 + 1})
+\]
+
+Posterior risk:
+\[
+r(\hat \theta_c | x) = E_{\theta | x} (\theta - cx)^2 = (\dfrac{\tau^2}{\tau^2 + 1} - c)^2 x^2 + \dfrac{\tau^2}{\tau^2 + 1}
+\] 
+Posterior rule is $\hat \theta_c = \dfrac{\tau^2}{\tau^2 + 1}x$, and the posterior risk is $\dfrac{\tau^2}{\tau^2+1}$ at this value.
+
+Thus, the posterior risk is invariant to $x$ at the posterior minimizing value.
+
+The Bayes risk is:
+\[
+r(f,\hat \theta_c) = \int r(\hat \theta_c | x) f(x) dx = \dfrac{\tau^2}{\tau^2 + 1}
+\]
+% paragraph Bayesian -> Integral over the data (end)
+\end{eb}

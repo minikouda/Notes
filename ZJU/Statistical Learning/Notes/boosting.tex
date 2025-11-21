@@ -1,0 +1,88 @@
+\section{Boosting}
+
+
+\subsection{Ada boost} % (fold)
+\label{sub:Ada boost}
+
+$$
+\min_h \sum\limits_{i=1}^{n} L(y_i,\sum\limits_{k=1}^{t-1} f_k(x_i) +h(x_i) )
+$$
+
+Steps:
+\begin{enumerate}
+    \item Initialize the weights: $w_i = \dfrac{1}{n}$ for all $i$.
+    \item For each iteration $t = 1, \ldots, T$:
+    \item Fit a weak learner $h_t$ to the training data, minimizing the weighted loss:
+    \item $$
+    h_t = \underset{h}{\arg\min} \sum\limits_{i=1}^{n} w_i L(y_i, h(x_i))
+    $$
+    \item Compute the error of the weak learner:
+    $$
+    \epsilon_t = \sum\limits_{i=1}^{n} w_i \mathbf{1}{(y_i \neq h_t(x_i))}
+    $$
+    \item Compute the weight for the weak learner:
+    $$
+    \alpha_t = \frac{1}{2} \log\left(\frac{1 - \epsilon_t}{\epsilon_t}\right)
+    $$
+    \item Update the weights for the next iteration:
+    $$
+    w_i^{(t+1)} \leftarrow w_i^{(t)}  \exp(-\alpha_t y_i h_t(x_i)) / Z_t
+    $$
+    \item Final model is:
+    $$
+    F(x) = \sum\limits_{t=1}^{T} \alpha_t h_t(x)
+    $$
+\end{enumerate}
+
+% subsection Ada boost (end)
+
+\subsection{Training Error Bound} % (fold)
+\label{sub:Training Error Bound}
+
+$$
+\omega^{(T)}_i = \dfrac{1}{Z_{T-1} } \omega^{(T-1)}_i \exp(-\alpha_{T-1} y_i f_{T-1}(x_i))
+$$
+$$
+\Longrightarrow \omega^{(T+1)}_i = \dfrac{1}{Z_1 Z_2 \cdots Z_T} \omega^{(1)}_i  \prod\limits_{t=1}^{T} \exp(-\alpha_t y_i f_t(x_i)) = \dfrac{1}{Z_1 Z_2 \cdots Z_T} \dfrac{1}{n} exp[-y_i \sum\limits_{t=1}^{T} \alpha_t f_t(x_i)]
+$$
+Summation for all $i$:
+$$
+1 = \sum\limits_{i=1}^{n} \omega^{(T+1)}_i = \dfrac{1}{Z_1 Z_2 \cdots Z_T} \dfrac{1}{n} \sum\limits_{i=1}^{n} exp[-y_i \sum\limits_{t=1}^{T} \alpha_t f_t(x_i)]
+$$
+$$
+\Longrightarrow Z_1 Z_2 \cdots Z_T = \dfrac{1}{n} \sum\limits_{i=1}^{n} exp[-y_i \sum\limits_{t=1}^{T} \alpha_t f_t(x_i)] = \dfrac{1}{n} \sum\limits_{i=1}^{n} exp[-y_i F_T(x_i)] > \dfrac{1}{n} \sum\limits_{i=1}^{n} \mathbf{1}\{y_i \ne F_T(x_i)\}
+$$
+
+By the definition of $Z_t$:
+$$
+Z_t = exp[-\alpha_t] \sum\limits_{y_i = f_t(x_i)}^{} \omega^{(t)}_i + exp[\alpha_t] \sum\limits_{y_i \ne f_t(x_i)}^{} \omega^{(t)}_i
+$$$$
+Z_t = (1-\epsilon_t) \cdot exp[-\alpha_t] + \epsilon_t \cdot exp[\alpha_t]
+$$
+$$
+\dfrac{\partial Z_t}{\partial \alpha_t} = 0 \rightarrow \alpha_t = \dfrac{1}{2}log(\dfrac{1-\epsilon_t}{\epsilon_t})
+$$
+$$
+Z_t = 2\sqrt{\epsilon_t(1-\epsilon_t)} = \sqrt{1-4\gamma^2_t} \le exp[-2\gamma^2_t]
+$$
+
+\vspace{20pt}
+
+Training error = $$
+\sum\limits_{i=1}^{n} \mathbf{1}\{y_i \ne F_T(x_i)\}  < \sum\limits_{i=1}^{n} exp[-y_i F_T(x_i)] = n Z_1 Z_2 \cdots Z_T \le n \cdot exp[-2\sum\limits_{t=1}^{T} \gamma^2_t] \rightarrow 0 \text{\ for fixed n}
+$$
+
+但是这不能说明training error是随T单调减的，只是他的上界是随T单调减的。
+
+Estimated probability:
+$$
+E(exp[-yF(x)]) = e^{-F(x)} P(y=1|x) + e^{F(x)} P(y=-1|x)
+$$
+Optimal $F^*(x)$ satisfies $\dfrac{\partial Loss}{\partial F} = 0$
+$$
+F^*(x) = \dfrac{1}{2} log \dfrac{P(y=1| x)}{P(y=-1| x)} \qquad P(y=1|x) = \dfrac{exp\{2F^*(x)\} }{1 + exp\{2F^*(x)\}}
+$$
+
+
+
+% subsection Training Error Bound (end)

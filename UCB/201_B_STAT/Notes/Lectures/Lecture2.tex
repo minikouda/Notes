@@ -1,0 +1,85 @@
+\section[Lecture 2 (Sept 2) -- {\it Estimator}]{Lecture 2}
+
+
+\begin{db}[Plug-in Estimator]
+    Let $X_1, ..., X_n \overset{i.i.d.}{\sim} F $, where F can be parametric or nonparametric. Assume
+that we are interested in estimating the quantities that are related to F ,
+such as the mean, median, variance, quantiles, etc, by a nonparametric way.
+
+No matter F is parametric or non-parametric, we can write the quantities
+of interest as a function of $F$ , $\theta(F)$.
+The substitution (plug-in) method is to estimate $\theta(F)$ with $\theta( \hat{F}_n)$, where
+$\hat{F}_n$ is the empirical distribution of F 
+\end{db}
+
+Empirical distribution function:
+$$
+\hat{F}_n(x) = \dfrac{1}{n} \sum\limits_{i=1}^{n} I(X_i \le x) = \#\{X_i \le x\}/n
+$$
+$$
+p = P(Y_i = 1) = P(X_i = x) = F(x)
+$$
+
+\begin{align*}
+    \mathrm{E}[\hat{F}_n(x)] &= F(x) \\
+    \mathrm{V}[\hat{F}_n(x)] &= \frac{F(x)[1 - F(x)]}{n} \\
+    \mathrm{MSE}[\hat{F}_n(x)] &= \mathrm{V}[\hat{F}_n(x)] \to 0 \\
+    \hat{F}_n(x) &\xrightarrow{P} F(x)
+\end{align*}
+Plug in estimator:
+
+$$
+\hat{\theta}_{\text{plug-in}}(F) \triangleq E_{\hat{F}_n} (X) = \sum\limits_{t}^{} t\cdot P_{\hat{F}_n}(X_i = t)  
+$$
+$$
+ = \sum\limits_{t}^{} t \sum\limits_{i=1}^{n} \dfrac{I(X_i = t)}{n} = \sum\limits_{i=1}^{n} \sum\limits_{t}^{} t \cdot \dfrac{I(X_i = t)}{n} = \bar{X}_n
+$$
+
+Now we are interested in $\theta(F) = Var_F(X)$
+
+One possible estimator of $\theta(F)$ is $\hat{\theta}(F) = \theta(\hat{F}_n)$
+
+\begin{align*}
+    \theta(\hat{F}_n) &= \text{var}_{\hat{F}_n}(X) = E_{\hat{F}_n}(X^2) - \left(E_{\hat{F}_n}(X)\right)^2 \\
+    &= \frac{\sum_{i=1}^n X_i^2}{n} - \left(\frac{\sum_{i=1}^n X_i}{n}\right)^2 \\
+    &= \frac{\sum_{i=1}^n (X_i - \bar{X})^2}{n}
+\end{align*}
+
+This is biased but consistent.
+
+\begin{tb}[Glivenko-Cantelli Theorem]
+    $$
+    \sup_x |\hat{F}_n(x) - F(x)| \xrightarrow{a.s.} 0
+    $$
+\end{tb}
+
+\begin{tb}
+Suppose the function $\theta(F)$ is continuous in the sup-norm:
+\[
+    \forall \epsilon > 0, \exists \delta > 0 \text{ such that ``}\|G - F\|_{\infty} < \delta \text{ implies } |\theta(G) - \theta(F)| < \epsilon\text{''}.
+\]
+[That is for any $\epsilon$, if there is some $G$ close enough to $F$, then $\theta(G)$ is close to $\theta(F)$.]
+
+Then,
+\[
+    \theta(\hat{F}_n) \xrightarrow{P} \theta(F).
+\]
+\end{tb}
+
+
+\begin{db}[Linear statistics]
+A statistic is a linear function of $F$ if it can be written as
+$$
+T(F) = \int r(x) \, dF(x)
+$$
+for some measurable function $r(x)$.
+\end{db}
+
+The mean is a linear functional, but the variance and quantile function are not.
+
+The plug-in estimator of $T(F)$ is just $T(\hat{F}_n)$. When $T$ is a linear functional,
+\[
+    T(\hat{F}_n) = \int r(x) d\hat{F}_n(x) = \frac{1}{n} \sum_{i=1}^n r(X_i)
+\]
+
+

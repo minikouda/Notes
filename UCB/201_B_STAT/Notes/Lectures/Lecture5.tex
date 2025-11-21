@@ -1,0 +1,194 @@
+% TeX root = ../Main.tex
+
+% First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
+\section[Lecture 5 (Sept. 11) -- {\it Sufficiency}]{Lecture 5}
+
+\subsection{Sufficiency}
+
+\subparagraph{Motivation} % (fold)
+\label{subp:Motivation}
+We hope to separate the information contained in the data into
+the information relevant for making inference about $\theta$ and the information
+irrelevant for these inferences. In other words, we would like to compress the
+data to, e.g. $T(X)$, without loss of information. (Actually, it often turns
+out that some part of the data carries no information about the unknown
+distribution that produces the data)
+% subparagraph Motivation (end)
+
+\subparagraph{Benefits} % (fold)
+\label{subp:Benefits}
+
+1. increasing computational efficiency and decreasing storage requirements
+2. involving irrelevant information may increase an estimator’s risk (see
+Rao-Blackwell Theorem)
+3. Improving the scientific interpretability of our data
+
+% subparagraph Benefits (end)
+
+\begin{eb}
+Let $X_i \overset{i.i.d.}{\sim} Ber(\theta)$. Show that $T(X) = \sum\limits_{i=1}^{n} X_i$ is sufficient for $\theta$.
+
+$$
+P_0(X_1 = x_1, \dots, X_n = x_n | T(X) = t) = \dfrac{P_0(X_1 = x_1, \dots, X_n = x_n, T(X) = t)}{P_0(T(X) = t)}
+$$
+$$
+= \dfrac{P_0(X_1 = x_1, \dots, X_n = x_n | \sum\limits_{i=1}^{n}X_i = t)}{P_0(\sum\limits_{i=1}^{n} X_i = t)} 
+$$
+$$
+=
+\left\{
+\begin{array}{ll}
+  0 & \text{\ when } t \ne \sum\limits_{i=1}^{n} x_i \\
+  \dfrac{1}{\binom{n}{t}} & \text{ when } t = \sum\limits_{i=1}^{n} x_i \\
+\end{array}
+\right.
+$$
+\end{eb}
+
+\begin{tb}[Neyman Factorization Theorem]
+    Suppose the family
+$\{P_\theta : \theta \in \Omega\}$ of distributions have joint mass functions or 
+densities $\{p(x;\theta) : \theta \in \Omega\}$. Then a statistic $T$ is sufficient for 
+$\theta$ if and only if there are functions $h$ and $g$ such that the density/mass 
+function can be written
+
+\[
+p(x;\theta) = h(x)\, g(T(x), \theta).
+\]
+\end{tb}
+
+\subparagraph{Proof} % (fold)
+\label{subp:Proof}
+$
+\Rightarrow
+$
+
+If $T$ is sufficient for $\theta$, then
+$$
+P_\theta(X = x ) =  \underset{h(x)}{P_\theta(X=x | T(X) = T(x))}  \cdot P_\theta(T(X) = T(x))
+$$
+$$
+= h(x) \cdot g(T(x), \theta)
+$$
+The first term is independent of $\theta$ according to the definition of Sufficient Statistics.
+
+$
+\Leftarrow
+$
+If $p(x;\theta) = h(x) g(T(x), \theta)$, then
+$$
+P_\theta(X = x | T(X) = t) = \dfrac{P_\theta(X = x, T(X) = t)}{P_\theta(T(X) = t)} = \dfrac{h(x) g(T(x), \theta)}{\sum\limits_{y: T(y) = t} h(y) g(T(y), \theta)}.
+$$
+Since $
+P(X = x, T(X) = T(x)) = P(X = x)
+$ and we need to run through all $y$ such that $T(y) = t$, the $g(T(y), \theta)$ term cancels out. So the conditional distribution does not depend on $\theta$.
+
+$$
+ = \dfrac{h(x)}{\sum\limits_{y: T(y) = t} h(y)}
+$$
+According to the definition of Sufficient Statistics, $T$ is sufficient for $\theta$.
+
+
+% subparagraph Proof (end)
+
+
+\begin{eb}
+Let $X_i \sim U(0,\theta)$. Show that $T(X) = \max(X_1, \dots, X_n)$ is sufficient for $\theta$.
+
+\begin{align*}
+ p(x_1, \dots, x_n; \theta) & = \dfrac{1}{\theta^n} \cdot I(0 < x_1, \dots, x_n < \theta) = \dfrac{1}{\theta^n} I(0 < \max(x_1, \dots, x_n) < \theta) \\
+ &   = \dfrac{1}{\theta^n} I(0 < Y_{(1)}) \cdot I(Y_{(n)} < \theta) \\
+ & = I(Y_{(1)} > 0) \cdot \dfrac{1}{\theta^n} \cdot I(Y_{(n)} < \theta) \\
+    & = h(Y) \cdot g(T(Y), \theta)
+ \end{align*}
+ $$
+ T(Y) = Y_{(n)}
+ $$
+ 
+
+\end{eb}
+
+
+\begin{tb}[The Rao-Blackwell Theorem]
+
+Suppose $X$ is distributed according to $P_\theta(x) \in \{ P_\theta : \theta \in \Omega \}$ 
+and a statistic $T(X)$ is sufficient for $\theta$. Given any estimator $\delta(X)$ of $\theta$, 
+define
+\[
+\eta(T) = \mathbb{E}_\theta \big[ \delta(X) \mid T(X) \big].
+\]
+If the loss function $\mathcal{L}(\theta, \delta(X))$ is convex and the risk function
+\[
+R(\theta, \delta(X)) = \mathbb{E}\big[\mathcal{L}(\theta, \delta(X))\big] < \infty,
+\]
+then
+\[
+R(\theta, \eta) \leq R(\theta, \delta).
+\]
+If $\mathcal{L}$ is strictly convex, then the inequality is strict unless $\delta = \eta$.
+
+\medskip
+\noindent Note that the loss function reflects the degree of wrongness of an estimate. 
+The commonly used quadratic loss function is defined as
+\[
+\mathcal{L}(\theta, \delta) = \big(\theta - \delta(X)\big)^2.
+\]
+\end{tb}
+\begin{proof}
+
+$\delta(x)$: an estimator of $\theta$.
+
+$\eta(x) := \mathbb{E}_\theta \big[ \delta(X) \mid T(X) \big] = \eta (T(X))$ a function of $T(X)$.
+
+$$
+E_{\theta,x}[\eta(x) | T(x)] = E_{\theta,x|T(x)}[ \eta(x)] = \int \eta(x) f(x|T(x)) dx \text{\ no theta}
+$$
+
+$\mathbb{E}_\theta(\eta(x)) = \mathbb{E}_\theta \big[ \mathbb{E}_\theta \big[ \delta(X) \mid T(X) \big] \big] = \mathbb{E}_\theta \big[ \delta(X) \big]$
+
+$\mathcal{L}(\theta, \eta) $ loss function
+
+$R(\theta,\delta) = \mathbb{E}_\theta(\mathcal{L}(\theta, \delta(X)))$
+
+\begin{lb}[Jensen Inequality]
+Let $(\Omega, \mathcal{F}, \mathbb{P})$ be a probability space, and let 
+$X : \Omega \to \mathbb{R}$ be an integrable random variable, i.e.\ $E[|X|] < \infty$.
+
+Let $\varphi : \mathbb{R} \to \mathbb{R}$ be a convex function such that $\varphi(X)$ is integrable. Then
+\[
+\varphi\!\big(E[X]\big) \;\leq\; E[\varphi(X)].
+\]
+
+Moreover, if $\varphi$ is strictly convex, then equality holds if and only if $X$ is almost surely constant.
+
+\begin{proof}
+Let $a = \mathbb{E}[X]$. By the definition of convexity, for any $x$,
+\[
+\phi(x) \geq \phi(a) + \phi'(a)(x - a).
+\]
+Taking expectation on both sides gives
+\[
+\mathbb{E}[\phi(X)] \geq \phi(a) + \phi'(a)(\mathbb{E}[X] - a) = \phi(a).
+\]
+\end{proof}
+\end{lb}
+
+$$
+R(\theta, \eta) = \mathbb{E}_\theta(\mathcal{L}(\theta, \eta(X))) = \mathbb{E}_\theta(\mathcal{L}(\theta, \eta(T(X))))
+$$
+$$
+= \E_{\theta,x} [ L(\theta,E_{\theta,x}[\delta(X) | T(X)]) ] = \E_{\theta,x} [ \mathcal{L}(\theta,E_{\theta,x|T(X)}[\delta(X)]) ] 
+$$
+$$
+\le \E_{\theta,x} [ E_{\theta,x|T(X)}[\mathcal{L}(\theta,\delta(X))] ] \qquad \text{Jensen Inequality}
+$$
+$$
+= \E_{\theta,x} [\mathcal{L}(\theta,\delta(X))] = R(\theta,\delta(x)) \qquad \text{Law of iterated expectation}
+$$
+
+
+
+\end{proof}
+
+
+

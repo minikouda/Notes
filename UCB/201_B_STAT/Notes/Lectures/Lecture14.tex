@@ -1,0 +1,68 @@
+% TeX root = ../Main.tex
+
+% First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
+\section[Lecture 14 (Oct 28)-- {\it TBD}]{Lecture 14}
+
+\subsection{Bayesian}
+
+
+For rejection sampling, 
+the $\theta_{i} ^{F} := $ the $i$-th item from final list of $B$ size.
+\\It follows some distribution $q$
+
+\[
+q(\theta) = \dfrac{f(\theta) f(X_1,\dots,X_n | \theta)}{f(X_1,\dots,X_n)}
+\]
+\[
+q(\theta) \propto f(\theta) \dfrac{L_n(\theta)}{L_n(\hat \theta _n)} \propto f(\theta) f(X_1,\dots,X_n|\theta) \propto f(\theta|X_1,\dots,X_n)
+\]
+
+\subsection{Importance Sampling} % (fold)
+
+\[
+\begin{aligned}
+E_h[q(\theta)]
+&= \int q(\theta) h(\theta) \, d\theta \\[6pt]
+&= \int q(\theta) \frac{h(\theta)}{g(\theta)} g(\theta) \, d\theta \\[6pt]
+&\approx \frac{1}{B} \sum_{i=1}^B q(\theta_i) \frac{h(\theta_i)}{g(\theta_i)}.
+\end{aligned}
+\]
+
+We choose $h(\theta)$ to be the posterior distribution $f(\theta|X_1,\dots,X_n)$, and $g(\theta)$ to be the prior distribution $f(\theta)$.
+
+Then we have
+\[
+E_{f(\theta|X_1,\dots,X_n)}[q(\theta)]
+\approx \frac{1}{B} \sum_{i=1}^B q(\theta_i) \frac{f(\theta_i|X_1,\dots,X_n)}{f(\theta_i)}
+\]
+
+How to get $f(\theta_i|X_1,\dots,X_n)$?
+
+Denote $L_n(\theta) = f(X_1,\dots,X_n|\theta)$, then
+
+Denote the fraction to be :
+\[
+w_i := \dfrac{f(\theta_i | X_1,\dots,X_n)}{B \cdot f(\theta_i)} 
+\]
+
+The numerator \[
+f(\theta_i | X_1,\dots,X_n) = \dfrac{f(X_1,\dots,X_n|\theta_i) f(\theta_i)}{f(X_1,\dots,X_n)} = \dfrac{L_n(\theta_i) f(\theta_i)}{f(X_1,\dots,X_n)}
+\]
+
+Thus, the weight is :
+\[
+=  \dfrac{L_n(\theta_i)}{B \cdot \int_{}^{} f(X_1,\dots,X_n | \theta) f(\theta) d\theta} \approx \frac{L_n(\theta_i)}{ \sum\limits_{j=1}^{B} L_n(\theta_j) } 
+\]
+(by approximating the denominator via Monte Carlo integration)
+
+\[
+f(x_1,\dots,x_n) = \int f(x_1,\dots,x_n,\theta) d \theta = \int f(x_1,\dots,x_n | \theta) \dfrac{f(\theta)}{g(\theta)} g(\theta) d \theta \approx \dfrac{1}{B} \sum_{j=1}^{B} L_n(\theta_j) \dfrac{f(\theta_j)}{g(\theta_j)}
+\]
+
+We can choose the second MC to use the same as the first MC, i.e., $g(\theta) = f(\theta)$
+
+Finally, we have
+\[
+\E[q(\theta) | x^n] \approx \sum_{i=1}^B w_i q(\theta_i)
+\]
+% paragraph Importance Sampling (end)

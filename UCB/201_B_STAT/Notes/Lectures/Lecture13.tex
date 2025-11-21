@@ -1,0 +1,112 @@
+% TeX root = ../Main.tex
+
+% First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
+\section[Lecture 13 (Oct 23) -- {\it TBD}]{Lecture 13}
+
+\subsection{Pearson's Test}
+
+\begin{eb}[Poisson]
+\[
+H_0: X_1,X_2\dots,X_n \sim Poisson(\lambda)
+\\ H_1: not null
+\]
+
+Construct $K$ categories, where category $i$ corresponds to observing $i-1$ events for $i=1,2,\dots,K-1$ and category $K$ corresponds to observing at least $K-1$ events. Let $O_i$ be the observed counts in category $i$ and let $E_i$ be the expected counts in category $i$ under $H_0$. Then the test statistic is:
+\[
+X^2 = \sum_{i=1}^K \frac{(O_i - E_i)^2}{E_i}
+\]
+
+In practice, usually we use at least 5 categories.
+
+
+\begin{align*}
+\{0\} :=&  i = 1\\
+\{1\} :=&  i = 2\\
+\vdots & \\
+\{K-2\} :=&  i = K-1\\
+\{K-1, K, K+1, \dots \} :=&  i = K
+\end{align*}
+
+\[
+Y_j = \#\{x_i | x_i = j-1\} \text{ for } j = 1,2,\dots,K-1
+\]
+\[
+Y_K = \#\{x_i | x_i \ge K-1\}
+\]
+\[
+p_j(\lambda) = \begin{cases}
+    e^{-\lambda} \frac{\lambda^{j-1}}{(j-1)!} & j = 1,2,\dots,K-1\\
+    1 - \sum_{i=0}^{K-2} e^{-\lambda} \frac{\lambda^i}{i!} & j = K
+\end{cases} 
+\]
+
+If $\lambda$ is known, then under $H_0$,
+\[
+T(X) = \sum\limits_{j=1}^{K} \dfrac{(Y_j - n p_j(\lambda))^2}{np_j(\lambda)} \overset{D}{\rightarrow} \chi^2_{K-1} 
+\]
+
+If $\lambda$ is unknown, then
+\[
+T(X) = \sum\limits_{j=1}^{K} \dfrac{(Y_j - n p_j(\lambda))^2}{np_j(\lambda)} \overset{D}{\rightarrow} \chi^2_{K-1-1} 
+\]
+
+
+\end{eb}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Images/PN.png}
+\caption{Positive and Negative Predictive Values vs Prevalence}
+\end{figure}
+
+
+
+\subsection{Bayesian Statistics}
+
+\[
+f(\theta|x^n) = \dfrac{f(x^n|\theta)(f(\theta))}{f(x^n)}
+\]
+\begin{enumerate}
+    \item $f(\theta)$ is the prior distribution of $\theta$.
+    \item $f(x^n|\theta)$ is the likelihood function.
+    \item $f(\theta|x^n)$ is the posterior distribution of $\theta$ given data $x^n$.
+    \item $f(x^n)$ is the marginal likelihood of the data, can be hard to compute. Serve as the normalizing constant.
+\end{enumerate}
+
+Good news: We often do not need to compute $f(x^n)$, since the family of prior and posterior distributions are often the same (conjugate prior).
+\begin{eb}[Normal Model]
+Suppose $X_1,X_2,\dots,X_n \overset{iid}{\sim} N(\mu,\sigma^2)$, and the prior distribution of $\mu$ is $N(\mu_0,\sigma_0^2)$, i.e.,
+\[f(\mu) = \dfrac{1}{\sqrt{2\pi \sigma_0^2}} e^{-\frac{(\mu - \mu_0)^2}{2\sigma_0^2}}\]    
+\begin{solution}
+    \[
+    f(\mu|x_1,\dots,x_n) \propto f(x_1,\dots,x_n|\mu) f(\mu) \propto \left(\prod_{i=1}^n \dfrac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{(x_i - \mu)^2}{2\sigma^2}}\right) \dfrac{1}{\sqrt{2\pi \sigma_0^2}} e^{-\frac{(\mu - \mu_0)^2}{2\sigma_0^2}}
+    \]
+    \[\propto e^{-\frac{1}{2}\left(\frac{n}{\sigma^2} + \frac{1}{\sigma_0^2}\right) \left(\mu - \frac{\frac{n\bar{x}}{\sigma^2} + \frac{\mu_0}{\sigma_0^2}}{\frac{n}{\sigma^2} + \frac{1}{\sigma_0^2}}\right)^2} 
+    \]
+\end{solution}
+\end{eb}
+\begin{eb}[Poisson-Gamma Model]
+Suppose $X_1,X_2,\dots,X_n \overset{iid}{\sim} Poisson(\theta)$, and the prior distribution of $\theta$ is $Gamma(\alpha,\beta)$, i.e.,
+\[f(\theta) = \dfrac{\beta^\alpha}{\Gamma(\alpha)} \theta^{\alpha - 1} e^{-\beta \theta}, \theta > 0\]
+
+\begin{solution}
+    \[
+    f(\theta|x_1,\dots,x_n) \propto f(x_1,\dots,x_n|\theta) f(\theta) \propto \left(\prod_{i=1}^n \dfrac{e^{-\theta} \theta^{x_i}}{x_i!}\right) \theta^{\alpha - 1} e^{-\beta \theta} \propto \theta^{(\sum_{i=1}^n x_i )+ \alpha - 1} e^{-(n + \beta) \theta}
+    \]
+
+    \[
+    \E(\theta| X_1,\dots,X_n) = \dfrac{\sum\limits_{i=1}^{n} X_i + \alpha}{n+\beta} = \dfrac{n}{n+\beta} \bar X_n + \dfrac{\beta}{n + \beta} \dfrac{\alpha}{\beta}
+    \]
+\end{solution}
+\end{eb}
+
+\begin{eb}
+For $X_1,\dots,X_n | \theta \overset{iid}{\sim} N(\theta,\sigma^2)$ , where $\sigma^2$ is known, $\theta \sim N(a,b^2)$
+The posterior distribution is
+\[\theta | x^n \sim N\left(\dfrac{\frac{n\bar{x}}{\sigma^2} + \frac{a}{b^2}}{\frac{n}{\sigma^2} + \frac{1}{b^2}}, \dfrac{1}{\frac{n}{\sigma^2} + \frac{1}{b^2}}\right)\]
+
+The mean could be written as a weighted average of the prior mean and the sample mean:
+\[\dfrac{\frac{n\bar{x}}{\sigma^2} + \frac{a}{b^2}}{\frac{n}{\sigma^2} + \frac{1}{b^2}} = \left(\dfrac{\frac{n}{\sigma^2}}{\frac{n}{\sigma^2} + \frac{1}{b^2}}\right) \bar{x} + \left(\dfrac{\frac{1}{b^2}}{\frac{n}{\sigma^2} + \frac{1}{b^2}}\right) a\]
+
+When $n \rightarrow \infty$, the weight for the prior $\rightarrow 0$.
+\end{eb}

@@ -1,0 +1,131 @@
+% TeX root = ../Main.tex
+
+% First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
+\section[Lecture 12 (Oct 9) -- {\it TBD}]{Lecture 12}
+
+\subsection{Hypothesis Testing}
+\[
+H_0 : g(\theta) = g(\theta_0)
+\]
+
+If the distribution is from \emph{an exponential family}, and $g(\theta)$ is a linear function of the natural parameter, then
+\[
+\dfrac{g(\hat{\theta}_n) - g(\theta_0)}{\hat{se}(g(\hat{\theta}_n))} \overset{D}{\rightarrow} N(0,1)
+\]
+
+where $T(F) = \E_F r(x)$ for any $r$
+
+\begin{eb}
+Suppose that $X \sim \text{Bin}(m, p_1)$ and $Y \sim \text{Bin}(n, p_2)$. Construct a size $\alpha$ Wald test for $H_0 : p_1 = p_2$.
+
+
+\[
+H_0 : p_1 - p_2 = 0 \qquad H_1 : p_1 - p_2 \neq 0
+\]
+
+where $\hat{p_1} - \hat{p_2} = X/m - Y/n$ is the MLE of $p_1 - p_2$.
+\end{eb}
+
+
+\begin{eb}
+Let $F(u, v)$ be the joint distribution of two random variables $U$ and $V$.  
+  Let $\theta = T(F) = \rho(U, V)$, where $\rho$ denotes the correlation.  
+  Describe how to construct a size $\alpha$ Wald test for $H_0 : \rho = 0$ using the plug-in estimator and the bootstrap.
+
+\begin{solution}
+    \[
+    \rho(U,V) = \dfrac{\E[(U - \mu_U)(V - \mu_V)]}{\sigma_U \sigma_V} = \dfrac{\E[UV] - \mu_U \mu_V}{\sigma_U \sigma_V} = \dfrac{\dfrac{1}{n} \sum\limits_{i=1}^{n} U_i V_i - \bar{U} \bar{V}}{\hat{se}(U) \hat{se}(V)}
+    \]
+
+    where $\hat{se}(U)$ and $\hat{se}(V)$ are the sample standard deviations of $U$ and $V$.
+    \[\hat{\rho} = \dfrac{\dfrac{1}{n} \sum\limits_{i=1}^{n} U_i V_i - \bar{U} \bar{V}}{\hat{se}(U) \hat{se}(V)}\]
+    \[\hat{se}(\hat{\rho}) = \text{bootstrap estimate of standard error of } \hat{\rho}\]
+    The Wald test rejects $H_0$ when
+    \[\left| \dfrac{\hat{\rho} - 0}{\hat{se}(\hat{\rho})} \right| > z_{\alpha/2}\]
+\end{solution}
+\end{eb}
+
+
+
+\subsection{Likelihood Ratio Test (LRT)}
+
+Another broadly applicable class of tests is the \textbf{likelihood ratio test (LRT)}.  
+Let
+\[
+T(X) = 
+\frac{\sup_{\theta \in \Theta} L_n(\theta)}
+{\sup_{\theta \in \Theta_0} L_n(\theta)}.
+\]
+If $T(X)$ is large, it means there are values of $\theta$ in $\Theta_1$ that yield larger likelihood than any in $\Theta_0$.  
+The likelihood ratio test rejects $H_0$ when
+\[
+R = \{ x : T(x) > c \}.
+\]
+If $\hat{\theta}_n$ is the MLE and $\hat{\theta}_{n,0}$ is the MLE under the constraint $\theta \in \Theta_0$, then
+\[
+T(X) = \frac{L_n(\hat{\theta}_n)}{L_n(\hat{\theta}_{n,0})}.
+\]
+
+\begin{remark}
+    This LRT is always greater than or equal to 1, since the numerator is the unconstrained MLE and the denominator is the constrained MLE.
+\end{remark}
+
+
+\begin{eb}
+Suppose $X_1, \ldots, X_n \overset{iid}{\sim} N(\theta, 1)$.  
+Test $H_0 : \theta = \theta_0$ vs $H_1 : \theta \ne \theta_0$.  
+Find $T(X)$ and simplify the rejection region.  
+Use this to find the size $\alpha$ LRT.
+
+\begin{solution}
+\[
+T(X) = \dfrac{L_n(\hat{\theta}_n)}{L_n(\hat{\theta}_{n,0})} = \dfrac{\exp\left(-\dfrac{1}{2} \sum\limits_{i=1}^{n} (X_i - \bar{X})^2\right)}{\exp\left(-\dfrac{1}{2} \sum\limits_{i=1}^{n} (X_i - \theta_0)^2\right)} = \exp\left(-\dfrac{1}{2} \left[\sum\limits_{i=1}^{n} (X_i - \bar{X})^2 - \sum\limits_{i=1}^{n} (X_i - \theta_0)^2\right]\right)
+\]
+\[
+= \exp\left(-\dfrac{1}{2} \left[n(\bar{X} - \theta_0)^2 - 2(\bar{X} - \theta_0) \sum\limits_{i=1}^{n} (X_i - \bar{X})\right]\right) = \exp\left(-\dfrac{n}{2} (\bar{X} - \theta_0)^2\right)
+\]
+The rejection region is
+\[R = \{ x : T(x) > c \} = \{ x : \exp(-\dfrac{n}{2} (\bar{X} - \theta_0)^2) > c \} = \left\{ x : |\bar{X} - \theta_0| > \sqrt{-\dfrac{2}{n} \log c} \right\}
+\]
+
+Power function:
+\[
+\beta(\theta) = P_\theta(X \in R) = P_\theta\left(|\bar{X} - \theta_0| > \sqrt{-\dfrac{2}{n} \log c}\right) = 2 \cdot P\left(\bar{X} - \theta_1 > \sqrt{-\frac{2}{n} \log c} + \theta_0 - \theta_1\right) 
+\]
+
+The $\bar X - \theta_1 \sim N(0, \frac{1}{n})$.
+
+
+\end{solution}
+\end{eb}
+
+
+When the exact power function cannot be computed, and $\Theta_0$ consists of fixing certain elements of $\theta$, we can use
+\[
+\lambda(X) = 2 \log T(X) \xrightarrow{D} \chi^2_{r - q},
+\]
+where $r = \dim(\Theta)$ and $q = \dim(\Theta_0)$.
+
+
+\begin{eb}
+ Suppose $X_i \overset{iid}{\sim} \text{Poisson}(\theta)$, and let $\hat{\theta}_n = \frac{1}{n}\sum_{i=1}^n X_i$ be the MLE.  
+For testing $H_0 : \theta = \theta_0$ vs $H_1 : \theta \ne \theta_0$,
+\[
+\lambda = 2 \log \frac{L(\hat{\theta}_n)}{L(\theta_0)}
+= 2n[(\theta_0 - \hat{\theta}_n) - \hat{\theta}_n \log(\theta_0 / \hat{\theta}_n)].
+\]
+Since $\lambda \xrightarrow{D} \chi^2_1$, reject $H_0$ if $\lambda > \chi^2_{1,\alpha}$.
+
+
+Notice that \[
+\hat \theta_n [\log(\theta_0 ) - \log(\hat \theta_n)] = \hat \theta_n [\dfrac{1}{\hat \theta_n} (\theta_0 - \hat \theta_n) - \dfrac{1}{2 \hat \theta_n^2} (\theta_0 - \hat \theta_n)^2] = (\theta_0 - \hat \theta_n) - \dfrac{1}{2 \hat \theta_n} (\theta_0 - \hat \theta_n)^2
+\]
+
+Thus, 
+\[
+\lambda = 2n [(\theta_0 - \hat \theta_n) - (\theta_0 - \hat \theta_n) + \dfrac{1}{2 \hat \theta_n} (\theta_0 - \hat \theta_n)^2] = n \dfrac{(\theta_0 - \hat \theta_n)^2}{\hat \theta_n} = \left(\dfrac{\theta_0 - \hat \theta_n}{\sqrt{ \frac{\hat \theta_n}{n}}}\right)^2 \sim \chi^2_1
+\]
+
+
+
+\end{eb}

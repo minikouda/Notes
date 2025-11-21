@@ -1,0 +1,279 @@
+\section{Survival Analysis}
+
+\subsection{preliminary} % (fold)
+\label{sub:preliminary}
+
+
+\begin{enumerate}
+    \item Survival function: $S(t) = P(T > t)$, where $T$ is the time until the event of interest occurs.
+    \item Hazard function: $h(t) = \lim_{\Delta t \to 0} \frac{P(t < T \leq t + \Delta t | T \ge t)}{\Delta t}$, which describes the instantaneous risk of the event occurring at time $t$ given that it has not occurred before $t$.
+    \item Cumulative hazard function: $H(t) = \int_0^t h(u) du$, which accumulates the hazard over time.
+    \item $f(t) = h(t)S(t) = -S'(t)$ is the probability density function of the time until the event occurs.
+\end{enumerate}
+$$
+H(t) = \int_{0}^{t} h(u) du = \int_{0}^{t}\dfrac{f(u)}{S(u)}du = \int_{0}^{t} \dfrac{1}{S(u)} d(-S(u))=-\ln S(t)
+$$
+$$
+H(t) \sim EXP(1)
+$$
+
+$$
+T= min(T_1, T_2, \ldots, T_n) \rightarrow h^T(t) = \sum_{i=1}^{n} h_i(t)
+$$
+
+Expotential distribution: $S(t) = e^{-\lambda t}$, where $\lambda$ is the rate parameter.
+$f(t) = \lambda e^{-\lambda t} ,h(t) = \lambda,H(t) = \lambda t$
+
+
+Weibull distribution: $S(t) = e^{-(\lambda t)^p}$, where $\lambda$ is the scale parameter and $k$ is the shape parameter.
+$f(t) = \lambda p t^{p-1} e^{-(\lambda t)^p}, h(t) = \lambda p t^{p-1}, H(t) = (\lambda t)^p$
+
+Homogeneous Poisson process: $h(t) = \lambda$, where $\lambda$ is the rate of the process.
+$$N(t+s) - N(t) \sim Poisson(\lambda s)$$
+
+\paragraph{Censoring} % (fold)
+\label{par:censoring}
+Censoring occurs when the event of interest has not occurred by the end of the observation period. There are two types of censoring:
+\begin{enumerate}
+    \item Type I censoring: $$
+    (U_i,\delta_i) = \{min(T_i,c),1(T_i \le c)\}
+    $$
+    \item Type II censoring: Only observe the first r smallest survival times.
+$$
+T_{(1,n)}, T_{(2,n)}, \ldots, T_{(r,n)} 
+$$
+    \item Random censoring:
+$$
+(U_i,\delta_i) = \{min(T_i,C_i),1(T_i \le C_i)\}, C_i \sim iid
+$$
+    \item Interval censoring: observe only $(L_i,U_i)$
+\end{enumerate}
+
+
+Noninformative censoring: $$
+h(t) = \lim\limits_{\epsilon\rightarrow 0} \frac{P(t \leq T \leq t + \epsilon | T \ge t, C \ge t)}{\epsilon}
+$$
+
+Likelihood construction:
+$$
+L_i(F,G) = \begin{cases}
+    f(u_i)(1-G(u_i)), & \text{if } \delta_i = 1\\
+    S(u_i)g(u_i), & \text{if } \delta_i = 0
+\end{cases}
+$$
+$$
+L(F,G) = \prod_{i=1}^{n} L_i(F,G) = \prod_{i=1}^{n} [ f(u_i)^{\delta_i} S(u_i)^{1-\delta_i} ] [ g(u_i)^{1-\delta_i} G(u_i)^{\delta_i }]
+$$
+$$
+L(F) = \prod_{i=1}^{n} [ f(u_i)^{\delta_i} S(u_i)^{1-\delta_i} ] = \prod_{i=1}^{n} [ h(u_i)^{\delta_i}{S(u_i)} ]
+$$
+
+% subsection preliminary (end)
+
+
+
+\subsection{Kaplan-Meier estimator} % (fold)
+\label{sub:Kaplan-Meier estimator}
+If no censoring,
+$$
+\hat S(t) = \dfrac{1}{n} \sum\limits_{i=1}^{n} \mathbf{1}(T_i > t)
+$$
+
+$T_1 < T_2 < \dots < T_n $, $f_1 = P(T = T_1), f_2 = P(T=T_2)$
+\vspace{20pt}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{figure/censor_exm.png}
+\caption{example,p31}
+\label{fig:exm_censor}
+\end{figure}
+
+Too complicated!!!
+
+Reparametrization tricks:
+$$
+h_1 = P(T = v_1), h_j = P(T=v_j | T > v_{j-1}), j = 2, \ldots, n
+$$
+\begin{itemize}
+    \item For $t\in[v_j,v_{j+1} )$
+$$
+S(t) = P(T>t) = P(T> v_j) = \prod_{i=1}^{j} (1-h_i) 
+$$
+    \item For $t = v_j$
+$$
+f_j = f(t) = P(T=t) = h_j \prod_{i=1}^{j-1} (1-h_i) 
+$$
+
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figure/solution_exm.png}
+\caption{solution to Figure~\ref{fig:exm_censor}, p32}
+\label{fig:}
+\end{figure}
+
+$$
+L(F) = \prod_{j=1}^{n} [h^{d_j} _j (1-h_j)^{Y(v_j)-d_j}]
+$$
+where $d_j$ is the number of events at time $v_j$, and $Y(v_j)$ is the number of individuals at risk at time $v_j$. 
+
+$d_j$：$v_j$时间嗝屁的人； $Y(v_j)-d_j$这个时间幸存的人
+
+Thus, we could derive the Kaplan-Meier estimator as follows:
+$$
+\hat h_j = \frac{d_j}{Y(v_j)}, \quad j = 1, \ldots, n
+$$
+$$
+\hat S(t) = \begin{cases}
+    1 & t < v_1 \\
+    \prod_{j=1}^{k} (1-\hat h_j) & v_k \leq t < v_{k+1} \\
+\end{cases}
+$$
+\begin{enumerate}
+    \item If the last $d_g = Y(v_g)$ , then $\hat S(t) = 0$ for $t \ge v_g$
+    \item If the last $d_g < Y(v_g)$, then $\hat S(t) > 0 $ but not defined for $t > v_g$.
+\end{enumerate}
+\hyperref[fig:example for km, p36]{Calculate the example above}
+
+
+
+\paragraph{Nelson-Aalen Estimator}
+
+在没有解析解的时候很有用
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figure/NA_estimator.png}
+\caption{}
+\label{fig:NA}
+\end{figure}
+
+$$
+\hat H(t) = \sum_{j=1}^{n} \frac{d_j}{Y(v_j)} \mathbf{1}(v_j \leq t) = \sum\limits_{i=1}^{j} \hat h_i \mathbf{1}(v_i \leq t)
+$$
+$$
+H(t) = -\ln \hat S(t) = \sum\limits_{i=1}^{j} {-\ln(1-\hat h_i)} \mathbf{1}(v_i \leq t) \approx \sum\limits_{i=1}^{j} {\hat h_i} \mathbf{1}(v_i \leq t)
+$$
+$$
+n\rightarrow \infty, \hat S(t) \xrightarrow{p} S(t) \qquad
+\sqrt{n}\{\hat S(t) - S(t)\} \xrightarrow{d} N(0, \sigma^2(t))
+$$
+$$
+Var(\hat h_i) = \dfrac{\hat h_i}{(1-\hat h_i)Y(v_i)} \qquad
+$$
+
+方差估计考试不涉及
+
+
+AUC $\mu = \int_{0}^{\tau}S(t) dt = tS(t)|^\tau_0 + \int_{0}^{\tau}tf(t) dt = \tau S(\tau) + \int_{0}^{\tau}tf(t) dt \\=\int_{0}^{\infty} min(t,\tau)f(t) dt = E\{min(T,tau)\}$
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figure/censor_time.png}
+\caption{estimating the censoring time, p50}
+\label{fig:censortime}
+\end{figure}
+
+
+% subsection Kaplan-Meier estimator (end)
+
+
+\subsection{Logrank Test} % (fold)
+\label{sub:Logrank Test}
+
+$\tau_1 < \tau_2 < \dots < \tau_K$
+
+$Y_i(\tau_j)$: the number of individuals at risk at time $\tau_j$ in group $i$.
+
+$d_{ij} $: the number of events at time $\tau_j$ in group $i$.
+
+
+超几何分布：
+$$
+P(d_{1j} = d ) = \dfrac{\binom{d_j}{d} \binom{Y(\tau_j)-d_j}{Y_1(\tau_j)-d}}{\binom{Y(\tau_j)}{Y_1(\tau_j)}}
+$$
+
+$$
+E(d_{1j}) = \frac{d_j Y_1(\tau_j)}{Y(\tau_j)} \qquad
+Var(d_{1j}) = \frac{d_j Y_1(\tau_j)Y_0(\tau_j)(Y(\tau_j)-d_j)}{Y(\tau_j)^2(Y(\tau_j)-1)}
+$$
+$$
+O_j = d_{1j} \text{\ observed number of events in group 1 at time } \tau_j
+$$
+$$
+E_j = \frac{d_j Y_1(\tau_j)}{Y(\tau_j)} \text{\ expected number of events in group 1 at time } \tau_j
+$$
+$$
+V_j = \frac{d_j Y_1(\tau_j)Y_0(\tau_j)(Y(\tau_j)-d_j)}{Y(\tau_j)^2(Y(\tau_j)-1)} \text{\ variance of } O_j
+$$
+Logrank test statistic:
+$$
+Z =  \frac{\sum_{j=1}^{K}(O_j - E_j)}{\sum_{j=1}^{K}\sqrt{V_j}} \sim N(0,1)
+$$
+
+The power of the log rank test depends on the number of observed failures rather than the sample sizes
+
+$$
+\sum\limits_{j=1}^{K} (O_j-E_j) = \sum\limits_{j=1}^{K} \dfrac{Y_0(\tau_j)T_1(\tau_j)}{Y(\tau_j)}( \dfrac{d_{1j} }{Y_1(\tau_j)} - \dfrac{d_{0j}}{Y_0(\tau_j)} ) = \sum\limits_{j=1}^{K} \dfrac{Y_0(\tau_j)T_1(\tau_j)}{Y(\tau_j)}( \hat h_{1j} - \hat h_{0j} )
+ = \int_{0}^{\infty} \dfrac{Y_0(t)T_1(t)}{Y(t)} d\{\hat H_1(s) - \hat H_0(s) \}
+$$
+
+% subsection Logrank Test (end)
+
+\subsection{Cox} % (fold)
+\label{sub:Cox}
+
+Cox model: $h(t|Z=z) = h_0(t) g(z)$
+$$
+\dfrac{h(t|Z=z_1)}{h(t|Z=z_2)} = \dfrac{h_0(t)g(z_1)}{h_0(t)g(z_2)} = \dfrac{g(z_1)}{g(z_2)}
+$$
+
+Observed data: $(U_i,\delta_i,Z_i) = \{min(T_i,C_i),1(T_i \le C_i)\}$
+
+Noninformative censoring: $T_i,C_i | Z_i$
+
+$$
+L(\beta,h_0) = \prod_{i=1}^{n} L_i(\beta,h_0) = \prod_{i=1}^{n} [ h_0(u_i)^{\delta_i} g(Z_i)^{\delta_i} S_0(u_i) ]
+$$
+
+where $S_0(t) = e^{-\int_{0}^{u_i} h_0(t) g(z) dt}$ is the baseline survival function.
+
+$\mathcal{F}(t_j^-)$: Information at time $t_j$ before the event occurs.
+
+$\mathcal{I}(t)$: Set of subjects failed at time $t$
+\begin{align*}
+L(\beta, h_0(\cdot)) &= PL(\beta) \tilde{L}(\beta, h_0(\cdot)) \quad \text{where} \\
+PL(\beta) &= \operatorname{pr}\left(\mathcal{I}(\tau_1) \mid \mathcal{F}(\tau_1^-), h_0, \beta\right) 
+            \times \operatorname{pr}\left(\mathcal{I}(\tau_2) \mid \mathcal{F}(\tau_2^-), h_0, \beta\right) \\
+           &\quad \cdots \operatorname{pr}\left(\mathcal{I}(\tau_K) \mid \mathcal{F}(\tau_K^-), h_0, \beta\right) \\
+           &= \operatorname{pr}\left(\mathcal{I}(\tau_1) \mid \mathcal{F}(\tau_1^-), \beta\right) 
+            \times \operatorname{pr}\left(\mathcal{I}(\tau_2) \mid \mathcal{F}(\tau_2^-), \beta\right) \\
+           &\quad \cdots \operatorname{pr}\left(\mathcal{I}(\tau_K) \mid \mathcal{F}(\tau_K^-), \beta\right) \\
+\text{where} \quad &\operatorname{pr}\left(\mathcal{I}(\tau_j) \mid \mathcal{F}(\tau_j^-), h_0, \beta\right) \\
+&= \operatorname{pr}\left(\text{subject } j_1 \text{ fails at } \tau_j \mid \text{subjects } j_1,\cdots,j_p \text{ survive at } \tau_j^- \text{and one fails at } \tau_j\right)
+\end{align*}
+
+$$
+ \operatorname{pr}\left(\text{subject } j_1 \text{ fails at } \tau_j \mid \text{subjects } j_1,\cdots,j_p \text{ survive at } \tau_j^- \text{and one fails at } \tau_j\right)
+$$$$
+= \dfrac{g(z_{j_1})}{\sum\limits_{i=1}^{p} g(z_{j_i} ) }
+$$
+
+\hyperref[fig:p80 Cox_pl]{\textbf{Go back to the example}}
+
+
+$$
+PL(\beta) = \prod_{i=1}^{n} (\dfrac{e^{\beta'z_i}}{\sum\limits_{j=1}^{n} 1(u_j \ge u_i) e^{\beta'z_j}} )^{\delta_i}
+$$
+
+Profile likelihood：先对h求导，得出一个含有beta的h的解。先对L做一个log，然后求导算出 $h_i$，带回到L里面，发现和partial likelihood正比。
+
+Stratified Cox model： relax了部分条件，允许不同组别有不同的 $h_k$
+
+
+% subsection Cox (end)
+
+
+
+

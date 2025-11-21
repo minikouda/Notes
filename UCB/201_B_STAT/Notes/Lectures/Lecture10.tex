@@ -1,0 +1,14 @@
+% TeX root = ../Main.tex
+
+% First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
+\section[Lecture 10 (Oct 2) -- {\it Review}]{Lecture 10}
+
+\subsection{Nonparametric Methods} % (fold)
+
+We have $X_1,\dots,X_n \iid F$, which we have no information about.
+
+
+Bootstrap: Resample with replacement from the data $X_1,\dots,X_n$ to get $X_1^*,\dots,X_n^*$. Then compute the statistic of interest $T_n^* = T(X_1^*,\dots,X_n^*)$. Repeat this many times to get an empirical distribution of $T_n^*$, which approximates the sampling distribution of $T_n = T(X_1,\dots,X_n)$.
+
+Say we have done $B$ bootstrap samples, and we have $T_{n,1}^*,\dots,T_{n,B}^*$. Then we have a vector $(T_{n,1}^*,\dots,T_{n,B}^*)$.
+

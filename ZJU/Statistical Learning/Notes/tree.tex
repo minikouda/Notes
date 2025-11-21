@@ -1,0 +1,133 @@
+\section{Tree and Random Forest}
+
+Nonparametric methods
+
+\subsection{Splitting rules} % (fold)
+\label{sub:Splitting rules}
+
+$$
+Gini(\mathcal{D}) = 1 - \sum_{k=1}^{K} p_k^2
+$$
+$$
+Score = Gini(\mathcal{T}) - (\dfrac{N_{\mathcal{T}_L} }{N_{\mathcal{T}}} Gini(\mathcal{T}_L) + \dfrac{N_{\mathcal{T}_R}}{N_{\mathcal{T}}} Gini(\mathcal{T}_R))
+$$
+Go through all variables j and all cutting points c to find the split with the best score.
+$$
+(ID3,C4.5)Entropy = \sum\limits_{k=1}^{N} -p_k log(p_k)
+$$
+$$
+Error = 1 - max(p_k)
+$$
+
+Gini and Shannon are more sensitive to changes. Maximum of $2^{M-1}-1  $ of possible splits.
+
+For regression trees:
+$$
+score = Var(\mathcal{T}) - (\dfrac{N_{\mathcal{T}_L}}{N_{\mathcal{T}}} Var(\mathcal{T}_L) + \dfrac{N_{\mathcal{T}_R}}{N_{\mathcal{T}}} Var(\mathcal{T}_R)) \qquad Var(\mathcal{T}) = \dfrac{1}{N_{\mathcal{T}}} \sum\limits_{i=1}^{N_{\mathcal{T}}} (y_i - \bar y)^2
+$$
+
+For any sub-tree of $T_{max}$ denote as $T \preceq T_{max} $ calculate
+$$
+C_\alpha (T)  = \sum\limits_{\text{all termial nodes t in T}}^{} N_t \cdot Impurity(t) + \alpha |T|
+$$
+where $|T|$ is the number of terminal nodes in $T$, $\alpha$ is a penalty parameter.
+
+$$
+\alpha \le \dfrac{C(t) - C(T_t)}{|T_t|-1}
+$$
+逐渐删掉最小的 $\alpha$
+
+Tree methods can handle missing value by either putting them as a separate category or using surrogate variables.
+
+
+Pros and cons of tree methods:
+\begin{itemize}
+    \item Pros:
+    \begin{itemize}
+        \item Easy to interpret and visualize.
+        \item Can handle both numerical and categorical data.
+        \item Non-parametric, no assumptions about the distribution of the data.
+        \item Can capture non-linear relationships.
+    \end{itemize}
+    \item Cons:
+    \begin{itemize}
+        \item Prone to overfitting, especially with deep trees.
+        \item Sensitive to small changes in the data.
+        \item Can be biased towards features with more levels (in categorical variables).
+        \item not smooth
+    \end{itemize}
+\end{itemize}
+
+
+% subsection Splitting rules (end)
+
+\subsection{Random Forest} % (fold)
+\label{sub:Random Forest}
+
+不仅仅是多个树的叠加，feature的选取也是随机的。
+
+Bootstrap
+
+mtry: At each split, randomly select mtry variables from the entire set of features.
+
+nmin: split until the number of samples in a node is less than nmin.
+
+ntree: number of trees to grow.
+
+\paragraph{Variable Importance} % (fold)
+
+For each tree $m$, use the oob as the testing set to obtain, obtain the prediction error: $Err_0^m$
+
+For each variable $j$, permute the values of $j$ in the oob set, and obtain the prediction error: $Err_j^m$.
+
+$$
+VI_{mj} = \dfrac{Err^m_j}{Err^m_0} - 1
+$$
+$$
+VI_j = \dfrac{1}{M} \sum\limits_{m=1}^{M} VI_{mj}
+$$
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figure/VI.png}
+\caption{Variable Importance}
+\label{fig:Variable Importance}
+\end{figure}
+% subsection Random Forest (end)
+
+
+\subsection{Adaptive Kernel} % (fold)
+\label{sub:Adaptive Kernel}
+$$
+\hat f(x_0) = \dfrac{\sum\limits_{i=1}^{} y_i K_{\lambda} (x_0,x_i)}{\sum\limits_{i=1}^{} K_{\lambda} (x_0,x_i)}
+$$
+
+In random forest, the kernel is adaptive to the local structure of the data. The bandwidth $\lambda$ can be adjusted based on the density of points in the neighborhood of $x_0$.
+
+$$
+\mathcal{A}(x_i,x_0)  = \sum\limits_{k \in \mathcal{K}}^{} \mathbf{1}{x_i \in A_k} \cdot \mathbf{1}{x_0 \in A_k} = \begin{cases}
+1 & \text{if } x_i \text{ and } x_0 \text{ are in the same terminal node} \\
+0 & \text{otherwise}
+\end{cases}
+$$
+
+\begin{center}
+    Tree estimator $\hat f(x_0) = \dfrac{\sum\limits_{i=1}^{} y_i \mathcal{A}(x_i,x_0)}{\sum\limits_{i=1}^{} \mathcal{A}(x_i,x_0)}$\\
+    Random Forest estimator $\hat f(x_0) = \dfrac{\sum\limits_{m=1}^{ntree} \sum\limits_{i=1}^{} y_i^m \mathcal{A}(x_i^m,x_0)}{\sum\limits_{m=1}^{ntree} \sum\limits_{i=1}^{} \mathcal{A}(x_i^m,x_0)}$
+\end{center}
+
+
+\textbf{Random Forests is a kernel method with adaptive bandwidth:}
+
+• Each tree in a forest defines a kernel: uniform within each terminal node
+
+• Ensemble: sum of kernels is still a kernel
+
+• A tree is “more likely” to split on important variables, making their “bandwidth” smaller
+
+• If the splitting variables are selected wisely, the bandwidth is adaptive to the signal strength
+
+• The cutting point is more likely to happen on the zero curvature of the underlying target function
+% subsection Adaptive Kernel (end)
+
+
+U statistics:

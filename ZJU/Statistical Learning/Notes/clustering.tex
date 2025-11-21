@@ -1,0 +1,102 @@
+\section{Clustering}
+
+\subsection{CLuster Analysis}
+Group the dataset into subsets.
+
+Flat clusteriing: assign into k cluster;
+Hierarchical clustering: arrange into a natural hierarchy.
+
+Euclidian distance:
+$$
+d(x,y) = \|u-v\|_2 = \sqrt{\sum_{i=1}^{p} (x_i - y_i)^2}$$
+
+Hamming distance:
+$$
+d(x,y) = \sum_{i=1}^{p} I(x_i \neq y_i)$$
+
+Let $C(\dot)$ be a cluster index function: $C:\{1,\cdot,n\} \rightarrow \{1,\cdot,K\}$
+
+$$
+W(C) = \dfrac{1}{2} \sum\limits_{k=1}^{K} \sum\limits_{C(i),C(i') = k}^{}  d(x_i,x_{i'} )
+$$
+
+Equivalent to maximizing the between cluster distance:
+$$
+B(C) = \dfrac{1}{2} \sum\limits_{k=1}^{K} \sum\limits_{C(i),C(i') \neq k}^{}  d(x_i,x_{i'} )
+$$
+
+\subsection{Combinatorial Algorithm} % (fold)
+\label{sub:Combinatorial Algorithm}
+
+Brute force search times(prove by induction):
+$$
+S(n,K) = \dfrac{1}{K!} \sum\limits_{i=1}^{K} (-1)^{K-i} \binom{K}{i} i^n
+$$
+% subsection Combinatorial Algorithm (end)
+
+\subsection{K-mean} % (fold)
+\label{sub:K-mean}
+
+$$
+\min_{C,\{m_k\}^K_{k=1} } \sum\limits_{k=1}^{K} \sum\limits_{C(i) = k}^{} \|x_i-m_k\|^2
+$$
+
+NP-hard for $\ge 2$ dimensions.
+
+Steps:
+\begin{enumerate}
+    \item Fixing C, find the best $m_k$: $m_k = \dfrac{\sum\limits_{C(i) = k }^{} x_i}{\sum\limits_{i}^{} \mathbf{1}\{C(i) = k\}}$
+    \item Fixing $m_k$, find the best $C$: $C(j) = argmin_i d(x_j,m_i)$
+    \item Repeat 1 and 2 until convergence.
+\end{enumerate}
+
+K-medoids: Replace the second step with searching for the \textbf{1 observation}  that minimizes the within cluster distance, better for categorical mission.
+% subsection K-mean (end)
+
+\subsection{Hierarchical Clustering} % (fold)
+\label{sub:Hierarchical Clustering}
+
+\begin{enumerate}
+    \item Begin with $n$ clusters, each containing one observation.
+    \item Find the two clusters that are closest together, and merge them into a single cluster.
+    \item Repeat step 2 until there is only one cluster left.
+\end{enumerate}
+
+Distance between two clusters:
+\begin{itemize}
+    \item Single linkage: $d(C_i,C_j) = \min_{x \in C_i, y \in C_j} d(x,y)$
+    \item Complete linkage: $d(C_i,C_j) = \max_{x \in C_i, y \in C_j} d(x,y)$
+    \item Average linkage: $d(C_i,C_j) = \dfrac{1}{|C_i||C_j|} \sum\limits_{x \in C_i, y \in C_j} d(x,y)$
+    \item Centroid linkage: $d(C_i,C_j) = d(\bar x_i,\bar x_j)$ where $\bar x_k$ is the centroid of cluster $C_k$.
+\end{itemize}
+
+Dissimilarity matrix: 
+1.symmetric, 2.diagonal is 0
+
+
+% subsection Hierarchical Clustering (end)
+
+\subsection{Spectral Clustering} % (fold)
+\label{sub:Spectral Clustering}
+
+Adjacency matrix $W$: $w_{ij} $  is the similarity between $x_i$ and $x_j$.
+
+Degree matrix $D$ as a diagonal matrix: $d_{ii} = \sum\limits_{j=1}^{n} w_{ij}$.
+
+Laplacian matrix $L = D - W$.
+
+Normalized Laplacian matrix:
+$$
+L_{sym} = D^{-1/2} L D^{-1/2} = I - D^{-1/2} W D^{-1/2}$$
+The eigenvalues of $L_{sym}$ are non-negative, and the smallest eigenvalue is 0.
+
+$$
+L_{rw} = D^{-1} L = I - D^{-1} W
+$$
+
+• Compute the smallest k eigenvalue of $L $, denote them collectively as $V_{n\times k} $
+
+• Treat $V_{n\times k}$as the matrix of the observed data, and perform k-means clustering
+
+• Output the k cluster labels
+% subsection Spectral Clustering (end)

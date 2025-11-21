@@ -1,0 +1,156 @@
+
+\section{Classification}
+$$
+y_i \in \{-1,1\} or \{0,1\}
+$$
+$$
+0-1 Loss L(y,f(x)) := \begin{cases}
+    0 & \text{if } y = f(x) \\
+    1 & \text{if } o.w.
+\end{cases}
+$$
+
+Soft classifier: estimate the conditional probability. Logistic
+
+Hard classifier: estimate the class label directly. SVM
+
+$$
+p(Y = y_i | X = x_i) = \eta(x_i)^{y_i} (1 - \eta(x_i))^{1-y_i} 
+$$
+$$
+where \log(\dfrac{\eta}{1-\eta}) = \beta^T x_i
+$$
+log odds: $log \dfrac{p}{1-p} $, $\eta(x) = \dfrac{exp(x^\top \beta)}{1+exp(x^\top \beta)}$
+
+Use mle to estimate the parameters $\beta$:
+$$
+l = \sum\limits_{i=1}^{n} \log p(y_i|x_i,\beta)
+$$
+Use newton's method to find the maximum likelihood estimate of $\beta$.
+$$
+\beta^{new} = \beta^{old} - [\dfrac{\partial^2 l}{\partial \beta \partial \beta ^\top}]^{-1} \dfrac{\partial l}{\partial \beta} |_{\beta^{old}} 
+$$
+
+Each unit increases in $X_j$ increases the log-odds of Y by $\beta_j$
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figure/type_error.png}
+    \caption{Logistic Regression}
+    \label{fig:logistic_regression}
+\end{figure}
+
+第一类错误（假阳性）：健康人误诊为患者，相当于无罪的人被判有罪
+
+第二类错误（假阴性）：患者漏诊为健康人，相当于有罪的人被判无罪
+
+$$
+Overall \ Error = P(\text{假阳性}) + P(\text{假阴性}) = P(\text{假阳性}) + (1 - P(\text{真阳性}))
+$$
+$$
+Sensitivity / Recall = P(\text{真阳性}) = \dfrac{TP}{TP + FN} = \dfrac{TP}{P(\text{患者})} = 1 - Type \ 2 \ Error
+$$
+$$
+Specificity = P(\text{真阴性}) = \dfrac{TN}{TN + FP} = \dfrac{TN}{P(\text{健康人})} = 1- Type\ 1 \ Error
+$$
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figure/ROC.png}
+    \caption{Chaneg different threshold to get different sensitivity and specificity}
+    \label{fig:roc_curve}
+\end{figure}
+
+\subsection{LDA and QDA} % (fold)
+\label{sub:LDA and QDA}
+
+Bayes rule:
+$$
+P(Y = 1 | X = x) = \dfrac{P(X = x | Y = 1) P(Y = 1)}{P(X = x)}
+$$
+
+Treat $\pi = P(Y=1)$ as prior probabilities,and $f_1 = P(X=x|Y=1)$ and $f_0 = P(X=x|Y=0)$.
+
+$$
+f_B(x) = arg\min_{f} R(f) = \begin{cases}
+    1 & \text{if } f_1(x) \pi > f_0(x) (1-\pi) \\
+    0 & \text{if } f_1(x) \pi < f_0(x) (1-\pi)
+\end{cases}
+$$
+
+Multi-class
+$$
+f_B(x) = arg\max_{k}P(Y = k|X = x)  = arg \max_k \pi_k f_k(x)
+$$
+
+
+Masking problem: linear polynomial may not perform well.
+
+$$
+P(Y=k|X=x) = \dfrac{P(X=x|Y=k)P(Y=k)}{\sum\limits_{j=1}^{K} P(X=x|Y=j)P(Y=j)} = \dfrac{f_k(x)\pi_k}{\sum\limits_{j=1}^{K} f_j(x)\pi_j}
+$$
+
+P26 
+
+$$
+\hat f(x) = arg\max_k log(\pi_k f_k(x)) = arg \max -\dfrac{1}{2}(x-\mu_k)^T \Sigma^{-1} (x-\mu_k) + log(\pi_k)
+$$
+
+Note that we only care about terms related to $k$.
+
+The discriminant function is:
+$$
+\delta_k(x) = x^\top \Sigma^{-1} \mu_k -\dfrac{1}{2}\mu_k^T \Sigma^{-1} \mu_k + log(\pi_k)
+$$ then we could calculate the decision boundary by setting $\delta_k(x) = \delta_j(x)$ for $k \neq j$.
+
+如何计算先验的概率 p31
+
+QDA simply abandons the assumption of equal covariance matrices for all classes, allowing each class to have its own covariance matrix $\Sigma_k$.
+% subsection LDA and QDA (end)
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figure/qda.png}
+    \caption{QDA decision boundary}
+    \label{fig:lda_qda}
+\end{figure}
+
+Comparison of LDA and QDA:
+\begin{itemize}
+    \item LDA assumes equal covariance matrices for all classes, while QDA allows each class to have its own covariance matrix.
+    \item More paremeters in QDA
+    \item Both are easy to implement.
+    \item We could select quadratic terms and perform lda.
+    \item p is large, the inverse of $\Sigma$ might not exist.
+\end{itemize}
+
+\subsection{Alternative Methods} 
+
+Fisher criterion: maximize the ratio of between-class variance to within-class variance.
+
+$$
+B = \sum\limits_{k=1}^{K} \pi_k (\mu_k - \bar{\mu})(\mu_k - \bar{\mu})^\top
+$$
+where $\bar{\mu} = \sum\limits_{k=1}^{K} \pi_k \mu_k$ is the overall mean vector.
+
+Denote the within class covariance matrix as $W$, which is common.
+
+$$
+\max_a \dfrac{a^\top B a}{a\top W a}
+$$
+The problem is equivalent to finding the eigenvector corresponding to the largest eigenvalue of the matrix $W^{-1}B$.
+
+Regularization: sparse lda, 加一个 L1 penalty of vector a.
+
+Regularized da (RDA): 在每个类的协方差矩阵上加一个 common的矩阵。
+
+Naive Bayes: 把每个特征都作为独立的， $f_k(x) \approx \Pi_{j=1} ^p f_{kj} (x_j)$
+
+\vspace{20pt}
+Comparison between LDA and logistic regression:
+\begin{itemize}
+    \item LDA assumes normality and equal covariance matrices, while logistic regression does not.
+    \item LDA is a generative model, while logistic regression is a discriminative model.
+    \item LDA can be more robust to outliers due to its assumptions.
+    \item Logistic regression is easier to interpret in terms of odds ratios.
+\end{itemize}

@@ -1,0 +1,100 @@
+\section[Lecture 3 (Spet 4) -- {\it Bootstrap}]{Lecture 3}
+
+\begin{tb}
+    The Dvoretzky-Kiefer-Wolfowitz Inequality states that for i.i.d. random variables $X_1, \dots, X_n$ with empirical distribution $\hat{F}_n$ and true distribution $F$, the following holds:
+$$
+P(\underset{x}{\sup} |F(x) - \hat{F}_n(x)| > \epsilon ) \le 2 e^{-2n\epsilon^2} 
+$$
+\end{tb}
+
+Let the RHS be $1-\alpha \rightarrow \epsilon = \sqrt{\frac{1}{2n} \log \frac{2}{\alpha}}$
+
+Then we have $$
+P(\hat{F}_n(x) - \epsilon \le F(x) \le \hat{F}_n(x) + \epsilon, \forall x) \ge 1-\alpha
+$$
+
+Let $L(x) = \max\{ \hat{F}_n(x) - \epsilon, 0\}$ and $U(x) = \min\{\hat{F}_n(x) + \epsilon, 1\}$
+
+Then we have $P(L(x) \le F(x) \le U(x), \forall x) \ge 1-\alpha$
+
+
+Often we have $T(\hat{F}_n) \approx N(T(F),\hat{se}^2)$, which allows us to form an approximate $1-\alpha$ confidence interval.
+We need to find an asymptotic distribution of $T(\hat{F}_n)$.
+
+$\theta(F) = T(F)$ quantity of interest (often a single value instead of function like F)
+
+We will have $$
+P(|\dfrac{T(f)- T(\hat{F}_n)}{\hat{se}}| \le z_{\alpha/2}) \approx 1-\alpha
+$$
+
+
+And we focus on this interval: 
+$$
+T(\hat{F}_n) \pm z_{\alpha/2} \hat{se}
+$$
+
+
+\subsection{Bootstrap} % (fold)
+\label{sub:Bootstrap}
+
+\subparagraph{Monte Carlo} % (fold)
+\label{subp:Monte Carlo}
+
+$$
+E(h(Y)) = \int h(y) \, d F_Y(y) \approx \frac{1}{n} \sum_{i=1}^n h(Y_i) \text{ where } Y_i \overset{\text{i.i.d.}}{\sim} F_Y 
+$$
+
+Note that if $E[h(Y)] < \infty$, then
+$$
+RHS \overset{a.s.}{\to} E[h(Y)] \text{ as } n \to \infty
+$$
+
+\begin{eb}
+    Approx $\int_{-\infty}^{\infty} sin^2(x) e^{-x^2} \, dx$ using Monte Carlo with $n=1000$ samples.
+\end{eb}
+
+$$
+\sqrt{\pi}\int_{-\infty}^{\infty} sin^2(x) \frac{1}{\sqrt{\pi}} e^{-x^2} \, dx = E[sin^2(X)] \text{ where } X \sim N(0,1/2)
+$$
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+n = 10000
+X = np.random.normal(0, np.sqrt(1/2), n)
+np.sqrt(np.pi) * np.mean(np.sin(X)**2)
+\end{lstlisting}
+
+Even though, the target density is $h$.
+More generally, we can use Monte Carlo for:
+$$
+E_h[q(\theta)] = \int h(\theta) q(\theta) \, d\theta = \int q(\theta) \dfrac{h(\theta)g(\theta)}{g(\theta)}\, d\theta \approx \frac{1}{n} \sum_{i=1}^n \dfrac{h(\theta_i)q(\theta_i)}{g(\theta_i)} \text{ where } \theta_i \overset{\text{i.i.d.}}{\sim} g(\theta)
+$$
+
+i.e. we can sample from a different distribution $g$ and use importance weights $\dfrac{q(\theta)}{g(\theta)}$ to adjust.
+
+%% Find 1(x > 3) where x ~ N(0,1)
+%% E[1(X>3)] = P(X>3) = \int 1
+\begin{lstlisting}[language=Python]
+import numpy as np
+n = 1000
+X = np.random.normal(0, 1, n)
+np.mean(X > 3)
+# np.float64(0.002)
+\end{lstlisting}
+
+Now try to stimualate using importance sampling:
+\begin{lstlisting}[language=Python]
+import numpy as np
+n = 1000
+X = np.random.normal(3, 1, n)
+np.mean((X > 3) * np.exp(-X**2/2 + (X-3)**2/2))
+# np.float64(0.0014236252168949273)
+\end{lstlisting}
+
+If we knew F , we could use MC integration to approximate $\var F(T_n)$.
+However, we don’t in practice, so we make an initial approximation of F
+with the empirical CDF $\hat{F}_n$ and then use MC integration to approximate $V_{\hat{F}_n}[T_n]$.
+$$
+V_F[T_n] \overset{ECDF}{\approx} V_{\hat{F}_n} \overset{MC}{\approx} \hat{V}_{\hat{F}_n}
+$$
+
