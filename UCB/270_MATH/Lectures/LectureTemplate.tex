@@ -1,0 +1,78 @@
+% 201_B_STAT Lecture Template
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage[most]{tcolorbox}
+\usepackage{lipsum} % For placeholder text
+
+% Colored blocks
+\newtcolorbox{definitionbox}{
+  colback=blue!5!white,
+  colframe=blue!80!black,
+  title=Definition,
+  fonttitle=\bfseries,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=2pt,
+  right=2pt,
+  top=2pt,
+  bottom=2pt
+}
+
+\newtcolorbox{examplebox}{
+  colback=green!5!white,
+  colframe=green!80!black,
+  title=Example,
+  fonttitle=\bfseries,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=2pt,
+  right=2pt,
+  top=2pt,
+  bottom=2pt
+}
+
+\newtcolorbox{lemmabox}{
+  colback=yellow!10!white,
+  colframe=orange!80!black,
+  title=Lemma,
+  fonttitle=\bfseries,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=2pt,
+  right=2pt,
+  top=2pt,
+  bottom=2pt
+}
+
+% Document
+\begin{document}
+
+\title{201_B_STAT Lecture Title}
+\author{Your Name}
+\date{\today}
+\maketitle
+
+\section{Introduction}
+% Add your introduction here
+\lipsum[1]
+
+\section{Main Content}
+
+\begin{definitionbox}
+This is a sample definition.
+\end{definitionbox}
+
+\begin{examplebox}
+This is a sample example.
+\end{examplebox}
+
+\begin{lemmabox}
+This is a sample lemma.
+\end{lemmabox}
+
+% Add more sections as needed
+
+\end{document}

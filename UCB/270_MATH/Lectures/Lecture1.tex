@@ -1,0 +1,191 @@
+% TeX root = ../Main.tex
+
+% First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
+\section[Lecture 1 (Sept 8) -- {\it Intro to NN}]{Lecture 1}
+
+\subsection{Information}
+Instructor: Dr. Haiyan Huang
+Tu/Th 11:00am-12:29pm Lecture, 106 Stanley
+Office: 317 Evans
+
+Office hour:
+Thursday 1-2pm 317 Evans
+
+\subsection{Introduction to Neural Networks}
+
+\subparagraph{Supervised Learning} % (fold)
+\label{subp:Supervised_learning}
+
+Supervised learning: regression, classification
+$$
+D = \{(x_i, y_i)\}_{i=1}^N, x_i \in \mathbb{R}^d, y_i \in \mathbb{R}^k
+$$
+
+Try to find a function $f: \mathbb{R}^d \to \mathbb{R}^k$ such that $f(x_i) \approx y_i$ for all $i$.
+
+Approach:
+
+(1) Choose parametrization of functions $f_\theta$ $\theta \in \mathbb{R}^m $
+
+(2) Optimize $\theta$ by gradient descent. $$D \rightarrow \mathcal{L}_D$$ Metaphor: $\theta \rightarrow f_\theta$
+
+
+Deep learning: $f_\theta$ is a neural network.
+
+linear regression $\rightarrow$ affine linear
+
+% subparagraph Supervised_learning (end)
+
+\subparagraph{Unsupervised Learning} % (fold)
+
+Goal is to learn the patterns and structure from data. e.g. clustering, dimensionality reduction, generative models.
+
+Generative models: $D = \{(x_i)\},\qquad x_i \overset{i.i.d.}{\sim} P $ for some prob distribution.
+
+Want to learn $P$.
+
+
+\begin{eb}[ Generative models ]
+Chatgpt
+
+P = distribution of natural language text.
+\end{eb}
+
+% subsection Unsupervised_learning (end)
+
+\subsection{Linear Regression} % (fold)
+\label{sub:Linear Regression}
+
+$$
+F(x) = xW + b, \qquad W \in \mathbb{R}^{d \times k}, b \in \mathbb{R}^k
+$$
+
+$W$ is the weight matrix, $b$ is the bias vector. Simplification: $b = 0$
+
+Need to quantify the error of $F_{W,b} $ on $D$. MAE,MSE.
+$$
+\dfrac{1}{N} \sum\limits_{i=1}^N |F_{W,b}(x_i) - y_i|_{1 or 2}
+$$
+
+Let $Y = \begin{pmatrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_N
+\end{pmatrix}$
+, $X = \begin{pmatrix}
+--- x_1 ---\\
+--- x_2 ---\\
+\vdots \\
+--- x_N ---
+\end{pmatrix}$
+
+$$
+N*MSE = \sum\limits_{i=1}^N |F_{W,b}(x_i) - y_i|_{2}^2 = \|XW - Y\|_F^2 = (Y-XW)^T(Y-XW)
+$$
+$$
+\dfrac{\partial}{\partial W} \mathcal{L}_D(W) = -2X^T(Y-XW) = 0 \Rightarrow X^TXW = X^TY
+$$
+$$
+W = (X^TX)^{-1}X^TY \quad \text{if } X^TX \text{ is invertible}
+$$
+
+
+
+% subsection Linear Regression (end)
+
+
+
+\subparagraph{Beyond Linear Models} % (fold)
+\label{subp:Beyond Linear Models}
+
+Neural Networks: piecewise linear functions.
+
+$$
+x \overset{g^*}{\rightarrow} Z \overset{h^*}{\rightarrow} a \rightarrow Z \rightarrow \dots \rightarrow Z = y
+$$
+$g$ is affine linear, $h$ is non-linear.
+
+
+\begin{tb}[Universal Approximation Theorem]
+   NN can approximate any continuous $f$ on compact set to any desired degree of accuracy as soon as $L \ge 2$.
+\end{tb}
+
+
+A single neuron $i$ in a layer $l$.
+$$
+g^l_i (a^{l-1} )  = z_i^l = \mathbf{a^{l-1}}\mathbf{w_i^l}  + b_i^l, \qquad a_i^l = h(z_i^l)
+$$$$
+h_i^l (z_i^l) = ReLU(z_i^l) = \max(0, z_i^l) = a_i^l
+$$
+
+From features to representations.
+
+\begin{eb}
+NN to classify proofs as correct or incorrect.
+
+Input: {'obvious', 'clear', 'well-known'} neurons $\rightarrow$ 'handwavy' neuron
+\end{eb}
+
+$\mathbb{\theta} = \{\text{weights and biases of the network}\}$
+
+Next: find loss function to measure error on $D$.
+
+\begin{itemize}
+    \item Regression MSE: $$\mathcal{L}_{D}(\mathbb{\theta}) = \dfrac{1}{N} \sum\limits_{i=1}^N |f_{\mathbb{\theta}}(x_i) - y_i|^2$$
+    \item Classification: cross-entropy loss
+    $$\mathcal{L}_{D}(\mathbb{\theta}) = -\dfrac{1}{N} \sum\limits_{i=1}^N \sum
+    _{j=1}^k y_{i,j} \log f_{\mathbb{\theta}}(x_i)_j$$
+    \item NN will compute $$
+    Model\ output: F_\theta(x,y) = P(y|x),\qquad
+    f_\theta(x) = \arg\max_y F_\theta(x,y)
+    $$
+    $$
+    \mathcal{L}_{(x_i,y_i)}(\theta) = - \log F_\theta(x_i,y_i)
+    $$
+    
+\end{itemize}
+
+Rmk:
+$$
+\sum\limits_{y}^{} F_\theta(x,y) = 1, \qquad F_\theta(x,y) \ge 0
+$$
+\begin{eb}[ Softmax ]
+$$
+F_\theta(x,y) = \dfrac{e^{\phi_\theta(x,y)}}{\sum\limits_{y'}^{} e^{\phi_\theta(x,y')}}
+$$
+\end{eb}
+
+% subparagraph Beyond Linear Models (end)
+
+
+\subsection{Train and Test} % (fold)
+\label{sub:Train and Test}
+Split data into 3 parts:
+Training: 80\%, Validation: 10\%, Test: 10\%
+
+\begin{itemize}
+    \item Learnable parameters: $W,b$
+    \item Hyperparameters: learning rate, number of layers, number of neurons per layer, batch size, ...
+\end{itemize}
+
+\href{https://playground.tensorflow.org/}{Tensorflow Playground for Visualization of NN}
+% subsection Train and Test (end)
+
+\subsection{Backpropagation} % (fold)
+\label{sub:Backpropagation}
+
+$$
+\nabla \mathcal{L}_D(\theta) = \left(\dfrac{\partial \mathcal{L}_D}{\partial \theta_1}, \dfrac{\partial \mathcal{L}_D}{\partial \theta_2}, \dots, \dfrac{\partial \mathcal{L}_D}{\partial \theta_m}\right)
+$$
+$$
+\nabla_{z^l} (\mathcal{L}) = \nabla_{z^{l+1} }(\mathcal{L}) \ a^l\  \text{diag}(d h^l)
+$$
+
+% subsection Backpropagation (end)
+
+
+
+
+
+

@@ -1,0 +1,9 @@
+\contentsline {section}{\numberline {1}Lecture 1 (Sept 8) -- {\it Intro to NN}}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Information}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Introduction to Neural Networks}{1}{subsection.1.2}%
+\contentsline {subparagraph}{Supervised Learning}{1}{subsection.1.2}%
+\contentsline {subparagraph}{Unsupervised Learning}{2}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Linear Regression}{2}{subsection.1.3}%
+\contentsline {subparagraph}{Beyond Linear Models}{3}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Train and Test}{4}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}Backpropagation}{4}{subsection.1.5}%
