@@ -1,0 +1,196 @@
+% TeX root = ../Main.tex
+
+% First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
+\section[Review 1 (Dec 17) -- {\it Review Questions}]{Review 1}
+
+\subsection{Final Exam}
+
+Date: Tuesday, December 17, 2025, 8:00am -- 11:00am
+
+
+
+
+\subsection{Questions} % (fold)
+\label{sub:Questions}
+\noindent \textbf{Review Question 1.} Suppose we take a random sample of size $n$ from a population of people. Let $X_1$ denote the number of individuals with a particular genotype AA, $X_2$ denote the number with Aa, and $X_3$ denote the number with aa. Assuming the gene frequencies are in equilibrium, the Hardy-Weinberg law says that the genotypes AA, Aa, and aa occur with probability:
+\[
+p_1 = (1-\theta)^2, \quad p_2 = 2\theta(1-\theta), \quad p_3 = \theta^2
+\]
+
+\begin{enumerate}
+    \item What is the likelihood function for $\theta$, treating $X=(X_1, X_2, X_3)$ as a sample from the multinomial distribution with size $n$ and $p=(p_1, p_2, p_3)$? 
+    
+    \item Find the maximum likelihood estimator (MLE) for $\theta$ under this model. Find the asymptotic distribution (after appropriate normalization) for the MLE.
+    
+    \item Construct the likelihood ratio test statistic for the null hypothesis that $p_1 = (1-\theta)^2$, $p_2 = 2\theta(1-\theta)$, and $p_3 = \theta^2$. What is the asymptotic distribution of your test statistic under the null? 
+\end{enumerate}
+
+\begin{solution}
+\noindent
+\begin{enumerate}
+    \item The likelihood function is given by
+    \[
+    L(\theta) = \frac{n!}{X_1! X_2! X_3!} p_1^{X_1} p_2^{X_2} p_3^{X_3} = \frac{n!}{X_1! X_2! X_3!} (1-\theta)^{2X_1} [2\theta(1-\theta)]^{X_2} (\theta^2)^{X_3}.
+    \]
+    \item To find the MLE, we can maximize the log-likelihood:
+    \[
+    \ell(\theta) = \log L(\theta) = \text{constant} + 2X_1 \log(1-\theta) + X_2 \log(2\theta(1-\theta)) + 2X_3 \log(\theta).
+    \]
+    Taking the derivative with respect to $\theta$ and setting it to zero gives:
+    \[
+    \frac{d\ell}{d\theta} = -\frac{2X_1}{1-\theta} + \frac{X_2}{\theta} - \frac{X_2}{1-\theta} + \frac{2X_3}{\theta} = 0.
+    \]
+    Solving this equation yields the MLE $\hat{\theta}$. The asymptotic distribution of the MLE can be derived using the Fisher information.
+
+    \[
+    \implies \hat \theta = 
+    \]
+
+    And the second derivative is
+    \[
+    \frac{d^2\ell}{d\theta^2} = -\frac{2X_1}{(1-\theta)^2} - \frac{X_2}{\theta^2} - \frac{X_2}{(1-\theta)^2} - \frac{2X_3}{\theta^2} < 0
+    \]
+
+    \item The likelihood ratio test statistic is given by
+    \[
+    \Lambda = 2 \log \left( \frac{L(\hat{\theta})}{L(\hat{\theta}_0)} \right),
+    \]
+    where $\hat{\theta}_0$ is the MLE under the null hypothesis. Under the null hypothesis, the asymptotic distribution of $\Lambda$ follows a chi-squared distribution with degrees of freedom equal to the difference in the number of parameters estimated under the null and alternative hypotheses.
+
+    The denominator has 1 free parameter (theta), while the numerator has 2 free parameters (p1, p2, p3 with one constraint that they sum to 1), so the degrees of freedom is 1.
+
+    Denominator:
+    \[L(\hat{\theta}_0) = \frac{n!}{X_1! X_2! X_3!} (1-\hat{\theta}_0)^{2X_1} [2\hat{\theta}_0(1-\hat{\theta}_0)]^{X_2} (\hat{\theta}_0^2)^{X_3}.\]
+where \[
+\hat \theta_0 = \dfrac{X_2 + 2 X_3}{2 n}
+\]
+    Numerator:
+    \[L(\hat{\theta}) = \frac{n!}{X_1! X_2! X_3!} \left(\frac{X_1}{n}\right)^{X_1} \left(\frac{X_2}{n}\right)^{X_2} \left(\frac{X_3}{n}\right)^{X_3}.\]
+\end{enumerate}
+
+
+\end{solution}
+% subsection Questions (end)
+
+
+\noindent \textbf{Review Question 2.} Assume that we want to integrate $r(x)$ using a Monte Carlo Integration approach.
+\begin{itemize}
+    \item How to select the density distribution $g(x)$ to sample $X_1, \dots, X_B$? 
+    \item Can you assess the variance of your Monte Carlo integration result? 
+\end{itemize}
+
+\noindent Remember that in Monte Carlo integration, we are finding the average of $r/g$ for a number of sampled points. Hence if $g$ is small for a given sample point, $r/g$ will be arbitrarily large and can skew the sample mean from the true mean unless we generate a LARGE sample.
+
+\noindent One way to avoid such cases is to use $g$ that looks like $r$. The peaks and valleys of $g$ should correspond to peaks and valleys of $r$.
+
+\begin{solution}
+
+\[
+\int_{\Omega}^{} r(x) \, dx = \int_{\Omega}^{} \frac{r(x)}{g(x)} g(x) \, dx = \mathbb{E}_g\left[\frac{r(X)}{g(X)}\right] \approx \frac{1}{B} \sum_{i=1}^{B} \frac{r(X_i)}{g(X_i)}
+\]
+
+Ideally, we want
+\begin{enumerate}
+    \item $g(x)$ has the same support as $r(x)$, i.e., $g(x) = 0 \Leftrightarrow r(x) = 0$.
+    \item Approximate shape of $g(x)$ to be similar to $r(x)$.
+    \item $g(x)$ is easy to sample from and $\dfrac{r(x)}{g(x)}$ easy to compute.
+\end{enumerate}
+
+\[
+\var_{x \sim g} \left(\dfrac{1}{B} \sum\limits_{i = 1}^{B} \dfrac{r(x_i)}{g(x_i)}\right) = \dfrac{\var_{x \sim g} \dfrac{r(x)}{g(x)}}{B}
+\]
+which could be estimated by
+\[\dfrac{1}{B^2} \sum\limits_{i = 1}^{B} \left(\dfrac{r(x_i)}{g(x_i)} - \dfrac{1}{B} \sum\limits_{j = 1}^{B} \dfrac{r(x_j)}{g(x_j)}\right)^2\]
+\end{solution}
+
+
+\noindent \textbf{Review Question 3.} Suppose $X_1, \dots, X_n$ are i.i.d. Poisson($\lambda$). \\Consider $S^2 = \sum_{i=1}^n (X_i - \overline{X})^2 / (n-1)$.
+
+\begin{enumerate}
+    \item Is $S^2$ an unbiased estimator for $\lambda$? Justify your answer.
+    \item Does $S^2$ have the smallest variance among all unbiased estimators for $\lambda$?  If not, please find the unbiased estimator (for $\lambda$) that has the smallest variance. Justify your answer.
+\end{enumerate}
+
+\begin{solution}
+\noindent
+\begin{enumerate}
+    \item Yes. We have
+    \[\mathbb{E}[S^2] = \mathbb{E}\left[\frac{1}{n-1} \sum_{i=1}^n (X_i - \overline{X})^2\right] = \frac{1}{n-1} \left( \sum_{i=1}^n \mathbb{E}[X_i^2] - n \mathbb{E}[\overline{X}^2] \right).\]
+    Since $X_i \sim \text{Poisson}(\lambda)$, we have $\mathbb{E}[X_i^2] = \lambda + \lambda^2$ and $\mathbb{E}[\overline{X}^2] = \frac{\lambda}{n} + \lambda^2$. Plugging these in, we get
+    \[\mathbb{E}[S^2] = \frac{1}{n-1} \left( n(\lambda + \lambda^2) - n\left(\frac{\lambda}{n} + \lambda^2\right) \right) = \lambda.\]
+    Thus, $S^2$ is an unbiased estimator for $\lambda$.
+
+    \item No. Method 1(CR bound): The sample mean $\overline{X}$ is also an unbiased estimator for $\lambda$ with variance $\frac{\lambda}{n}$. By the Cramér-Rao lower bound, the variance of any unbiased estimator for $\lambda$ cannot be lower than that of $\overline{X}$. Since $S^2$ has a larger variance than $\overline{X}$, it does not have the smallest variance among all unbiased estimators for $\lambda$. Therefore, the unbiased estimator with the smallest variance is $\overline{X}$.
+
+    Method 2(Sufficiency and Completeness):
+    We define \[
+    \tilde{\lambda} = \E(S^2 \mid \sum\limits_{i=1}^{n} X_i) \qquad \E(\tilde{\lambda}) = \E(S^2) = \lambda  
+    \]
+    By Rao-Blackwell theorem, $\tilde{\lambda}$ has smaller variance than $S^2$. Since $\sum\limits_{i=1}^{n} X_i$ is a complete sufficient statistic for $\lambda$ (Poisson belongs to exponential family), 
+    \[
+    R(\lambda, \tilde{\lambda}) < R(\lambda,S^2) \implies \var(\tilde{\lambda}) < \var(S^2)
+    \]
+
+\end{enumerate}
+\end{solution}
+
+
+\noindent \textbf{Review Question 4.} Let $(X_1, Y_1), \dots, (X_n, Y_n)$ be i.i.d. with $X_i \sim N(0,1)$ and $Y_i | (X_i=x) \sim N(x\theta, 1)$.
+
+\begin{enumerate}
+    \item Is the above an exponential family? 
+    \item Find the Fisher information $I(\theta)$.
+    \item Find an unbiased estimator of $\theta$.
+\end{enumerate}
+
+\begin{solution}
+\noindent
+\begin{enumerate}
+    \item Yes. The joint density function of $(X_i, Y_i)$ is given by
+    \[
+    f(\mathbf{x}, \mathbf{y} | \theta) = \prod_{i=1}^n f(y_i|x_i, \theta)f(x_i)
+    \]
+    Substituting the given distributions $X_i \sim N(0,1)$ and $Y_i|X_i \sim N(x_i\theta, 1)$:
+    \begin{align*}
+    f(\mathbf{x}, \mathbf{y} | \theta) &= \prod_{i=1}^n \left( \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}(y_i - x_i\theta)^2} \cdot \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}x_i^2} \right) \\
+    &= (2\pi)^{-n} \exp\left( -\frac{1}{2} \sum_{i=1}^n x_i^2 \right) \exp\left( -\frac{1}{2} \sum_{i=1}^n (y_i^2 - 2x_iy_i\theta + x_i^2\theta^2) \right) \\
+    &= \underbrace{(2\pi)^{-n} \exp\left( -\frac{1}{2} \sum_{i=1}^n (x_i^2 + y_i^2) \right)}_{h(\mathbf{x}, \mathbf{y})} \cdot \exp\left( \theta \sum_{i=1}^n x_iy_i - \frac{\theta^2}{2} \sum_{i=1}^n x_i^2 \right)
+    \end{align*}
+    This takes the form of a (curved) exponential family with sufficient statistics $T_1 = \sum X_iY_i, \eta_1 = \theta$ and $T_2 = \sum X_i^2 , \eta_2 = -\frac{\theta^2}{2}$.
+
+    \item To find the Fisher information $I_n(\theta)$, we use the log-likelihood function derived from the joint density above:
+    \[
+    \ell(\theta) = \log f(\mathbf{x}, \mathbf{y} | \theta) \propto -\frac{1}{2} \sum_{i=1}^n (y_i - x_i\theta)^2
+    \]
+    The first derivative (score function) is:
+    \[
+    \frac{\partial \ell}{\partial \theta} = -\frac{1}{2} \sum_{i=1}^n 2(y_i - x_i\theta)(-x_i) = \sum_{i=1}^n (x_iy_i - x_i^2\theta)
+    \]
+    The second derivative is:
+    \[
+    \frac{\partial^2 \ell}{\partial \theta^2} = \sum_{i=1}^n (-x_i^2) = -\sum_{i=1}^n x_i^2
+    \]
+    The Fisher Information is the negative expectation of the second derivative:
+    \[
+    I_n(\theta) = -E\left[ \frac{\partial^2 \ell}{\partial \theta^2} \right] = E\left[ \sum_{i=1}^n X_i^2 \right] = \sum_{i=1}^n E[X_i^2]
+    \]
+    Since $X_i \sim N(0,1)$, $E[X_i^2] = \text{Var}(X_i) + (E[X_i])^2 = 1$. Thus:
+    \[
+    I_n(\theta) = n
+    \]
+
+    \item We can use the Maximum Likelihood Estimator (MLE). Setting the score function to 0:
+    \[
+    \sum_{i=1}^n (x_iy_i - x_i^2\hat{\theta}) = 0 \implies \hat{\theta} = \frac{\sum_{i=1}^n X_iY_i}{\sum_{i=1}^n X_i^2}
+    \]
+    To check if it is unbiased, we use the law of iterated expectations, conditioning on $X$:
+    \[
+    E[\hat{\theta}] = E_X \left[ E_{Y|X} \left[ \frac{\sum X_iY_i}{\sum X_i^2} \right] \right] = E_X \left[ \frac{1}{\sum X_i^2} \sum_{i=1}^n X_i E[Y_i|X_i] \right]
+    \]
+    Since $E[Y_i|X_i] = X_i\theta$:
+    \[
+    E[\hat{\theta}] = E_X \left[ \frac{1}{\sum X_i^2} \sum_{i=1}^n X_i (X_i\theta) \right] = E_X \left[ \frac{\theta \sum X_i^2}{\sum X_i^2} \right] = E_X[\theta] = \theta
+    \]
+    Thus, $\hat{\theta} = \frac{\sum X_iY_i}{\sum X_i^2}$ is an unbiased estimator of $\theta$.
+\end{enumerate}
+\end{solution}
