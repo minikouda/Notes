@@ -5,6 +5,27 @@
 
 \subsection{Pearson's Test}
 
+Multinomial model:
+\[X = (X_1,X_2,\dots,X_k) \sim \text{Multinomial}(n,p_1,p_2,\dots,p_k)\]
+where \(\sum_{i=1}^{k} p_i = 1\) and \(p_i \ge 0\) for all \(i\).
+
+The pdf is:
+\[f(x_1,x_2,\dots,x_k|p_1,p_2,\dots,p_k) = \dfrac{n!}{x_1! x_2! \dots x_k!} p_1^{x_1} p_2^{x_2} \dots p_k^{x_k}\]
+where \(x_i \ge 0\) for all \(i\) and \(\sum_{i=1}^{k} x_i = n\).
+
+MLE:
+\[\hat p_i = \dfrac{X_i}{n}, \quad i=1,2,\dots,k\]
+
+\begin{db}[Pearson's Chi-Squared Test]
+We want to test:
+\[H_0: p = p^0 = (p_1^0,p_2^0,\dots,p_k^0) \qquad H_1: p \neq p^0\]
+The test statistic is:
+\[T = \sum_{i=1}^k \dfrac{(X_i - n p_i^0)^2}{n p_i^0} = \sum_{i=1}^k \dfrac{(X_i - E_i)^2}{E_i}\]
+Under \(H_0\), when \(n\) is large, 
+\[T \overset{D}{\rightarrow} \chi^2_{k-1}\]
+The test rejects \(H_0\) when \(T > \chi^2_{k-1,\alpha}\).
+\end{db}
+
 \begin{eb}[Poisson]
 \[
 H_0: X_1,X_2\dots,X_n \sim Poisson(\lambda) \qquad H_1: \text{not null}
@@ -16,8 +37,6 @@ X^2 = \sum_{i=1}^K \frac{(O_i - E_i)^2}{E_i}
 \]
 
 In practice, usually we use at least 5 categories.
-
-
 \begin{align*}
 \{0\} :=&  i = 1\\
 \{1\} :=&  i = 2\\
@@ -80,7 +99,7 @@ Suppose $X_1,X_2,\dots,X_n \overset{iid}{\sim} N(\mu,\sigma^2)$, and the prior d
     \[
     f(\mu|x_1,\dots,x_n) \propto f(x_1,\dots,x_n|\mu) f(\mu) \propto \left(\prod_{i=1}^n \dfrac{1}{\sqrt{2\pi \sigma^2}} e^{-\frac{(x_i - \mu)^2}{2\sigma^2}}\right) \dfrac{1}{\sqrt{2\pi \sigma_0^2}} e^{-\frac{(\mu - \mu_0)^2}{2\sigma_0^2}}
     \]
-    \[\propto e^{-\frac{1}{2}\left(\frac{n}{\sigma^2} + \frac{1}{\sigma_0^2}\right) \left(\mu - \frac{\frac{n\bar{x}}{\sigma^2} + \frac{\mu_0}{\sigma_0^2}}{\frac{n}{\sigma^2} + \frac{1}{\sigma_0^2}}\right)^2} 
+    \[\propto \exp\{-\frac{1}{2}\left(\frac{n}{\sigma^2} + \frac{1}{\sigma_0^2}\right) \left(\mu - \frac{\frac{n\bar{x}}{\sigma^2} + \frac{\mu_0}{\sigma_0^2}}{\frac{n}{\sigma^2} + \frac{1}{\sigma_0^2}}\right)^2\} 
     \]
 \end{solution}
 \end{eb}

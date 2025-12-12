@@ -75,7 +75,7 @@ The estimator $\hat{\theta}$ is called \textbf{inadmissible} if there is at leas
 $\hat{\theta}'$ that dominates it. Otherwise it is called \textbf{admissible}.
 
 
-\begin{db}[Bayes risk]
+\begin{db}[Bayes risk \& Bayes rule]
 The Bayes risk is defined as:
 
 \[
@@ -92,6 +92,9 @@ r(f, \hat{\theta})
 \noindent
 This expression averages over both $\theta$ and $X$. It depends on the particular form of $\hat{\theta}$,
 and on the probability models for the data $f(x \mid \theta)$ and the parameter $\theta$ ($f(\theta)$).
+
+And the Bayes rule is defined as the decision rule $\hat{\theta}_{\text{Bayes}}$ that minimizes the Bayes risk:
+\[\hat{\theta}_{\text{Bayes}} = \arg \min_{\hat{\theta}} r(f, \hat{\theta})\]
 \end{db}
 
 
@@ -144,4 +147,118 @@ The Bayes risk is:
 r(f,\hat \theta_c) = \int r(\hat \theta_c | x) f(x) dx = \dfrac{\tau^2}{\tau^2 + 1}
 \]
 % paragraph Bayesian -> Integral over the data (end)
+\end{eb}
+
+Takeaway:
+
+1.\ Posterior risk:
+\[
+r(\hat{\theta}\mid x)
+= \mathbb{E}_{\theta \mid X}\!\left[\,L(\theta, \hat{\theta}(x))\,\right].
+\]
+
+2.\ Frequentist risk:
+\[
+R(\theta, \hat{\theta})
+= \mathbb{E}_{X \mid \theta}\!\left[\,L(\theta, \hat{\theta}(X))\,\right].
+\]
+
+3.\ Bayes risk:
+\[
+r(f, \hat{\theta})
+= \mathbb{E}_{\theta, X}\!\left[\,L(\theta, \hat{\theta}(X))\,\right].
+\]
+
+By iterated expectation, we also have that
+\[
+r(f, \hat{\theta})
+= \mathbb{E}_{\theta}\!\left[\mathbb{E}_{X\mid\theta}\!\left[L(\theta, \hat{\theta}(X))\right]\right]
+= \mathbb{E}_{\theta}\!\left[R(\theta, \hat{\theta})\right],
+\]
+
+and
+\[
+r(f, \hat{\theta})
+= \mathbb{E}_{X}\!\left[\mathbb{E}_{\theta\mid X}\!\left[L(\theta, \hat{\theta}(X))\right]\right]
+= \mathbb{E}_{X}\!\left[r(\hat{\theta}\mid X)\right].
+\]
+
+\begin{eb}
+Suppose \(X_1,\dots,X_n\mid\sigma^2\overset{\text{iid}}{\sim}N(\theta,\sigma^2)\) where \(\theta\) is known.
+Let the prior for \(\sigma^2\) be an inverse--gamma distribution \(\operatorname{Inv\text{-}Gamma}(a,b)\) with density
+\[
+p(\sigma^2;a,b)=\frac{b^{a}}{\Gamma(a)}(\sigma^2)^{-a-1}\exp\!\big\{-b/\sigma^2\big\},\qquad \sigma^2>0.
+\]
+
+Solution:
+
+The likelihood (as a function of \(\sigma^2\)) is
+\[
+L(\sigma^2)\propto (\sigma^2)^{-n/2}\exp\!\left\{-\frac{1}{2\sigma^2}\sum_{i=1}^n (X_i-\theta)^2\right\}.
+\]
+Write \(S=\sum_{i=1}^n (X_i-\theta)^2\).
+
+Multiplying prior by likelihood gives the posterior kernel
+\[
+p(\sigma^2\mid X)\propto (\sigma^2)^{-\big(a+1+\frac{n}{2}\big)}
+\exp\!\left\{-\frac{b+\tfrac{1}{2}S}{\sigma^2}\right\}.
+\]
+Hence the posterior is again inverse--gamma:
+\[
+\sigma^2\mid X \sim \operatorname{Inv\text{-}Gamma}\!\Big(a+\frac{n}{2},\; b+\frac{1}{2}S\Big).
+\]
+
+\end{eb}
+
+\begin{eb}[cont'd]
+Define
+\[
+a' = a+\frac{n}{2},\qquad b' = b+\frac{1}{2}S.
+\]
+
+The Bayes estimator under squared error is the posterior mean (provided it exists).
+For an \(\operatorname{Inv\text{-}Gamma}(a',b')\) distribution the mean is \(b'/(a'-1)\) whenever \(a'>1\).
+Thus
+\[
+\hat{\sigma}^2_{\text{(MSE)}} = \mathbb{E}[\sigma^2\mid X]
+= \frac{b+\tfrac{1}{2}S}{\,a+\tfrac{n}{2}-1\,},
+\qquad\text{(exists if }a+\tfrac{n}{2}>1\text{).}
+\]
+
+---
+
+The Bayes estimator under absolute error loss is the posterior median:
+\[
+\hat{\sigma}^2_{\text{(MAE)}} = \text{median}\big(\sigma^2\mid X\big).
+\]
+The median of an inverse--gamma distribution does not have a simple closed form; it must be found numerically from
+\[
+\int_0^{\hat{\sigma}^2_{\text{(MAE)}}} p(t\mid X)\,dt = \tfrac{1}{2}.
+\]
+
+---
+
+A Bayes estimator under (point) 0--1 loss is any maximizer of the posterior density (the MAP estimator).
+For \(\operatorname{Inv\text{-}Gamma}(a',b')\) the mode is
+\[
+\operatorname{mode}(\sigma^2\mid X)=\frac{b'}{a'+1}
+= \frac{b+\tfrac{1}{2}S}{\,a+\tfrac{n}{2}+1\,},
+\]
+provided \(a'>1\) (mode exists for \(a'>0\) but this formula holds for usual parameter ranges).
+Thus one convenient 0--1 Bayes estimate is
+\[
+\hat{\sigma}^2_{\text{(MAP)}}=\frac{b+\tfrac{1}{2}S}{\,a+\tfrac{n}{2}+1\,}.
+\]
+
+---
+
+\[
+\sigma^2\mid X \sim \operatorname{Inv\text{-}Gamma}\!\Big(a+\tfrac{n}{2},\; b+\tfrac{1}{2}\sum_{i=1}^n (X_i-\theta)^2\Big),
+\]
+\[
+\hat{\sigma}^2_{\text{(MSE)}}=\dfrac{b+\tfrac{1}{2}S}{a+\tfrac{n}{2}-1},\qquad
+\hat{\sigma}^2_{\text{(MAE)}}=\text{posterior median },\qquad
+\hat{\sigma}^2_{\text{(MAP)}}=\dfrac{b+\tfrac{1}{2}S}{a+\tfrac{n}{2}+1}.
+\]
+
 \end{eb}

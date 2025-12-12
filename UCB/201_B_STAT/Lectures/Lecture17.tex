@@ -26,7 +26,7 @@ She estimates the probability of a default to be 0.1.
     R(\theta,a_1(x)) = \E_{x\mid \theta} L(\theta,a_1(x)) = \int_{}^{} L(\theta,a_1(x)) f(x \mid \theta)\, d x = L(\theta,a_1) \int_{}^{}  f(x\mid \theta)\, d x = L(\theta,a_1)
     \]
     \[
-    r(f,a_1) = \E_\theta R(\theta,a_1) = 150 \qquad r(f,a_2) = \E_\theta R(\theta,a_2) = 300
+    r(f,a_1) = \E_\theta R(\theta,a_1) = - 350 \qquad r(f,a_2) = \E_\theta R(\theta,a_2) = - 300
     \]
 \end{solution}
 \end{eb}
@@ -40,10 +40,10 @@ The maximum Risk:
 
 \begin{eb}[Cont'd]
     \[
-    \bar R(a_1) = \sup_\theta R(\theta,a_1) = \max \{R(\theta_1.a_1), R(\theta_2, a_1)\} = 1500
+    \bar R(a_1) = \sup_\theta R(\theta,a_1) = \max \{R(\theta_1.a_1), R(\theta_2, a_1)\} = 1000
     \]
     \[
-    \bar R(a_2) = \sup_\theta R(\theta,a_2) = \max \{R(\theta_1,a_2), R(\theta_2, a_2)\} = 300
+    \bar R(a_2) = \sup_\theta R(\theta,a_2) = \max \{R(\theta_1,a_2), R(\theta_2, a_2)\} = -300
     \]
 
     \[
@@ -54,6 +54,13 @@ The maximum Risk:
 In the estimation context, our possible actions are estimators $\hat \theta$. Then the maximum risk is \[
 \bar R(\hat \theta) = \sup_\theta R(\theta,\hat \theta)
 \]
+
+\begin{db}[Minimax Rule]
+A decision rule $\hat \theta_{MM}$ is minimax if it minimizes the maximum risk:
+\[
+\hat \theta_{MM} = \arg \min_{\hat \theta \in \mathcal{A}} \bar R(\hat \theta) = \arg \min_{\hat \theta \in \mathcal{A}} \sup_\theta R(\theta,\hat \theta)
+\]
+\end{db}
 
 \begin{eb}
     \[

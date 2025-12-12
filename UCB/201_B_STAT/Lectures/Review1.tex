@@ -194,3 +194,70 @@ which could be estimated by
     Thus, $\hat{\theta} = \frac{\sum X_iY_i}{\sum X_i^2}$ is an unbiased estimator of $\theta$.
 \end{enumerate}
 \end{solution}
+
+\subsection{Application of Likelihood Ratio Test} % (fold)
+
+\begin{enumerate}
+    \item $H_0: \theta \in \Theta_0 $ vs $H_1: \theta \in \Theta_1 = \Theta \setminus \Theta_0$.
+
+    For example, $X_1,\dots,X_k \sim Multinomial (n,p_1,\dots,p_k)$, \\$H_0: p_1 = g_1(\theta),\dots,p_k = g_k(\theta)$ Note that $\sum\limits_{j=1}^{k} g_j(\theta) = 1$
+    $H_1:$ not null.
+
+    Without parameter constraints, MLE is $\hat p_j = \dfrac{Y_j}{n}$, where $Y_j$ is the observed count in category $j$.
+
+    \item Independent Test for multiple Populations
+%% table 
+
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+  & Population 1 & Population 2 & ... & Population m \\
+\hline
+Category 1 & $Y_{11}$ & $Y_{12}$ & ... & $Y_{1m}$ \\
+\hline
+Category 2 & $Y_{21}$ & $Y_{22}$ & ... & $Y_{2m}$ \\
+\hline
+... & ... & ... & ... & ... \\
+\hline
+Category k & $Y_{k1}$ & $Y_{k2}$ & ... & $Y_{km}$ \\
+\hline
+\end{tabular}
+
+Convert to probabilities table:
+
+\begin{tabular}{c|c|c|c|c|c}
+  & Population 1 & Population 2 & ... & Population m & \\
+\hline
+Category 1 & $p_{11}$ & $p_{12}$ & ... & $p_{1m}$ & $p_{1 \cdot} $\\ 
+\hline
+Category 2 & $p_{21}$ & $p_{22}$ & ... & $p_{2m}$& $p_{2 \cdot} $ \\
+\hline
+... & ... & ... & ... & ... & ... \\
+\hline
+Category k & $p_{k1}$ & $p_{k2}$ & ... & $p_{km}$& $p_{k \cdot} $ \\
+\hline
+~ & $p_{\cdot 1} $ & $p_{\cdot 2} $ & ... & $p_{\cdot m} $ & 1 \\
+\end{tabular}
+
+
+
+\[p_{ij} = P(\text{Category } i \text{ in Population } j)\]
+
+\[
+H_0: \text{indenpent} \quad i.e. p_{ij} = p_{i\cdot} p_{\cdot j} ,\qquad H_a : \text{ not null}
+\]
+
+Test statistic:
+
+Under $H_0$, MLE is $\hat p_{ij} = p_{i \cdot} p_{\cdot j} = \dfrac{Y_{i \cdot}}{n} \dfrac{Y_{\cdot j}}{n}$, where $Y_{i \cdot} = \sum\limits_{j=1}^{m} Y_{ij}$ and $Y_{\cdot j} = \sum\limits_{i=1}^{k} Y_{ij}$.
+Under $H_a$, MLE is $\hat p_{ij} = \dfrac{Y_{ij}}{n}$.
+
+Thus,
+\[T = 2 \log \dfrac{L(\hat p_{ij})}{L(\hat p_{i \cdot} \hat p_{\cdot j})} = 2 \sum\limits_{i=1}^{k} \sum\limits_{j=1}^{m} Y_{ij} \log \dfrac{Y_{ij}}{n p_{i \cdot} p_{\cdot j}} \xrightarrow{D} \chi^2_{(k-1)(m-1)}\]
+
+
+
+
+
+
+
+\end{enumerate}

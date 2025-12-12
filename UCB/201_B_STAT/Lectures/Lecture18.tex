@@ -3,5 +3,169 @@
 % First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
 \section[Lecture 18 (Nov 21) -- {\it Geometry of Bayes Risk}]{Lecture 18}
 
-\subsection{Information}
+\subsection{Minimax}
 
+In general it can be difficult to find minimax rules when the parameter space
+is infinite. One connection to Bayes rules is:
+
+\begin{theorem}[Bayes--Minimax Connection]
+Suppose there exists a prior density $f(\theta)$ such that the Bayes rule 
+$\hat{\theta}_f$ has constant risk; that is,
+\[
+R(\theta,\hat{\theta}_f)=c \qquad \text{for all } \theta\in\Theta.
+\]
+Then $\hat{\theta}_f$ is minimax with minimax risk $c$.
+\end{theorem}
+
+\begin{proof}
+Let $\delta$ be any decision rule.  
+Its Bayes risk under prior $f$ is
+\[
+r_f(\delta) = \int_{\Theta} R(\theta,\delta)\, f(\theta)\, d\theta.
+\]
+Since $\hat{\theta}_f$ is the Bayes rule under $f$, we have
+\[
+r_f(\hat{\theta}_f) \le r_f(\delta) 
+\qquad \text{for all rules } \delta.
+\]
+Because the risk of $\hat{\theta}_f$ is constant equal to $c$, its Bayes risk is
+\[
+r_f(\hat{\theta}_f)
+= \int_{\Theta} R(\theta,\hat{\theta}_f) f(\theta)\, d\theta
+= \int_{\Theta} c\, f(\theta)\, d\theta
+= c.
+\]
+
+Now take any rule $\delta$.  
+\[
+r_f(\delta) 
+= \int_{\Theta} R(\theta,\delta) f(\theta)\, d\theta
+\le \sup_{\theta'\in\Theta} R(\theta',\delta).
+\]
+Combining with $c=r_f(\hat{\theta}_f)\le r_f(\delta)$ yields
+\[
+c \le r_f(\delta) 
+\quad\Rightarrow\quad 
+c \le \sup_{\theta\in\Theta} R(\theta,\delta).
+\]
+while for $\hat{\theta}_f$,
+\[
+\sup_{\theta\in\Theta} R(\theta,\hat{\theta}_f) = c.
+\]
+
+Hence $\hat{\theta}_f$ achieves the smallest possible maximum risk.  
+Therefore, $\hat{\theta}_f$ is minimax with minimax risk $c$.
+\end{proof}
+\begin{eb}
+
+
+Let \(X\mid p\sim\operatorname{Bin}(n,p)\) and consider squared--error loss.
+
+\textbf{1. Risk of \(\hat p=X/n\):}
+
+\[
+R(p,\hat p)=\mathbb{E}_p\big[(X/n-p)^2\big]
+=\frac{1}{n^2}\operatorname{Var}_p(X)
+=\frac{1}{n^2}\,np(1-p)
+=\frac{p(1-p)}{n}.
+\]
+This depends on \(p\); its supremum over \(p\in[0,1]\) is attained at \(p=1/2\) and equals
+\[
+\sup_{p}R(p,\hat p)=\frac{1}{4n}.
+\]
+
+\textbf{2. Randomized estimator showing \(\hat p\) is not minimax}
+Define the randomized estimator \(\tilde p\) by
+\[
+\tilde p=
+\begin{cases}
+X/n &\text{with probability }1-\dfrac{1}{n+1},\\[6pt]
+1/2 &\text{with probability }\dfrac{1}{n+1},
+\end{cases}
+\]
+(independent of \(X\)). Its risk equals the mixture of risks:
+\[
+\begin{aligned}
+R(p,\tilde p)
+&=\Big(1-\frac{1}{n+1}\Big)R(p,\hat p)
++\frac{1}{n+1}\,\mathbb{E}_p\big[(1/2-p)^2\big] \\
+&=\frac{n}{n+1}\cdot\frac{p(1-p)}{n}+\frac{1}{n+1}(p-1/2)^2 \\
+&=\frac{1}{n+1}\Big(p(1-p)+(p-1/2)^2\Big).
+\end{aligned}
+\]
+But
+\[
+p(1-p)+(p-1/2)^2
+=(p-p^2)+(p^2-p+1/4)=\tfrac14,
+\]
+so
+\[
+R(p,\tilde p)=\frac{1}{n+1}\cdot\frac{1}{4}=\frac{1}{4(n+1)}\quad\text{for all }p.
+\]
+Hence \(\tilde p\) has constant (and strictly smaller) maximum risk than \(\hat p\):
+\[
+\sup_p R(p,\tilde p)=\frac{1}{4(n+1)}<\frac{1}{4n}=\sup_p R(p,\hat p).
+\]
+Therefore \(\hat p=X/n\) is not minimax.
+
+\end{eb}
+
+\begin{eb}[cont'd]
+\subsection*{3. Bayes estimator under $\mathrm{Beta}(a,b)$ prior and choice of $(a,b)$ making risk constant}
+Let the prior be \(p\sim\operatorname{Beta}(a,b)\).
+Given \(X\), the posterior is
+\[
+p\mid X \sim \operatorname{Beta}(a+X,\; b+n-X),
+\]
+so the Bayes estimator under squared--error loss (posterior mean) is
+\[
+\delta(X)=\mathbb{E}[p\mid X]=\frac{a+X}{a+b+n}.
+\]
+Write \(A=a+b\). Then we can write
+\[
+\delta(X)=\frac{a+X}{A+n}.
+\]
+Compute its risk \(R(p)=\mathbb{E}_p\big[(\delta(X)-p)^2\big]\).
+Since \(\delta\) is affine in \(X\),
+\[
+\begin{aligned}
+\mathbb{E}_p[\delta(X)]&=\frac{a+np}{A+n},\\
+\operatorname{Var}_p(\delta(X))&=\frac{1}{(A+n)^2}\operatorname{Var}_p(X)
+=\frac{np(1-p)}{(A+n)^2}.
+\end{aligned}
+\]
+Thus
+\[
+\begin{aligned}
+R(p)
+&=\operatorname{Var}_p(\delta(X))+\big(\mathbb{E}_p[\delta(X)]-p\big)^2 \\
+&=\frac{np(1-p)}{(A+n)^2}+\frac{(a-pA)^2}{(A+n)^2}\\
+&=\frac{1}{(A+n)^2}\Big( np(1-p)+(a-pA)^2\Big).
+\end{aligned}
+\]
+\[
+np(1-p)+(a-pA)^2
+= p^2(A^2-n) + p\,(n-2aA) + a^2.
+\]
+For \(R(p)\) to be constant (independent of \(p\))
+\[
+\begin{cases}
+A^2-n=0,\\
+n-2aA=0.
+\end{cases}
+\]
+\[
+\implies a=b=\frac{\sqrt{n}}{2}\qquad\text{(i.e. }p\sim\operatorname{Beta}(\tfrac{\sqrt n}{2},\tfrac{\sqrt n}{2})\text{)}
+\]
+makes the frequentist risk of the Bayes estimator constant in \(p\).
+\[
+\begin{aligned}
+np(1-p)+(a-pA)^2 &= n\Big(p(1-p)+(p-1/2)^2\Big)=\frac{n}{4},\\
+R(p) &= \frac{n/4}{(A+n)^2}=\frac{1}{4}\cdot\frac{n}{(n+\sqrt n)^2}
+=\frac{1}{4\big(1+n^{-1/2}\big)^2}.
+\end{aligned}
+\]
+Because the Bayes estimator has constant frequentist risk, it is minimax.
+
+\end{eb}
+\section*{Binomial example, squared--error loss}

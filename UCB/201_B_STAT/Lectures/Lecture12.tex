@@ -126,6 +126,165 @@ Thus,
 \lambda = 2n [(\theta_0 - \hat \theta_n) - (\theta_0 - \hat \theta_n) + \dfrac{1}{2 \hat \theta_n} (\theta_0 - \hat \theta_n)^2] = n \dfrac{(\theta_0 - \hat \theta_n)^2}{\hat \theta_n} = \left(\dfrac{\theta_0 - \hat \theta_n}{\sqrt{ \frac{\hat \theta_n}{n}}}\right)^2 \sim \chi^2_1
 \]
 
-
-
 \end{eb}
+\subsection{P-value}
+Suppose that for every $\alpha \in (0,1)$ we have a size $\alpha$ test with rejection region $R_\alpha$. When 
+\[
+R_\alpha = \{x : T(x) \ge c_\alpha\},
+\]
+\[
+\text{p-value} = \sup_{\theta \in \Theta_0} P_\theta\big(T(X) \ge T(x)\big)
+\]
+where $x$ is the observed data.
+
+Therefore, the p-value is the probability under $H_0$ of observing a value $T(X)$ the same as or more extreme than what was actually observed.
+
+Equivalently,
+\[
+\text{p-value} = \inf\{\alpha : T(x) \in R_\alpha\}.
+\]
+That is, the p-value is the smallest level at which we can reject $H_0$ with $x$ observed.
+
+\begin{enumerate}
+  \item For Wald test with statistic
+    \[
+    \text{p-value} = P_{\theta_0} (|W| > |w|) \approx P(|Z| > |w|) = 2(1 - \Phi(|w|)),
+    \]
+  \item For LRT with statistic
+    \[\lambda(X) = 2 \log T(X) \xrightarrow{D} \chi^2_{r - q},\quad \text{p-value} = P\big(\chi^2_{r - q} \ge \lambda(x)\big).\]
+\end{enumerate}
+
+\begin{tb}
+\begin{theorem}[Neyman--Pearson lemma, simple vs.\ simple]
+Let $X=(X_1,\dots,X_n)$ have likelihood $L_n(\theta)=f(x_1,\dots,x_n\mid\theta)$.
+Consider testing the simple hypotheses
+\[
+H_0:\theta=\theta_0
+\qquad\text{vs.}\qquad
+H_1:\theta=\theta_1 .
+\]
+Among all tests of size $\alpha$ (i.e.\ tests $\varphi$ with
+$\mathbb{E}_{\theta_0}[\varphi(X)]\le\alpha$), the most powerful test has
+rejection region of the form
+\[
+\left\{x:\frac{L_n(\theta_1)}{L_n(\theta_0)} > k\right\}
+\]
+for some constant $k$ chosen so that the test has size exactly $\alpha$.
+\end{theorem}
+\end{tb}
+
+\begin{proof}
+Let $f_0(x)$ and $f_1(x)$ denote the joint densities of $X$ under
+$\theta_0$ and $\theta_1$, respectively, so $L_n(\theta_0)=f_0(X)$ and
+$L_n(\theta_1)=f_1(X)$.  A (non-randomized) test is determined by its
+rejection region $C\subseteq\mathcal{X}$: we reject $H_0$ if $X\in C$,
+and we do not reject otherwise.
+
+The size and power of a test with region $C$ are
+\[
+\alpha(C) = \mathbb{P}_{\theta_0}(X\in C)
+= \int_C f_0(x)\,dx, 
+\qquad
+\beta(C) = \mathbb{P}_{\theta_1}(X\in C)
+= \int_C f_1(x)\,dx.
+\]
+
+Define the likelihood ratio
+\[
+\Lambda(x) = \frac{f_1(x)}{f_0(x)}.
+\]
+Fix $\alpha\in(0,1)$.  Consider the test which rejects $H_0$ when
+$\Lambda(x)>k$, where $k>0$ is chosen so that
+\[
+\alpha^* := \int_{\{\Lambda(x)>k\}} f_0(x)\,dx = \alpha.
+\]
+(We ignore the set $\{\Lambda(x)=k\}$ or assume it has probability zero
+under $f_0$, so the equality can be achieved without randomization.)
+Call this rejection region
+\[
+C^* = \{x:\Lambda(x) > k\}.
+\]
+
+We must show that for any other test region $C$ with
+$\alpha(C)\le\alpha$, we have $\beta(C)\le\beta(C^*)$.
+
+Consider the difference in powers:
+\[
+\beta(C^*) - \beta(C)
+= \int_{C^*} f_1(x)\,dx - \int_C f_1(x)\,dx
+= \int (I_{C^*}(x) - I_C(x)) f_1(x)\,dx,
+\]
+where $I_A$ is the indicator of set $A$.
+
+Rewrite this using $\Lambda(x)=f_1(x)/f_0(x)$:
+\[
+\beta(C^*) - \beta(C)
+= \int (I_{C^*}(x) - I_C(x)) \Lambda(x) f_0(x)\,dx.
+\]
+
+Now add and subtract $k$ inside the integrand:
+\[
+\beta(C^*) - \beta(C)
+= \int (I_{C^*}(x) - I_C(x)) (\Lambda(x)-k) f_0(x)\,dx
+     + k\int (I_{C^*}(x) - I_C(x)) f_0(x)\,dx.
+\]
+
+By our choice of $k$,
+\[
+\int I_{C^*}(x) f_0(x)\,dx = \alpha,
+\]
+and since $\alpha(C)\le\alpha$,
+\[
+\int I_C(x) f_0(x)\,dx \le \alpha.
+\]
+Hence
+\[
+\int (I_{C^*}(x) - I_C(x)) f_0(x)\,dx
+= \alpha(C^*) - \alpha(C)
+\ge 0,
+\]
+so the second term is nonnegative:
+\[
+k\int (I_{C^*}(x) - I_C(x)) f_0(x)\,dx \ge 0.
+\]
+
+For the first term, note that by definition of $C^*$:
+\[
+\Lambda(x)-k > 0 \quad \text{on } C^*, \qquad
+\Lambda(x)-k < 0 \quad \text{on } C^{*c}.
+\]
+Also, $I_{C^*}(x)-I_C(x)$ can only take the values $-1,0,1$ and
+\[
+I_{C^*}(x)-I_C(x)
+=\begin{cases}
+1, & x\in C^*\setminus C,\\
+-1,& x\in C\setminus C^*,\\
+0,& \text{otherwise}.
+\end{cases}
+\]
+Thus, when $I_{C^*}(x)-I_C(x)=1$ we have $x\in C^*$ and
+$\Lambda(x)-k>0$, so the product
+$(I_{C^*}(x)-I_C(x))(\Lambda(x)-k)$ is nonnegative; when
+$I_{C^*}(x)-I_C(x)=-1$ we have $x\in C\setminus C^*\subseteq C^{*c}$,
+so $\Lambda(x)-k<0$, and the product is again nonnegative.  Therefore
+\[
+(I_{C^*}(x)-I_C(x))(\Lambda(x)-k) \ge 0
+\quad\text{for all }x,
+\]
+and hence
+\[
+\int (I_{C^*}(x)-I_C(x))(\Lambda(x)-k) f_0(x)\,dx \ge 0.
+\]
+
+Combining the two parts, we obtain
+\[
+\beta(C^*) - \beta(C) \ge 0,
+\]
+i.e.\ $\beta(C^*) \ge \beta(C)$ for every test $C$ with
+$\alpha(C)\le\alpha$.
+
+Thus the likelihood-ratio test with rejection region
+$C^*=\{x:\Lambda(x)>k\}$ is most powerful of size $\alpha$, which
+completes the proof.
+\end{proof}
+
