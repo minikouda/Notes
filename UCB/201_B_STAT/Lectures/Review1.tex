@@ -43,7 +43,7 @@ p_1 = (1-\theta)^2, \quad p_2 = 2\theta(1-\theta), \quad p_3 = \theta^2
     Solving this equation yields the MLE $\hat{\theta}$. The asymptotic distribution of the MLE can be derived using the Fisher information.
 
     \[
-    \implies \hat \theta = 
+    \implies \hat \theta = \dfrac{X_2 + 2 X_3}{2 n}
     \]
 
     And the second derivative is
@@ -196,6 +196,9 @@ which could be estimated by
 \end{solution}
 
 \subsection{Application of Likelihood Ratio Test} % (fold)
+\label{sub:Application of Likelihood Ratio Test}
+
+Back to \hyperref[sub:PT]{Peason's Test}
 
 \begin{enumerate}
     \item $H_0: \theta \in \Theta_0 $ vs $H_1: \theta \in \Theta_1 = \Theta \setminus \Theta_0$.
@@ -255,9 +258,8 @@ Thus,
 \[T = 2 \log \dfrac{L(\hat p_{ij})}{L(\hat p_{i \cdot} \hat p_{\cdot j})} = 2 \sum\limits_{i=1}^{k} \sum\limits_{j=1}^{m} Y_{ij} \log \dfrac{Y_{ij}}{n p_{i \cdot} p_{\cdot j}} \xrightarrow{D} \chi^2_{(k-1)(m-1)}\]
 
 
+\hyperref[sub:Rejection Sampling]{Rejection Sampling}
 
-
-
-
+\hyperref[sub:GeoBays]{Geometry Decision Theory}
 
 \end{enumerate}

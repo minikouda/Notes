@@ -49,20 +49,57 @@ The numerator \[
 f(\theta_i | X_1,\dots,X_n) = \dfrac{f(X_1,\dots,X_n|\theta_i) f(\theta_i)}{f(X_1,\dots,X_n)} = \dfrac{L_n(\theta_i) f(\theta_i)}{f(X_1,\dots,X_n)}
 \]
 
+\[
+f(X_1,\dots,X_n) = \int f(X_1,\dots,X_n,\theta) d \theta = \int f(X_1,\dots,X_n | \theta) \dfrac{f(\theta)}{g(\theta)} g(\theta) d \theta \approx \dfrac{1}{B} \sum_{j=1}^{B} L_n(\theta_j) \dfrac{f(\theta_j)}{g(\theta_j)}
+\]
+
+We can choose the second MC to use the same as the first MC, i.e., $g(\theta) = f(\theta)$
+
 Thus, the weight is :
 \[
 =  \dfrac{L_n(\theta_i)}{B \cdot \int_{}^{} f(X_1,\dots,X_n | \theta) f(\theta) d\theta} \approx \frac{L_n(\theta_i)}{ \sum\limits_{j=1}^{B} L_n(\theta_j) } 
 \]
-(by approximating the denominator via Monte Carlo integration)
-
-\[
-f(x_1,\dots,x_n) = \int f(x_1,\dots,x_n,\theta) d \theta = \int f(x_1,\dots,x_n | \theta) \dfrac{f(\theta)}{g(\theta)} g(\theta) d \theta \approx \dfrac{1}{B} \sum_{j=1}^{B} L_n(\theta_j) \dfrac{f(\theta_j)}{g(\theta_j)}
-\]
-
-We can choose the second MC to use the same as the first MC, i.e., $g(\theta) = f(\theta)$
 
 Finally, we have
 \[
 \E[q(\theta) | x^n] \approx \sum_{i=1}^B w_i q(\theta_i)
 \]
 % paragraph Importance Sampling (end)
+
+\subsection{Rejection Sampling} % (fold)
+\label{sub:Rejection Sampling}
+
+Goal: get s sample for $r(x)$
+
+Proposal distribution: $g(x)$, which is easy to sample from.
+
+\emph{Rejection procedure:} find  $M \quad \text{s.t.} \quad \forall x, \dfrac{r(x)}{M\cdot g(x)} < 1 $
+
+\begin{enumerate}
+    \item Sample $X_{cand}  \sim g(x)$
+    \item Sample $U \sim \text{Uniform}(0,1)$
+    \item If $U \le \dfrac{r(X_{cand} )}{M \cdot g(X_{cand} )}$, accept $X_{cand} $; else reject $X_{cand} $ and go to step 1.
+\end{enumerate}
+
+Following the above procedure, the sample probability density function is:
+\[f_{X_{acc}} (x) \propto g(x) \cdot \dfrac{r(x)}{M \cdot g(x)} \propto r(x)\]
+
+
+\begin{eb}
+For posterior distribution sampling, we can set
+\[
+r(\theta) = f(\theta \mid x), \quad g(\theta) = f(\theta)
+\]
+
+We can multiply by some function that does not depend on $\theta$ to make the sampling easier:
+\[
+\theta_1, \dots, \theta_B \sim r(\theta) \propto r(\theta) f(x) = f(\theta,x) \propto f(x \mid \theta) g(\theta)
+\]
+
+We need to find $M$ such that
+\[\dfrac{f(x \mid \theta) g(\theta)}{M \cdot g(\theta)} = \dfrac{f(x \mid \theta)}{M} < 1 \quad \forall \theta\]
+i.e.
+\[M = \sup_\theta f(x \mid \theta) = f(x \mid \hat \theta_{MLE} )\]
+\end{eb}
+
+% subsection Rejection Sampling (end)

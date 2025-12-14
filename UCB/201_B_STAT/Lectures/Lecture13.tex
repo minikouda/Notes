@@ -4,6 +4,10 @@
 \section[Lecture 13 (Oct 23) -- {\it Pearson's Test and Bayesian Statistics}]{Lecture 13}
 
 \subsection{Pearson's Test}
+\label{sub:PT}
+
+\paragraph{Review connection}\label{par:review-questions-link}
+See \hyperref[sub:Application of Likelihood Ratio Test]{LRT practice} for more.
 
 Multinomial model:
 \[X = (X_1,X_2,\dots,X_k) \sim \text{Multinomial}(n,p_1,p_2,\dots,p_k)\]
@@ -64,6 +68,8 @@ T(X) = \sum\limits_{j=1}^{K} \dfrac{(Y_j - n p_j(\lambda))^2}{np_j(\lambda)} \ov
 \]
 
 If $\lambda$ is unknown, then
+
+we use the MLE $\hat \lambda = \bar X_n$ to estimate $\lambda$. Then under $H_0$,
 \[
 T(X) = \sum\limits_{j=1}^{K} \dfrac{(Y_j - n p_j(\lambda))^2}{np_j(\lambda)} \overset{D}{\rightarrow} \chi^2_{K-1-1} 
 \]
@@ -82,7 +88,7 @@ T(X) = \sum\limits_{j=1}^{K} \dfrac{(Y_j - n p_j(\lambda))^2}{np_j(\lambda)} \ov
 \subsection{Bayesian Statistics}
 
 \[
-f(\theta|x^n) = \dfrac{f(x^n|\theta)(f(\theta))}{f(x^n)}
+f(\theta|x^n) = \dfrac{f(x^n|\theta)f(\theta)}{f(x^n)}
 \]
 \begin{enumerate}
     \item $f(\theta)$ is the prior distribution of $\theta$.
