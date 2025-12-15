@@ -40,7 +40,7 @@ i.e. the estimator is sufficient. The Rao-Blackwell theorem says that if we have
 
 \begin{proof}
 $$
-\dfrac{\partial \ell}{\partial \theta} \mid_{\theta^*} = 0
+\dfrac{\partial \ell}{\partial \theta} \Big|_{\theta^*} = 0
 $$
 \begin{tb}[CLT]
 Let $X_1, X_2, \ldots, X_n$ be iid with mean $\mu$ and variance $\sigma^2 < \infty$. Then
@@ -187,17 +187,17 @@ $$
 
 
 Suppose $\tau = g(\theta_1, \ldots, \theta_k)$ is a differentiable function.  
-Let $\nabla g = \left( \frac{\partial}{\partial \theta_1} g(\theta), \ldots, \frac{\partial}{\partial \theta_k} g(\theta) \right)'$ be the gradient of $g$, and suppose that $\nabla g$ evaluated at $\hat{\theta}_n$ is not zero. Then
+Let $\nabla g = \left( \frac{\partial}{\partial \theta_1} g(\theta), \ldots, \frac{\partial}{\partial \theta_k} g(\theta) \right)^\top$ be the gradient of $g$, and suppose that $\nabla g$ evaluated at $\hat{\theta}_n$ is not zero. Then
 
 \[
-\frac{\hat{\tau}_n - \tau}{\hat{s}e(\hat{\tau}_n)} \xrightarrow{D} N(0,1)
+\frac{\hat{\tau}_n - \tau}{\hat{se}(\hat{\tau}_n)} \xrightarrow{D} N(0,1)
 \]
 
 where
 
 \[
-\hat{s}e(\hat{\tau}_n) = 
-\sqrt{ (\nabla\hat{ g})' J_n(\hat{\theta}_n) (\nabla\hat{ g}) }
+\hat{se}(\hat{\tau}_n) = 
+\sqrt{ (\nabla\hat{ g})^\top J_n(\hat{\theta}_n) (\nabla\hat{ g}) }
 \]
 
 and $\nabla\hat{ g}$ is $\nabla g$ evaluated at $\hat{\theta}_n$.

@@ -22,8 +22,8 @@ $$
 
 \begin{align*}
     \mathrm{E}[\hat{F}_n(x)] &= F(x) \\
-    \mathrm{V}[\hat{F}_n(x)] &= \frac{F(x)[1 - F(x)]}{n} \\
-    \mathrm{MSE}[\hat{F}_n(x)] &= \mathrm{V}[\hat{F}_n(x)] \to 0 \\
+    \mathrm{Var}[\hat{F}_n(x)] &= \frac{F(x)[1 - F(x)]}{n} \\
+    \mathrm{MSE}[\hat{F}_n(x)] &= \mathrm{Var}[\hat{F}_n(x)] \to 0 \\
     \hat{F}_n(x) &\xrightarrow{P} F(x)
 \end{align*}
 Plug in estimator:
@@ -58,7 +58,7 @@ Suppose the function $\theta(F)$ is continuous in the sup-norm:
 \[
     \forall \epsilon > 0, \exists \delta > 0 \text{ such that ``}\|G - F\|_{\infty} < \delta \text{ implies } |\theta(G) - \theta(F)| < \epsilon\text{''}.
 \]
-[That is for any $\epsilon$, if there is some $G$ close enough to $F$, then $\theta(G)$ is close to $\theta(F)$.]
+    [That is, for any $\epsilon$, if there is some $G$ close enough to $F$, then $\theta(G)$ is close to $\theta(F)$.]
 
 Then,
 \[

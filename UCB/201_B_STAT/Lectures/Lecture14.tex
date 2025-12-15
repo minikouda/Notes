@@ -3,19 +3,11 @@
 % First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
 \section[Lecture 14 (Oct 28)-- {\it Posterior Distribution}]{Lecture 14}
 
-\subsection{Bayesian}
+\subsection{MCMC}
 
+If the posterior distribution is complicated, we may not be able to get closed-form expressions for posterior quantities of interest, e.g. posterior mean, variance, quantiles, etc.
 
-For rejection sampling, 
-the $\theta_{i} ^{F} := $ the $i$-th item from final list of $B$ size.
-\\It follows some distribution $q$
-
-\[
-q(\theta) = \dfrac{f(\theta) f(X_1,\dots,X_n | \theta)}{f(X_1,\dots,X_n)}
-\]
-\[
-q(\theta) \propto f(\theta) \dfrac{L_n(\theta)}{L_n(\hat \theta _n)} \propto f(\theta) f(X_1,\dots,X_n|\theta) \propto f(\theta|X_1,\dots,X_n)
-\]
+In such cases, we can use Monte Carlo methods to approximate these quantities.
 
 \subsection{Importance Sampling} % (fold)
 
@@ -88,7 +80,7 @@ Following the above procedure, the sample probability density function is:
 \begin{eb}
 For posterior distribution sampling, we can set
 \[
-r(\theta) = f(\theta \mid x), \quad g(\theta) = f(\theta)
+r(\theta) = f(x|\theta), \quad g(\theta) = f(\theta)
 \]
 
 We can multiply by some function that does not depend on $\theta$ to make the sampling easier:
@@ -97,9 +89,8 @@ We can multiply by some function that does not depend on $\theta$ to make the sa
 \]
 
 We need to find $M$ such that
-\[\dfrac{f(x \mid \theta) g(\theta)}{M \cdot g(\theta)} = \dfrac{f(x \mid \theta)}{M} < 1 \quad \forall \theta\]
-i.e.
-\[M = \sup_\theta f(x \mid \theta) = f(x \mid \hat \theta_{MLE} )\]
+\[\dfrac{f(x|\theta) g(\theta)}{M \cdot g(\theta)} = \dfrac{f(x|\theta)}{M} < 1 \quad \forall \theta\]
+\[\Rightarrow M = \sup_\theta f(x|\theta) = f(x|\hat \theta_{MLE} )\]
 \end{eb}
 
 % subsection Rejection Sampling (end)

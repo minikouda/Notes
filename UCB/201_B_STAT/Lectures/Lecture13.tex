@@ -77,13 +77,6 @@ T(X) = \sum\limits_{j=1}^{K} \dfrac{(Y_j - n p_j(\lambda))^2}{np_j(\lambda)} \ov
 
 \end{eb}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=1\textwidth]{Images/PN.png}
-\caption{Positive and Negative Predictive Values vs Prevalence}
-\end{figure}
-
-
 
 \subsection{Bayesian Statistics}
 
@@ -109,6 +102,7 @@ Suppose $X_1,X_2,\dots,X_n \overset{iid}{\sim} N(\mu,\sigma^2)$, and the prior d
     \]
 \end{solution}
 \end{eb}
+
 \begin{eb}[Poisson-Gamma Model]
 Suppose $X_1,X_2,\dots,X_n \overset{iid}{\sim} Poisson(\theta)$, and the prior distribution of $\theta$ is $Gamma(\alpha,\beta)$, i.e.,
 \[f(\theta) = \dfrac{\beta^\alpha}{\Gamma(\alpha)} \theta^{\alpha - 1} e^{-\beta \theta}, \theta > 0\]
@@ -124,6 +118,8 @@ Suppose $X_1,X_2,\dots,X_n \overset{iid}{\sim} Poisson(\theta)$, and the prior d
 \end{solution}
 \end{eb}
 
+\phantomsection
+\label{example:pg}
 \begin{eb}
 For $X_1,\dots,X_n | \theta \overset{iid}{\sim} N(\theta,\sigma^2)$ , where $\sigma^2$ is known, $\theta \sim N(a,b^2)$
 The posterior distribution is
@@ -134,3 +130,74 @@ The mean could be written as a weighted average of the prior mean and the sample
 
 When $n \rightarrow \infty$, the weight for the prior $\rightarrow 0$.
 \end{eb}
+\subsection{Posterior Inference}
+
+In Bayesian statistics, all inference is based on the posterior distribution.
+We can use the posterior to calculate quantities similar to those under
+frequentist statistics (point estimates and intervals), or we can examine the
+posterior probability of any event of interest.
+
+The posterior mean is a commonly used point estimator:
+\[
+\mathbb{E}[\theta \mid X_1, \dots, X_n]
+=
+\int \theta \, f(\theta \mid X_1, \dots, X_n)\, d\theta.
+\]
+
+It can often be written as a weighted average of the prior mean and the MLE.
+For example, in \hyperref[example:pg]{Example} on the previous page,
+\[
+\mathbb{E}[\theta \mid X_1, \dots, X_n]
+=
+\frac{b^2 \sum_{i=1}^n X_i + a \sigma^2}{n b^2 + \sigma^2}
+=
+\frac{n b^2}{n b^2 + \sigma^2}\,\bar X_n
++
+\frac{\sigma^2}{n b^2 + \sigma^2}\, a.
+\]
+
+\subsection{Credible Intervals}
+
+A $1-\alpha$ credible interval for $\theta$ (also called a posterior interval)
+is an interval $C_n$ satisfying
+\[
+P(\theta \in C_n \mid X_1, \dots, X_n) = 1 - \alpha.
+\]
+
+Note a few differences compared to a confidence interval:
+
+\begin{itemize}
+    \item The probability statement is about $\theta$, not $C_n$. The interval
+    $C_n$ is a function of $X_1, \dots, X_n$, which we are conditioning on in
+    the probability statement.
+    \item The statement is an equality. This is different from a frequentist
+    interval, which puts a lower bound on the probability of coverage.
+    \item The intervals constructed this way may or may not have good
+    frequentist coverage rates.
+\end{itemize}
+
+
+\subsection{Types of Credible Intervals}
+
+Note that $C_n$ is not uniquely defined. There are several popular methods for
+finding such intervals.
+
+A $1-\alpha$ equal-tail credible interval is an interval $(a,b)$ such that
+\[
+\int_{-\infty}^{a} f(\theta \mid x^n)\, d\theta
+=
+\int_{b}^{\infty} f(\theta \mid x^n)\, d\theta
+=
+\frac{\alpha}{2}.
+\]
+
+A $1-\alpha$ highest posterior density (HPD) region $R_n$ is defined such that:
+\begin{enumerate}
+    \item $P(\theta \in R_n \mid x^n) = 1 - \alpha$,
+    \item $R_n = \{ \theta : f(\theta \mid x^n) > k \}$ for some constant $k$.
+\end{enumerate}
+
+When $f(\theta \mid x^n)$ is unimodal, $R_n$ is an interval.
+
+Often it is more informative to plot $f(\theta \mid x^n)$ than it is to report
+an interval.

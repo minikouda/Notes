@@ -14,17 +14,16 @@ data to, e.g. $T(X)$, without loss of information. (Actually, it often turns
 out that some part of the data carries no information about the unknown
 distribution that produces the data)
 % subparagraph Motivation (end)
+\vspace{-10pt}
 
 \subparagraph{Benefits} % (fold)
 \label{subp:Benefits}
-
-1. increasing computational efficiency and decreasing storage requirements
-2. involving irrelevant information may increase an estimator’s risk (see
+\begin{itemize}
+  \item Increasing computational efficiency and decreasing storage requirements
+  \item Involving irrelevant information may increase an estimator’s risk (see
 Rao-Blackwell Theorem)
-3. Improving the scientific interpretability of our data
-
-% subparagraph Benefits (end)
-
+  \item Improving the scientific interpretability of our data
+\end{itemize}% subparagraph Benefits (end)
 \begin{eb}
 Let $X_i \overset{i.i.d.}{\sim} Ber(\theta)$. Show that $T(X) = \sum\limits_{i=1}^{n} X_i$ is sufficient for $\theta$.
 
@@ -57,36 +56,36 @@ p(x;\theta) = h(x)\, g(T(x), \theta).
 \]
 \end{tb}
 
-\subparagraph{Proof} % (fold)
-\label{subp:Proof}
-$
-\Rightarrow
-$
-
-If $T$ is sufficient for $\theta$, then
-$$
-P_\theta(X = x ) =  \underset{h(x)}{P_\theta(X=x | T(X) = T(x))}  \cdot P_\theta(T(X) = T(x))
-$$
-$$
-= h(x) \cdot g(T(x), \theta)
-$$
-The first term is independent of $\theta$ according to the definition of Sufficient Statistics.
-
-$
-\Leftarrow
-$
-If $p(x;\theta) = h(x) g(T(x), \theta)$, then
-$$
-P_\theta(X = x | T(X) = t) = \dfrac{P_\theta(X = x, T(X) = t)}{P_\theta(T(X) = t)} = \dfrac{h(x) g(T(x), \theta)}{\sum\limits_{y: T(y) = t} h(y) g(T(y), \theta)}.
-$$
-Since $
-P(X = x, T(X) = T(x)) = P(X = x)
-$ and we need to run through all $y$ such that $T(y) = t$, the $g(T(y), \theta)$ term cancels out. So the conditional distribution does not depend on $\theta$.
-
-$$
- = \dfrac{h(x)}{\sum\limits_{y: T(y) = t} h(y)}
-$$
-According to the definition of Sufficient Statistics, $T$ is sufficient for $\theta$.
+\begin{proof}
+  $
+  \Rightarrow
+  $
+  
+  If $T$ is sufficient for $\theta$, then
+  $$
+  P_\theta(X = x ) =  \underset{h(x)}{P_\theta(X=x | T(X) = T(x))}  \cdot P_\theta(T(X) = T(x))
+  $$
+  $$
+  = h(x) \cdot g(T(x), \theta)
+  $$
+  The first term is independent of $\theta$ according to the definition of Sufficient Statistics.
+  
+  $
+  \Leftarrow
+  $
+  If $p(x;\theta) = h(x) g(T(x), \theta)$, then
+  $$
+  P_\theta(X = x | T(X) = t) = \dfrac{P_\theta(X = x, T(X) = t)}{P_\theta(T(X) = t)} = \dfrac{h(x) g(T(x), \theta)}{\sum\limits_{y: T(y) = t} h(y) g(T(y), \theta)}.
+  $$
+  Since $
+  P(X = x, T(X) = T(x)) = P(X = x)
+  $ and we need to run through all $y$ such that $T(y) = t$, the $g(T(y), \theta)$ term cancels out. So the conditional distribution does not depend on $\theta$.
+  
+  $$
+   = \dfrac{h(x)}{\sum\limits_{y: T(y) = t} h(y)}
+  $$
+  According to the definition of Sufficient Statistics, $T$ is sufficient for $\theta$.
+\end{proof}
 
 
 % subparagraph Proof (end)

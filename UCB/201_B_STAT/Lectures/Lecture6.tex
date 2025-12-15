@@ -37,27 +37,28 @@ p(x,\theta) = h(x) \exp\!\left[ \sum_{i=1}^d \eta_i(\theta) T_i(x) - A(\theta) \
 which is of full rank if $\eta(\Theta) = \{\eta_1(\theta), \ldots, \eta_d(\theta)\}$ has 
 non-empty interior in $\mathbb{R}^d$ and $T_1(x), \ldots, T_d(x)$ are linearly independent.  
 
-In a full rank exponential family, the natural sufficient statistic 
+\textbf{In a full rank exponential family, the natural sufficient statistic }
 \[
 T = (T_1, \ldots, T_d)
 \]
-is minimally sufficient.
+\textbf{is minimally sufficient.}
 
 
 \begin{eb}
 Let $X_i \sim N(\theta,\sigma^2) i.i.d. i = 1,\dots,n$. 
 
-\begin{align*}
-f_{\mu,\sigma^2}(x_1,\dots,x_n) & = \prod_{i=1}^n f_{\mu,\sigma^2}(x_i) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x_i - \mu)^2}{2\sigma^2}} = \frac{1}{(2\pi)^{n/2}\sigma^n} e^{-\frac{1}{2\sigma^2} \sum_{i=1}^n (x_i - \mu)^2} \\
- &  = \dfrac{1}{(2\pi)^{n/2}\sigma^n} \cdot \exp\{\frac{\mu}{\sigma^2} \sum\limits_{i=1}^n x_i - \dfrac{n\mu^2}{2\sigma^2} - \frac{1}{2\sigma^2} \sum\limits_{i=1}^n x_i^2\} \\
-\end{align*}
-\begin{align*}
-\eta_1 (\theta) = \frac{\mu}{\sigma^2} \qquad& T_1 = \sum\limits_{i=1}^n x_i \\
-\eta_2 (\theta) = -\frac{1}{2\sigma^2} \qquad& T_2 = \sum\limits_{i=1}^n x_i^2 \\
-A(\theta) = \dfrac{n\mu^2}{2\sigma^2} \qquad& h(x) = \dfrac{1}{(2\pi)^{n/2}\sigma^n}
- \end{align*}
-
-
+\begin{solution}
+    \begin{align*}
+    f_{\mu,\sigma^2}(x_1,\dots,x_n) & = \prod_{i=1}^n f_{\mu,\sigma^2}(x_i) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x_i - \mu)^2}{2\sigma^2}} = \frac{1}{(2\pi)^{n/2}\sigma^n} e^{-\frac{1}{2\sigma^2} \sum_{i=1}^n (x_i - \mu)^2} \\
+     &  = \dfrac{1}{(2\pi)^{n/2}\sigma^n} \cdot \exp\{\frac{\mu}{\sigma^2} \sum\limits_{i=1}^n x_i  - \frac{1}{2\sigma^2} \sum\limits_{i=1}^n x_i^2 - \dfrac{n\mu^2}{2\sigma^2}\}\\
+    \end{align*}
+    \vspace{-35pt}
+    \begin{align*}
+    \eta_1 (\theta) = \frac{\mu}{\sigma^2} \qquad& T_1 = \sum\limits_{i=1}^n x_i \\
+    \eta_2 (\theta) = -\frac{1}{2\sigma^2} \qquad& T_2 = \sum\limits_{i=1}^n x_i^2 \\
+    A(\theta) = \dfrac{n\mu^2}{2\sigma^2} \qquad& h(x) = \dfrac{1}{(2\pi)^{n/2}\sigma^n}
+    \end{align*}
+\end{solution}
 
 \end{eb}
 % subsection Minimal Sufficiency (end)
@@ -66,27 +67,29 @@ A(\theta) = \dfrac{n\mu^2}{2\sigma^2} \qquad& h(x) = \dfrac{1}{(2\pi)^{n/2}\sigm
 \subsection{Moments estimation} % (fold)
 \label{sub:Moments estimation}
 
-Suppose $\theta = (\theta_1, \ldots, \theta_k)$. For $j=1,\ldots,k$, define the $j^{th}$ moment
-\[
-\alpha_j \equiv \alpha_j(\theta) = E_\theta[X^j] 
-= \int x^j \, dF_\theta(x)
-\]
-and the $j^{th}$ sample moment 
-\[
-\hat{\alpha}_j = \frac{1}{n}\sum_{i=1}^n X_i^j.
-\]
+\begin{db}
+    Suppose $\theta = (\theta_1, \ldots, \theta_k)$. For $j=1,\ldots,k$, define the $j^{th}$ moment
+    \[
+    \alpha_j \equiv \alpha_j(\theta) = E_\theta[X^j] 
+    = \int x^j \, dF_\theta(x)
+    \]
+    and the $j^{th}$ sample moment 
+    \[
+    \hat{\alpha}_j = \frac{1}{n}\sum_{i=1}^n X_i^j.
+    \]
+    
+    The method of moments estimator $\hat{\theta}_n$ is defined to be the value of $\theta$ such that
+    \[
+    \begin{aligned}
+    \alpha_1(\hat{\theta}_n) &= \hat{\alpha}_1, \\
+    \alpha_2(\hat{\theta}_n) &= \hat{\alpha}_2, \\
+    &\;\;\vdots \\
+    \alpha_k(\hat{\theta}_n) &= \hat{\alpha}_k.
+    \end{aligned}
+    \]
+\end{db}
 
-The method of moments estimator $\hat{\theta}_n$ is defined to be the value of $\theta$ such that
-\[
-\begin{aligned}
-\alpha_1(\hat{\theta}_n) &= \hat{\alpha}_1, \\
-\alpha_2(\hat{\theta}_n) &= \hat{\alpha}_2, \\
-&\;\;\vdots \\
-\alpha_k(\hat{\theta}_n) &= \hat{\alpha}_k.
-\end{aligned}
-\]
-
-\begin{eb}
+\begin{eb}[ Normal $\mu,\sigma^2$]
 For normal distribution $N(\mu,\sigma^2)$, we have
 \[
 \alpha_1(\theta) = E[X] = \mu, \qquad \alpha_2(\theta) = E[X^2] = \mu^2 + \sigma^2.

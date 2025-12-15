@@ -4,26 +4,84 @@
 \section[Lecture 12 (Oct 9) -- {\it LRT}]{Lecture 12}
 
 \subsection{Hypothesis Testing}
+\textbf{Wald Test:} Consider testing $H_0 : \theta = \theta_0$ versus 
+$H_1 : \theta \neq \theta_0$. Let $\hat{\theta}_n$ be an estimator such that
 \[
-H_0 : g(\theta) = g(\theta_0)
+\frac{\hat{\theta}_n - \theta_0}{\widehat{\mathrm{se}}(\hat{\theta}_n)}
+\overset{D}{\to} N(0,1).
+\]
+The size $\alpha$ Wald test rejects $H_0$ when $T > z_{\alpha/2}$, where
+\[
+T = \left| \frac{\hat{\theta}_n - \theta_0}{\widehat{\mathrm{se}}(\hat{\theta}_n)} \right|.
+\]
+
+We can show that asymptotically, the Wald test has size $\alpha$, and that it is
+obtained by inverting the approximate $1 - \alpha$ normal-based CI for $\theta$.
+
+\[
+H_0 : g(\theta) = g(\theta_0)  
 \]
 
 If the distribution is from \emph{an exponential family}, and $g(\theta)$ is a linear function of the natural parameter, then
 \[
-\dfrac{g(\hat{\theta}_n) - g(\theta_0)}{\hat{se}(g(\hat{\theta}_n))} \overset{D}{\rightarrow} N(0,1)
+\dfrac{g(\hat{\theta}_n) - g(\theta_0)}{\hat{se}(g(\hat{\theta}_n))} \overset{D}{\rightarrow} N(0,1)  
 \]
-
-where $T(F) = \E_F r(x)$ for any $r$
 
 \begin{eb}
-Suppose that $X \sim \text{Bin}(m, p_1)$ and $Y \sim \text{Bin}(n, p_2)$. Construct a size $\alpha$ Wald test for $H_0 : p_1 = p_2$.
-
+Suppose that $X \sim \text{Bin}(m, p_1)$ and $Y \sim \text{Bin}(n, p_2)$. Construct a size $\alpha$ Wald test for
 
 \[
-H_0 : p_1 - p_2 = 0 \qquad H_1 : p_1 - p_2 \neq 0
+H_0 : p_1 - p_2 = 0 \qquad H_1 : p_1 - p_2 \neq 0  
 \]
 
-where $\hat{p_1} - \hat{p_2} = X/m - Y/n$ is the MLE of $p_1 - p_2$.
+where $\hat{p}_1 - \hat{p}_2 = X/m - Y/n$ is the MLE of $p_1 - p_2$.
+
+\begin{solution}
+We have
+\[
+\hat p_1 = \frac{X}{m}, \qquad \hat p_2 = \frac{Y}{n},
+\]
+so the MLE of $p_1 - p_2$ is
+\[
+\hat p_1 - \hat p_2 = \frac{X}{m} - \frac{Y}{n}.
+\]
+
+Since $X \sim \text{Bin}(m,p_1)$ and $Y \sim \text{Bin}(n,p_2)$ are independent,
+\[
+\mathrm{Var}(\hat p_1 - \hat p_2)
+= \mathrm{Var}(\hat p_1) + \mathrm{Var}(\hat p_2)
+= \frac{p_1(1-p_1)}{m} + \frac{p_2(1-p_2)}{n}.
+\]
+
+Under the null hypothesis $H_0: p_1 - p_2 = 0$, we have $p_1 = p_2 = p$.
+We estimate $p$ using the pooled estimator
+\[
+\hat p = \frac{X+Y}{m+n}.
+\]
+
+Thus, the estimated standard error of $\hat p_1 - \hat p_2$ is
+\[
+\widehat{\mathrm{se}}(\hat p_1 - \hat p_2)
+= \sqrt{\frac{\hat p(1-\hat p)}{m} + \frac{\hat p(1-\hat p)}{n}}.
+\]
+
+The Wald test statistic is
+\[
+W = \frac{(\hat p_1 - \hat p_2) - 0}
+{\widehat{\mathrm{se}}(\hat p_1 - \hat p_2)}.
+\]
+
+Asymptotically, under $H_0$, $W \overset{D}{\to} N(0,1)$.
+Therefore, the size $\alpha$ Wald test rejects $H_0$ if
+\[
+\left| W \right| > z_{\alpha/2},
+\]
+where $z_{\alpha/2}$ is the $(1-\alpha/2)$ quantile of the standard normal
+distribution.
+\end{solution}
+
+Rmk. The $\hat{se}$ here is different from the one in \href{https://bcourses.berkeley.edu/courses/1548317/files/folder/Section%20Handouts?preview=92769638}{Section handouts 5}.
+The corresponding link in \href{https://edstem.org/us/courses/84592/discussion/7466043}{ED}. Please correct me if I am wrong.
 \end{eb}
 
 
@@ -93,9 +151,7 @@ Power function:
 \beta(\theta) = P_\theta(X \in R) = P_\theta\left(|\bar{X} - \theta_0| > \sqrt{-\dfrac{2}{n} \log c}\right) = 2 \cdot P\left(\bar{X} - \theta_1 > \sqrt{-\frac{2}{n} \log c} + \theta_0 - \theta_1\right) 
 \]
 
-The $\bar X - \theta_1 \sim N(0, \frac{1}{n})$.
-
-
+The $\bar X - \theta_1 \sim N(0, \frac{1}{n})$, where $\theta_1$ is the true value of $\theta$.
 \end{solution}
 \end{eb}
 

@@ -7,7 +7,7 @@
 \label{sub:Maximum Likelihood Estimation}
 
 $$
-\mathcal{L}_n(\theta) = f_\theta (X_1,\dots,X_n;\theta) = \prod_{i=1}^n f_\theta (X_i;\theta) \text{if the data are independent}
+\mathcal{L}_n(\theta) = f_\theta (X_1,\dots,X_n;\theta) = \prod_{i=1}^n f_\theta (X_i;\theta) \text{\quad if the data are independent}
 $$
 
 log-likelihood function
@@ -16,19 +16,27 @@ l_n(\theta) = \log \mathcal{L}_n(\theta) = \sum_{i=1}^n \log f_\theta (X_i;\thet
 $$
 
 If the log-likelihood function is differentiable, then the MLE $\hat{\theta}$ satisfies
-$$\frac{\partial l_n(\theta)}{\partial \theta_j} = 0 \text{ for j = 1,\dots,p}$$
+$$\frac{\partial l_n(\theta)}{\partial \theta_j} = 0 \text{\quad for } j = 1,\dots,p$$
 But still need to check the second order condition and boundaries where the likelihood is maximized.
 
 
 \begin{eb}
 Let $X_1,\dots,X_n \iid N(\theta,1)$ 
 
-\begin{align*}
-\mathcal{L}_n(\theta) & = f_\theta (X_1,\dots,X_n;\theta) = \prod_{i=1}^n f_\theta (X_i;\theta) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi}} e^{-\frac{(X_i - \theta)^2}{2}} = \frac{1}{(2\pi)^{n/2}} e^{-\frac{1}{2} \sum_{i=1}^n (X_i - \theta)^2} \\
-l_n(\theta) & = \log \mathcal{L}_n(\theta) = -\frac{n}{2} \log(2\pi) - \frac{1}{2} \sum_{i=1}^n (X_i - \theta)^2 \\
-\frac{\partial l_n(\theta)}{\partial \theta} & = \sum_{i=1}^n (X_i - \theta) = 0 \implies \hat{\theta} = \bar{X}_n\\
-\frac{\partial^2 l_n(\theta)}{\partial \theta^2} & = -n < 0 \text{ (max)}
-\end{align*}
+\begin{solution}
+    \[
+        \mathcal{L}_n(\theta) = f_\theta (X_1,\dots,X_n;\theta) = \prod_{i=1}^n f_\theta (X_i;\theta) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi}} e^{-\frac{(X_i - \theta)^2}{2}} = \frac{1}{(2\pi)^{n/2}} e^{-\frac{1}{2} \sum_{i=1}^n (X_i - \theta)^2}
+    \]
+    \[
+        l_n(\theta) = \log \mathcal{L}_n(\theta) = -\frac{n}{2} \log(2\pi) - \frac{1}{2} \sum_{i=1}^n (X_i - \theta)^2
+    \]
+    \[
+        \frac{\partial l_n(\theta)}{\partial \theta} = \sum_{i=1}^n (X_i - \theta) = 0 \implies \hat{\theta} = \bar{X}_n
+    \]
+    \[
+        \frac{\partial^2 l_n(\theta)}{\partial \theta^2} = -n < 0 \text{ (max)}
+    \]
+\end{solution}
 
 But if with the restriction $\theta \in [0,\infty)$, then
 $$\hat{\theta} = \max(0,\bar{X}_n)$$
@@ -37,6 +45,7 @@ $$\hat{\theta} = \max(0,\bar{X}_n)$$
 
 \begin{eb}
 Let $X_1,\dots,X_n \iid U[0,\theta]$. Find MLE and MOM.
+\begin{solution}
 \begin{align*}
 \mathcal{L}_n(\theta) & = f_\theta (X_1,\dots,X_n;\theta) = \prod_{i=1}^n f_\theta (X_i;\theta) = \prod_{i=1}^n \frac{1}{\theta} I(X_i \in [0,\theta]) = \frac{1}{\theta^n} I(\max(X_i) \leq \theta) \\
 l_n(\theta) & = \log \mathcal{L}_n(\theta) = -n \log \theta + \log I(\max(X_i) \leq \theta)
@@ -48,8 +57,9 @@ The MOM estimator is
 $$
 \alpha_1(\theta) = EX_1 = \dfrac{\theta}{2},\qquad \hat{\alpha}_1 = \bar{X}_n
 $$
-
 $$\hat{\theta}_{MOM} = 2\bar{X}_n$$
+\end{solution}
+
 \end{eb}
 
 % end of subsection \ref{sub:Maximum Likelihood Estimation}

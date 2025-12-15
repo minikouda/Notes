@@ -3,6 +3,87 @@
 % First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
 \section[Lecture 15 (Oct 30) -- {\it Hypothesis Testing With Posterior}]{Lecture 15}
 
+\subsection{Bayesian Hypothesis Testing}
+
+In a Bayesian analysis, hypotheses, like parameters, can be described using
+probability distributions.
+
+The simplest case is when the hypotheses describe regions into which $\theta$
+can fall, and these all have positive prior probability. If
+$H_0 : \theta \in \Theta_0,$ then
+
+\begin{itemize}
+    \item \textbf{Prior probability:}
+    \[
+    P(H_0) = \int_{\Theta_0} f(\theta)\, d\theta
+    \]
+
+    \item \textbf{Posterior probability:}
+    \[
+    P(H_0 \mid x^n) = \int_{\Theta_0} f(\theta \mid x^n)\, d\theta
+    \]
+\end{itemize}
+
+\bigskip
+
+Suppose $H_0, \dots, H_{K-1}$ are $K$ hypotheses under consideration (typically
+$K = 2$, but in theory we can have more). Suppose that under hypothesis $H_k$,
+\[
+\theta \sim f(\theta \mid H_k).
+\]
+Note that $\theta$ may mean different things under the various hypotheses.
+
+Then,
+\[
+P(H_k \mid x^n)
+=
+\frac{f(x^n \mid H_k) P(H_k)}
+{\sum_{k=1}^K f(x^n \mid H_k) P(H_k)}.
+\]
+
+Therefore, the posterior odds of $H_i$ relative to $H_j$ equals
+\[
+\frac{P(H_i \mid x^n)}{P(H_j \mid x^n)}
+=
+\frac{f(x^n \mid H_i)}{f(x^n \mid H_j)}
+\times
+\frac{P(H_i)}{P(H_j)}.
+\]
+
+The term $
+\frac{f(x^n \mid H_i)}{f(x^n \mid H_j)} $
+is called the \textbf{Bayes Factor} for comparing $H_i$ to $H_j$, and is denoted
+by $\mathrm{BF}_{ij}$.
+
+When $H_i$ and $H_j$ represent regions of the parameter space, it is often
+easier to calculate the prior and posterior odds directly, and from these
+compute the Bayes Factor.
+
+If
+\[
+H_i : \theta = \theta_i
+\quad \text{and} \quad
+H_j : \theta = \theta_j,
+\]
+then the Bayes Factor is simply the ratio of likelihoods under the two values:
+\[
+\mathrm{BF}_{ij}
+=
+\frac{f(x^n \mid \theta_i)}{f(x^n \mid \theta_j)}.
+\]
+
+More generally,
+\[
+f(x^n \mid H_i)
+=
+\int_{\Theta} f(x^n \mid \theta, H_i)\, f(\theta \mid H_i)\, d\theta,
+\]
+which is called the \textbf{marginal likelihood}.
+
+If $f(\theta \mid H_i)$ is conjugate, this integral can often be calculated in
+closed form. Otherwise, we use sampling methods to approximate it. For example,
+we could use Monte Carlo integration by sampling from $f(\theta \mid H_i)$.
+
 \subsection{Hypothesis Testing using Posterior Odds}
 
 
@@ -15,7 +96,7 @@ Albert Pujols (St. Louis Cardinals) and Ichiro Suzuki (Seattle Mariners) had ver
 \]
 Let $X\mid p_1\sim \mathrm{Bin}(n,p_1)$ be Pujols' hits and $Y\mid p_2\sim \mathrm{Bin}(m,p_2)$ be Suzuki's hits. We wish to assess evidence for/against the hypothesis $p_{\text{Pujols}}=p_{\text{Suzuki}}$.
 
-Under $H_1:\;p_1\neq p_2$, assign independent priors $p_1\sim \mathrm{Unif}(0,1)$ and $p_2\sim \mathrm{Unif}(0,1)$. Compute the marginal likelihood
+Under $H_0: p_1 = p_2$, $H_1:p_1\neq p_2$, assign independent priors $p_1\sim \mathrm{Unif}(0,1)$ and $p_2\sim \mathrm{Unif}(0,1)$. Compute the marginal likelihood
 \[
 f(x,y\mid H_1)=\int_0^1\!\int_0^1 f(x\mid p_1)\,f(y\mid p_2)\,dp_1\,dp_2.
 \]
@@ -60,7 +141,6 @@ f(x,y\mid H_0)
 &= \binom{n}{x}\binom{m}{y}\int_0^1 p^{x+y}(1-p)^{(n-x)+(m-y)}\,dp \\
 &= \binom{n}{x}\binom{m}{y}B(x+y+1,n+m-(x+y)+1).
 \end{aligned}\]
-\end{solution}
 
 Let $p=P(H_1)$, so $P(H_0)=1-p$, and let $p^*=P(H_1\mid \text{Data})$.
 By Bayes’ rule,
@@ -88,3 +168,5 @@ which is equivalent to the odds form
 \[
 \frac{p^*}{1-p^*} \;=\; \frac{p}{1-p}\,BF_{10}.
 \]
+
+\end{solution}

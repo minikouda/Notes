@@ -42,9 +42,13 @@ R = \{ (x_1, \ldots, x_n) : T(x_1, \ldots, x_n) > c \}
 where $T$ is called a \emph{test statistic} and $c$ is the \emph{critical value}.
 
 The idea is to construct $R$ so that the probability of the data falling into it when $H_0$ is true is small.
+And the \textbf{test size }would be $\alpha = \sup_{\theta \in \Theta_0} \beta(\theta)$.
 
-And the test size would be $\alpha = \sup_{\theta \in \Theta_0} \beta(\theta)$.
-
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Images/PN.png}
+\caption{Positive and Negative Predictive Values vs Prevalence}
+\end{figure}
 
 \begin{eb}[Normal distribution]
 Suppose $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$, and let $\hat{\mu}_n$ and $\hat{\sigma}^2_n$ be the MLEs.  

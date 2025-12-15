@@ -5,6 +5,7 @@
 
 \subsection{MLE} % (fold)
 
+Some properties of MLE:
 \begin{itemize}
     \item If $\hat{\theta}_n$ is MLE of $\theta$, then $g(\hat{\theta}_n)$ is MLE of $g(\theta)$.
     \item Under certain conditions $\hat{\theta}_n \overset{p}{\rightarrow} \theta$.
@@ -131,8 +132,7 @@ where $V_\theta(\cdot)$ stands for variance.
 
 \subsection{Fisher Information Identity}
 
-
-For a single observation $X \sim f(x;\theta)$, the score function is
+For a single observation $X \sim f(x;\theta)$, the \textbf{score function} is
 \[
 s(X;\theta) = \frac{\partial}{\partial \theta} \log f(X;\theta).
 \]
@@ -157,9 +157,6 @@ If $X_i$ are i.i.d., then
 \[
 I_n(\theta) = n I(\theta).
 \]
-
----
-
 
 \begin{proposition}[Sufficient Conditions for Fisher Information Identity]
 Let $X \sim f(x;\theta)$ with pdf (or pmf) $f(x;\theta)$. 
