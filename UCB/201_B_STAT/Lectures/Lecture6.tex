@@ -10,9 +10,8 @@ Let $X_i \sim N(\theta,1) i.i.d. i = 1,\dots,n$. Show that $T = \sum\limits_{i=1
 \begin{proof}
     $f_\theta (x_1,\dots,x_n) = \prod_{i=1}^n f_\theta (x_i) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi}} e^{-\frac{(x_i - \theta)^2}{2}} = \frac{1}{(2\pi)^{n/2}} e^{-\frac{1}{2} \sum_{i=1}^n (x_i - \theta)^2}$
     $$
-    = \bigg[\frac{1}{(2\pi)^{n/2}} e^{\dfrac{\sum\limits_{i=1}^n x_i^2}{2}}\bigg] \cdot e^{-\dfrac{n\theta^2}{2} + \theta \sum\limits_{i=1}^n x_i} =  h(x) \cdot g_\theta(T(x))
+    = \bigg[\frac{1}{(2\pi)^{n/2}} e^{\frac{\sum\limits_{i=1}^n x_i^2}{2}}\bigg] \cdot e^{-\frac{n\theta^2}{2} + \theta \sum\limits_{i=1}^n x_i} =  h(x) \cdot g_\theta(T(x))
     $$
-    
 \end{proof}
 \end{eb}
 
