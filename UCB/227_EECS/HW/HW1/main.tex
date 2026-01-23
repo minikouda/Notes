@@ -1,0 +1,445 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% fphw Assignment
+% LaTeX Template
+% Version 1.0 (27/04/2019)
+%
+% This template originates from:
+% https://www.LaTeXTemplates.com
+%
+% Authors:
+% Class by Felipe Portales-Oliva (f.portales.oliva@gmail.com) with template 
+% content and modifications by Vel (vel@LaTeXTemplates.com)
+%
+% Template (this file) License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[
+  12pt,
+  %fleqn, % Default font size, values between 10pt-12pt are allowed
+  %letterpaper, % Uncomment for US letter paper size
+  %spanish, % Uncomment for Spanish
+]{fphw}
+
+% Template-specific packages
+\usepackage[utf8]{inputenc} % Required for inputting international characters
+\usepackage[T1]{fontenc} % Output font encoding for international characters
+\usepackage{mathpazo} % Use the Palatino font
+
+\usepackage{graphicx} % Required for including images
+
+\usepackage{booktabs} % Required for better horizontal rules in tables
+
+\usepackage{listings} % Required for insertion of code
+
+\usepackage{enumerate} % To modify the enumerate environment
+
+\usepackage{enumitem}
+
+\usepackage{amsmath}
+
+\usepackage{mathtools,amsthm}
+
+\usepackage{float}
+
+\usepackage{listings}
+
+\usepackage{hyperref}
+
+\lstdefinelanguage{R}{
+  keywords={if, else, repeat, while, function, for, in, next, break},
+  otherkeywords={TRUE, FALSE, NULL, NA, Inf, NaN},
+  sensitive=true,
+  morecomment=[l]\#,
+  morestring=[b]",
+}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+
+
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Homework \#1} % Assignment title
+
+\author{Shizhe Zhang} % Student name
+
+\date{\today} % Due date
+
+\institute{University of California, Berkeley \\ Department of Statistics} % Institute or school name
+
+\class{EECS 227AT} % Course or class name
+
+\professor{Gireeja Ranade} % Professor or teacher in charge of the assignment
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Output the assignment title, created automatically using the information in the custom commands above
+
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT CONTENT
+%----------------------------------------------------------------------------------------
+
+\section*{Problem 1. Course Setup}
+\begin{problem}
+
+Please complete the following steps to get access to all course resources.
+\begin{enumerate}
+    \item[(a)] Visit the course website at \texttt{http://eecs127.github.io/} and familiarize yourself with the syllabus.
+    \item[(b)] Verify that you can access the class Ed site at \texttt{https://edstem.org/us/courses/93760/discussion}.
+    \item[(c)] Verify that you can access the class Gradescope site.
+\end{enumerate}
+\end{problem}
+
+\subsection*{Answer}
+
+
+%----------------------------------------------------------------------------------------
+
+\section*{Problem 2. Prerequisites}
+\begin{problem}
+The prerequisites for this course are:
+\begin{itemize}
+    \item MATH 54 (Linear Algebra \& Differential Equations),
+    \item CS 70 (Discrete Mathematics \& Probability Theory),
+    \item MATH 53 (Multivariable Calculus).
+\end{itemize}
+
+Please fill out the Google form provided on the homework PDF.  
+For your written response, write the \emph{secret word} revealed at the end of the form.
+\end{problem}
+
+\subsection*{Answer}
+PinkpantheR
+
+%----------------------------------------------------------------------------------------
+
+\newpage
+\section*{Problem 3. Orthogonality}
+\begin{problem}
+
+Let $\vec{x}, \vec{y} \in \mathbb{R}^n$ be two linearly independent unit-norm vectors, i.e.,
+\[
+\|\vec{x}\|_2 = \|\vec{y}\|_2 = 1.
+\]
+
+\begin{enumerate}
+    \item[(a)] Show that the vectors $\vec{u} = \vec{x} - \vec{y}$ and $\vec{v} = \vec{x} + \vec{y}$ are orthogonal.
+    \item[(b)] Find an orthonormal basis for $\text{span}(\vec{x}, \vec{y})$.
+\end{enumerate}
+\end{problem}
+
+\subsection*{Answer}
+\paragraph{(a)} % (fold)
+To show that $\vec{u}$ and $\vec{v}$ are orthogonal, we need to show that their dot product is zero:
+\[
+\vec{u} \cdot \vec{v} = (\vec{x} - \vec{y}) \cdot (\vec{x} + \vec{y}).
+\]
+Expanding the dot product, we have:
+\[
+\vec{u} \cdot \vec{v} = \vec{x} \cdot \vec{x} + \vec{x} \cdot \vec{y} - \vec{y} \cdot \vec{x} - \vec{y} \cdot \vec{y}.
+\]
+
+Since the dot product is commutative, $\vec{x} \cdot \vec{y} = \vec{y} \cdot \vec{x}$. Also, given that $\|\vec{x}\|_2 = \|\vec{y}\|_2 = 1$, we have $\vec{x} \cdot \vec{x} = 1$ and $\vec{y} \cdot \vec{y} = 1$. Therefore,
+
+\[
+\vec{u} \cdot \vec{v} = 1 + \vec{x} \cdot \vec{y} - \vec{x} \cdot \vec{y} - 1 = 0. \Rightarrow \vec{u} \perp \vec{v}
+\]
+
+
+% paragraph (a) (end)
+
+\paragraph{(b)} % (fold)
+
+We use the Gram-Schmidt process.
+Starting with the vectors $\vec{x}$ and $\vec{y}$.
+First, we take $\vec{u}_1 = \vec{x}$. Next, we project $\vec{y}$ onto $\vec{u}_1$:
+
+\[\vec{p}_{\vec{y}}  = \frac{\vec{y} \cdot \vec{u}_1}{\|\vec{u}_1\|_2^2} \vec{u}_1 = (\vec{y} \cdot \vec{x}) \vec{x}.\]
+Now, we subtract this projection from $\vec{y}$ to get $\vec{u}_2$:
+\[\vec{u}_2 = \vec{y} - \vec{p}_{\vec{y}} = \vec{y} - (\vec{y} \cdot \vec{x}) \vec{x}.\]
+Next, we normalize $\vec{u}_1$ and $\vec{u}_2$ to get the orthonormal basis vectors:
+\[\vec{e}_1 = \frac{\vec{u}_1}{\|\vec{  u}_1\|_2} = \vec{x},\]
+\[\vec{e}_2 = \frac{\vec{u}_2}{\|\vec{u}_2\|_2} = \frac{\vec{y} - (\vec{y} \cdot \vec{x}) \vec{x}}{\|\vec{y} - (\vec{y} \cdot \vec{x}) \vec{x}\|_2}.\]
+Thus, the orthonormal basis for $\text{span}(\vec{x}, \vec{y})$ is given by the vectors $\vec{e}_1$ and $\vec{e}_2$:
+\[\left\{ \vec{x}, \frac{\vec{y} - (\vec{y} \cdot \vec{x}) \vec{x}}{\|\vec{y} - (\vec{y} \cdot \vec{x}) \vec{x}\|_2} \right\}.\]
+
+% paragraph (b) (end)
+
+%----------------------------------------------------------------------------------------
+
+\section*{Problem 4. Least Squares}
+\begin{problem}
+The Michaelis--Menten model for enzyme kinetics relates the rate $y$ of an enzymatic reaction
+to the concentration $x$ of a substrate, as follows:
+\[
+y = \frac{\beta_1 x}{\beta_2 + x}, \tag{1}
+\]
+for constants $\beta_1, \beta_2 > 0$.
+
+\begin{enumerate}
+    \item[(a)] Show that the model can be expressed as a linear relation between the values
+    $1/y = y^{-1}$ and $1/x = x^{-1}$.
+    Specifically, give an equation of the form
+    \[
+    y^{-1} = w_1 + w_2 x^{-1},
+    \]
+    specifying the values of $w_1$ and $w_2$ in terms of $\beta_1$ and $\beta_2$.
+
+    \item[(b)] In general, reaction parameters $\beta_1$ and $\beta_2$
+    (and, thus, $w_1$ and $w_2$) are not known a priori and must be fit from data,
+    for example using least squares.
+    Suppose you collect $m$ measurements $(x_i, y_i)$, $i = 1, \ldots, m$,
+    over the course of a reaction.
+
+    Formulate the least squares problem
+    \[
+    \vec{w}^\star = \arg\min_{\vec{w}} \|X\vec{w} - \vec{y}\|_2^2, \tag{2}
+    \]
+    where
+    \[
+    \vec{w}^\star =
+    \begin{bmatrix}
+    w_1^\star \\
+    w_2^\star
+    \end{bmatrix},
+    \]
+    and you must specify $X \in \mathbb{R}^{m \times 2}$ and $\vec{y} \in \mathbb{R}^m$.
+    Specifically, your solution should include explicit expressions for $X$ and $\vec{y}$
+    as a function of $(x_i, y_i)$ values and a final expression for $\vec{w}^\star$
+    in terms of $X$ and $\vec{y}$, which should contain only matrix multiplications,
+    transposes, and inverses.
+
+    Assume without loss of generality that $x_1 \neq x_2$.
+
+    \item[(c)] Assume that we have used the above procedure to calculate values for
+    $w_1^\star$ and $w_2^\star$, and we now want to estimate
+    \[
+    \hat{\boldsymbol{\beta}} =
+    \begin{bmatrix}
+    \hat{\beta}_1 \\
+    \hat{\beta}_2
+    \end{bmatrix}.
+    \]
+    Write an expression for $\hat{\boldsymbol{\beta}}$ in terms of $w_1^\star$ and $w_2^\star$.
+\end{enumerate}
+
+\textbf{NOTE:} This problem was taken (with some edits) from the textbook
+\emph{Optimization Models} by Calafiore and El Ghaoui.
+\end{problem}
+
+\subsection*{Answer}
+
+\paragraph{(a)} % (fold)
+Taking the reciprocal of both sides of equation (1), we have:
+\[y^{-1} = \frac{\beta_2 + x}{\beta_1 x} = \frac{\beta_2}{\beta_1 x} + \frac{x}{\beta_1 x} = \frac{\beta_2}{\beta_1} x^{-1} + \frac{1}{\beta_1}.\]
+Thus, we can express the model as a linear relation between $y^{-1}$ and $x^{-1}$:
+\[y^{-1} = \frac{1}{\beta_1} + \frac{\beta_2}{\beta_1} x^{-1}.\]
+Therefore, we have:
+\[w_1 = \frac{1}{\beta_1}, \quad w_2 = \frac{\beta_2}{\beta_1}.\]
+% paragraph (a) (end)
+
+\paragraph{(b)} % (fold)
+
+
+
+% paragraph (b) (end)
+
+
+\section*{Problem 5. Subspaces and Dimensions}
+\begin{problem}
+Consider the set $S$ of points $(x_1, x_2, x_3) \in \mathbb{R}^3$ such that
+\[
+x_1 + 2x_2 + 3x_3 = 0, \quad
+3x_1 + 2x_2 + x_3 = 0. \tag{3}
+\]
+
+\begin{enumerate}
+    \item[(a)] Find a $2 \times 3$ matrix $A$ for which $S$ is exactly the null space of $A$.
+    \item[(b)] Determine the dimension of $S$ and find a basis for it.
+\end{enumerate}
+\end{problem}
+
+\subsection*{Answer}
+
+\paragraph{(a)} % (fold)
+We can express the given equations in matrix form as follows:
+\[\begin{bmatrix}
+1 & 2 & 3 \\
+3 & 2 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+x_3
+\end{bmatrix} = \mathbf{0}.\]
+Thus, the matrix $A$ is given by:
+\[A = \begin{bmatrix}
+1 & 2 & 3 \\
+3 & 2 & 1
+\end{bmatrix}.\]
+% paragraph (a) (end)
+
+\paragraph{(b)} % (fold)
+To determine the dimension of $S$ and find a basis for it, we first need to find the null space of the matrix $A$.
+We can perform row reduction on the matrix $A$:
+\[\begin{bmatrix}
+1 & 2 & 3 \\
+3 & 2 & 1
+\end{bmatrix} \xrightarrow{R_2 \leftarrow R_2 - 3R_1} \begin{bmatrix}
+1 & 2 & 3 \\
+0 & -4 & -8
+\end{bmatrix} \xrightarrow{R_2 \leftarrow -\frac{1}{4} R_2} \begin{bmatrix}
+1 & 2 & 3 \\
+0 & 1 & 2
+\end{bmatrix}.\]
+Now, we can express the system of equations represented by the row-reduced matrix:
+\[x_1 + 2x_2 + 3x_3 = 0,\]
+\[x_2 + 2x_3 = 0.\]
+From the second equation, we have:
+\[x_2 = -2x_3.\]
+Substituting this into the first equation, we get:
+\[x_1 + 2(-2x_3) + 3x_3 = 0 \implies x_1 - 4x_3 + 3x_3 = 0 \implies x_1 - x_3 = 0 \implies x_1 = x_3.\]
+Letting $x_3 = t$, we can express the solution as:
+\[\begin{bmatrix}
+x_1 \\
+x_2 \\
+x_3
+\end{bmatrix} = \begin{bmatrix}
+t \\
+-2t \\
+t
+\end{bmatrix} = t \begin{bmatrix}
+1 \\
+-2 \\
+1
+\end{bmatrix}.\]
+Thus, the null space of $A$ is spanned by the vector $\begin{bmatrix}
+1 \\ -2 \\ 1
+\end{bmatrix}$, and the dimension of $S$ is 1.
+Therefore, a basis for $S$ is given by:
+\[\left\{ \begin{bmatrix}
+1 \\ -2 \\ 1
+\end{bmatrix} \right\}.\]
+% paragraph (b) (end)
+
+
+\section*{Problem 6. Vector Spaces and Rank}
+\begin{problem}
+The rank of a $m \times n$ matrix $A$, $\mathrm{rank}(A)$, is the dimension of its range,
+also called span, and denoted
+\[
+\mathcal{R}(A) := \{A\vec{x} : \vec{x} \in \mathbb{R}^n\}.
+\]
+
+\begin{enumerate}
+    \item[(a)] Assume that $A \in \mathbb{R}^{m \times n}$ takes the form
+    \[
+    A = \vec{u}\vec{v}^\top,
+    \]
+    with $\vec{u} \in \mathbb{R}^m$, $\vec{v} \in \mathbb{R}^n$, and
+    $\vec{u}, \vec{v} \neq \vec{0}$.
+    (Note that a matrix of this form is known as a dyad.)
+    Find the rank of $A$.
+
+    \textbf{HINT:} Consider the quantity $A\vec{x}$ for arbitrary $\vec{x}$.
+
+    \item[(b)] Show that for arbitrary $A, B \in \mathbb{R}^{m \times n}$,
+    \[
+    \mathrm{rank}(A + B) \le \mathrm{rank}(A) + \mathrm{rank}(B). \tag{4}
+    \]
+
+    \textbf{HINT:} First, show that $\mathcal{R}(A + B) \subseteq \mathcal{R}(A) + \mathcal{R}(B)$.
+    Remember that for any matrix $A$, $\mathcal{R}(A)$ is a subspace, and for any two subspaces
+    $S_1$ and $S_2$, $\dim(S_1 + S_2) \le \dim(S_1) + \dim(S_2)$.
+    The sum of vector spaces is defined as
+    \[
+    S_1 + S_2 := \{\vec{s}_1 + \vec{s}_2 \mid \vec{s}_1 \in S_1, \vec{s}_2 \in S_2\}.
+    \]
+
+    \item[(c)] Consider an $m \times n$ matrix $A$ that takes the form
+    \[
+    A = UV^\top,
+    \]
+    with $U \in \mathbb{R}^{m \times k}$ and $V \in \mathbb{R}^{n \times k}$.
+    Show that the rank of $A$ is less than or equal to $k$.
+
+    \textbf{HINT:} Use parts (a) and (b), and remember that this decomposition can also be written as
+    the dyadic expansion
+    \[
+    A = UV^\top =
+    \begin{bmatrix}
+    \vec{u}_1 & \cdots & \vec{u}_k
+    \end{bmatrix}
+    \begin{bmatrix}
+    \vec{v}_1^\top \\
+    \vdots \\
+    \vec{v}_k^\top
+    \end{bmatrix}
+    =
+    \sum_{i=1}^k \vec{u}_i \vec{v}_i^\top. \tag{5}
+    \]
+\end{enumerate}
+\end{problem}
+
+\subsection*{Answer}
+
+\paragraph{(a)} % (fold)
+\[A\vec{x} = \vec{u}\vec{v}^\top \vec{x} = \vec{u}(\vec{v}^\top \vec{x}). \]
+The term $\vec{v}^\top \vec{x}$ is a scalar, so we can denote it as $c = \vec{v}^\top \vec{x}$. Therefore,
+\[A\vec{x} = c\vec{u}.\]
+This shows that the image of any vector $\vec{x}$ under the transformation defined by $A$ is a scalar multiple of the vector $\vec{u}$. Hence, the range of $A$ is spanned by the single vector $\vec{u}$.
+Since $\vec{u} \neq \vec{0}$, the range of $A$ is one-dimensional. Therefore, the rank of $A$ is:
+\[\mathrm{rank}(A) = 1.\]
+% paragraph (a) (end)
+
+\paragraph{(b)} % (fold)
+
+To show that $\mathrm{rank}(A + B) \le \mathrm{rank}(A) + \mathrm{rank}(B)$, we first need to show that $\mathcal{R}(A + B) \subseteq \mathcal{R}(A) + \mathcal{R}(B)$.
+Let $\vec{y} \in \mathcal{R}(A + B)$. Then, by definition of the range, there exists a vector $\vec{x} \in \mathbb{R}^n$ such that:
+\[\vec{y} = (A + B)\vec{x} = A\vec{x} + B\vec{x}.\]
+
+Since $A\vec{x} \in \mathcal{R}(A)$ and $B\vec{x} \in \mathcal{R}(B)$, thus:
+$\mathcal{R}(A + B) \subseteq \mathcal{R}(A) + \mathcal{R}(B)$.
+
+Now, using the property of dimensions of subspaces, we have:
+\[\dim(\mathcal{R}(A + B)) \le \dim(\mathcal{R}(A) + \mathcal{R}(B)) \le \dim(\mathcal{R}(A)) + \dim(\mathcal{R}(B)).\]
+
+Therefore,
+\[\mathrm{rank}(A + B) \le \mathrm{rank}(A) + \mathrm{rank}(B).\]
+% paragraph (b) (end)
+
+\paragraph{(c)} % (fold)
+Using the dyadic expansion of $A$ from equation (5), we can express $A$ as a sum of $k$ dyads:
+\[A = \sum_{i=1}^k \vec{u}_i \vec{v}_i^\top.\]
+From part (a), we know that each dyad $\vec{u}_i \vec{v}_i^\top$ has rank 1. Therefore, we can apply the result from part (b) to find the rank of $A$:
+\[\mathrm{rank}(A) = \mathrm{rank}\left(\sum_{i=1}^k \vec{u}_i \vec{v}_i^\top\right) \le \sum_{i=1}^k \mathrm{rank}(\vec{u}_i \vec{v}_i^\top) = \sum_{i=1}^k 1 = k.\]
+Thus, we have shown that the rank of $A$ is less than or equal to $k$:
+\[\mathrm{rank}(A) \le k.\]
+% paragraph (c) (end) 
+
+
+\section*{Problem 7. Homework Process}
+\begin{problem}
+With whom did you work on this homework?
+List the names and SIDs of your group members.
+
+\textbf{NOTE:} If you didn’t work with anyone, you can put ``none'' as your answer.
+\end{problem}
+
+\subsection*{Answer}
+none
+
+
+\end{document}
