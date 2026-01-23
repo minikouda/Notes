@@ -1,0 +1,35 @@
+% TeX root = ../Main.tex
+
+% First argument to \section is the title that will go in the table of contents. Second argument is the title that will be printed on the page.
+\section[Lecture 2 (Jan 22) -- {\it Introduction(Cont'd)}]{Lecture 2}
+
+\subsection{What is Statistics?}
+
+\textbf{PCS}: predictability, computability, and stability
+
+\textbf{Reproducibility \& Stability}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{dslc.png}
+\caption{data science life cycle (DSLC)}
+\end{figure}
+
+\begin{db}[ Dimension ]
+The dimension of the data refers to the number of variables (columns) that it contains (and sometimes also the number of rows that it contains).
+
+So “high-dimensional data” typically refers to data that has a lot of variables
+\end{db}
+
+\begin{db}[ Rectangular Data or Tabular Data ]
+Data that can be represented in a spreadsheet-like.
+The data is arranged into columns (features/variables) and rows (observational units).
+\end{db}
+
+\begin{db}[ Reproducibility ]
+There is no clear definition of what it means for a data-driven result to be reproducible. Instead, there is a spectrum of definitions that range from the weakest (demonstrating that the results reemerge when the original code is rerun on the same computer) to the strongest (demonstrating that the results reemerge when a completely independent group of data scientists collect their own data and write their own code to answer the same question).
+
+Every form of reproducibility can be viewed as a type of stability assessment (to the data collected, to the code written, to the person who conducted the analysis, etc.) and/or predictability assessment (if re-evaluation involves showing that the results reemerge using new data). You are encouraged to demonstrate the strongest form of reproducibility for which you have the resources (even if this is just demonstrating that your results reemerge when your code is rerun in a fresh R session).
+
+\end{db}
+
