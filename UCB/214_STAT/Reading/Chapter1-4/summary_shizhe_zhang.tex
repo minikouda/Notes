@@ -1,0 +1,97 @@
+% --- LaTeX Essay Template - S. Venkatraman ---
+
+% --- Set document class and font size ---
+
+\documentclass[letterpaper, 11pt]{article}
+
+% --- Package imports ---
+
+% lipsum is just for generating placeholder text and can be removed
+\usepackage{hyperref, lipsum} 
+
+% --- Fonts (Set to Palatino or Times New Roman if desired) ---
+
+% \usepackage{newpxtext, newpxmath}
+% \usepackage{times}
+
+% --- Page layout settiings ---
+
+% Set page margins
+\usepackage[left=1.2in, right=1.2in, top=.9in, bottom=.9in]{geometry}
+
+% Anchor footnotes to the bottom of the page
+\usepackage[bottom]{footmisc}
+\usepackage{setspace}
+\setstretch{1.15}
+% Set line spacing
+\renewcommand{\baselinestretch}{1.2}
+
+% Use this for a one-off '*' footnote (e.g., a URL in a heading)
+\newcommand{\starfootnote}[1]{%
+\begingroup
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}%
+\footnote{#1}%
+\endgroup
+\addtocounter{footnote}{-1}%
+}
+
+% Set spacing between paragraphs
+\setlength{\parskip}{2mm}
+
+% --- Page formatting settings ---
+
+
+
+% --- Essay title and author ---
+\title{\vspace{-1.5cm} Summary of \textit{Veridical Data Science}, Chapters 1--4 \footnote{\url{https://vdsbook.com/}}}
+\author{Shizhe Zhang (3041882158)\\\href{mailto:shizhe\_zhang@berkeley.edu}{shizhe\_zhang@berkeley.edu}}
+
+\date{\today}
+
+% --- Main text ---
+% --- Document starts here ---
+
+\begin{document}
+% Set link colors for labeled items and URLs (blue) 
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue}
+\maketitle
+
+\section*{Chapter 1: An Introduction to Veridical Data Science}
+Veridical data science emphasizes making data-driven decisions about the real world.
+Although we intensively use algorithms for data analysis these days, the core is still human judgment.
+Because data and models are flawed representations of reality, results must be treated as evidence rather than truth.
+All models are wrong, but some are useful.
+
+This fact forces us to use our critical thinking skills and domain knowledge when facing data.
+We should always question the assumptions, data, conclusions.
+We should utilize the PCS framework, predictability, computability, and stability.
+These three principles help us to understand what is veridical data science and how to implement it in practice.
+
+\section*{Chapter 2: The Data Science Life Cycle}
+The data science life cycle describes the typical stages of a data project, from data collection to final results.
+This cycle is iterative, meaning that we should often revisit earlier stages to learn more about the data and domain.
+Early stages have crucial impacts on later analysis. In turn, later analysis provides feedback to earlier steps.
+
+
+\section*{Chapter 3: Setting Up Your Data Science Project}
+Picking the right tools is important for the analysis.
+There is no such one-size-fits-all tool. They all have pros and cons, and the choice depends on the specific context.
+
+From the start of the project, we should keep documentation, reproducibility, and modular code in mind.
+The codes should reproduce the same results when rerun, and the documentation should explain the reasoning behind each step.
+
+\section*{Chapter 4: Data Preparation}
+
+Data preparation is an important part of data science.
+Cleaning, filtering, transforming, and merging data all involve choices that can affect results.
+We need to know how the data were collected and what each feature stands for.
+For different problems like missing data, outliers, we need to apply domain knowledge to make reasonable decisions.
+We should also test whether the final conclusions are stable to these reasonable alternative preparation choices.
+
+% --- Document ends here ---
+\end{document}
+
+Models are simplified representations that encode assumptions rather than objective truth.
+Reasonable modeling choices can lead to different conclusions from the same data.
+Statistical significance alone is insufficient for meaningful interpretation.
+Reliable conclusions require robustness checks, contextual knowledge, and careful treatment of uncertainty.

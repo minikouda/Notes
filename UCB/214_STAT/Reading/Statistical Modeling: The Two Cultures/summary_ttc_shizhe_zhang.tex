@@ -1,0 +1,84 @@
+% --- LaTeX Essay Template - S. Venkatraman ---
+
+% --- Set document class and font size ---
+
+\documentclass[letterpaper, 11pt]{article}
+
+% --- Package imports ---
+
+% lipsum is just for generating placeholder text and can be removed
+\usepackage{hyperref, lipsum} 
+
+% --- Fonts (Set to Palatino or Times New Roman if desired) ---
+
+% \usepackage{newpxtext, newpxmath}
+% \usepackage{times}
+
+% --- Page layout settiings ---
+
+% Set page margins
+\usepackage[left=1.2in, right=1.2in, top=.9in, bottom=.9in]{geometry}
+
+% Anchor footnotes to the bottom of the page
+\usepackage[bottom]{footmisc}
+\usepackage{setspace}
+\setstretch{1.15}
+% Set line spacing
+\renewcommand{\baselinestretch}{1.2}
+
+% Use this for a one-off '*' footnote (e.g., a URL in a heading)
+\newcommand{\starfootnote}[1]{%
+\begingroup
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}%
+\footnote{#1}%
+\endgroup
+\addtocounter{footnote}{-1}%
+}
+
+% Set spacing between paragraphs
+\setlength{\parskip}{2mm}
+
+% --- Page formatting settings ---
+
+
+
+% --- Essay title and author ---
+\title{\vspace{-1.5cm} Summary of \textit{Statistical Modeling: The Two Cultures}\footnote{\url{https://www.jstor.org/stable/2676681}}}
+\author{Shizhe Zhang (3041882158)\\\href{mailto:shizhe\_zhang@berkeley.edu}{shizhe\_zhang@berkeley.edu}}
+
+\date{\today}
+
+% --- Main text ---
+% --- Document starts here ---
+
+\begin{document}
+% Set link colors for labeled items and URLs (blue) 
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue}
+\maketitle
+
+
+Leo Breiman argues that statistics has two main ways of working with data. 
+The first way, which he calls the data modeling culture, assumes that data come from a specific mathematical model, like linear or logistic regression, delivering a simple and understandable picture of the data. 
+The goal is often to estimate parameters and explain how variables relate to each other. 
+This has been taken for granted in statistics for a long time, but Breiman points out that it can be risky because the conclusions depend heavily on the model assumptions, which are often unrealistic for complex real-world data.
+And the habit of using these models everywhere can lead to prejudice against other methods. It is dangerous to apply these models without checking and contemplating the scenarios.
+
+The second way is the algorithmic modeling culture, where the data-generating process is treated as unknown. 
+Instead of starting with a model, the goal is to find a function that predicts well. 
+These methods are judged mainly by how accurate their predictions are on new data. Breiman argues that this culture, common in machine learning, often works better for modern, high-dimensional problems.
+
+Another problem is that many models can fit the same data almost equally well but tell very different stories. 
+This makes interpretation ambiguous. 
+Ensemble methods like random forests may alleviate this problem by combining many models but they also make it harder to understand the underlying relationships.
+Simple models would trick us into simplifying the features and get a result easily, but we may miss the complex nature of the data. 
+Sometimes making the model more complex can actually offer better insights.
+
+Statistics should focus on solving real problems using whatever tools work best, instead of applying the same tools to every problem.
+Nowadays, we are facing more complex data and problems and the way data is generated has changed dramatically.
+Statisticians should be creative and energetic to embrace new methods and ideas.
+
+
+
+
+% --- Document ends here ---
+\end{document}

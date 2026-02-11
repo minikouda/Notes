@@ -1,0 +1,73 @@
+% --- LaTeX Essay Template - S. Venkatraman ---
+
+% --- Set document class and font size ---
+
+\documentclass[letterpaper, 11pt]{article}
+
+% --- Package imports ---
+
+% lipsum is just for generating placeholder text and can be removed
+\usepackage{hyperref, lipsum} 
+
+% --- Fonts (Set to Palatino or Times New Roman if desired) ---
+
+% \usepackage{newpxtext, newpxmath}
+% \usepackage{times}
+
+% --- Page layout settiings ---
+
+% Set page margins
+\usepackage[left=1.2in, right=1.2in, top=.9in, bottom=.9in]{geometry}
+
+% Anchor footnotes to the bottom of the page
+\usepackage[bottom]{footmisc}
+\usepackage{setspace}
+\setstretch{1.15}
+% Set line spacing
+\renewcommand{\baselinestretch}{1.2}
+
+% Use this for a one-off '*' footnote (e.g., a URL in a heading)
+\newcommand{\starfootnote}[1]{%
+\begingroup
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}%
+\footnote{#1}%
+\endgroup
+\addtocounter{footnote}{-1}%
+}
+
+% Set spacing between paragraphs
+\setlength{\parskip}{2mm}
+
+% --- Page formatting settings ---
+
+
+
+% --- Essay title and author ---
+\title{\vspace{-1.5cm} Summary of \textit{Science and Statistics}\footnote{\url{https://www.jstor.org/stable/2286841}}}
+\author{Shizhe Zhang (3041882158)\\\href{mailto:shizhe\_zhang@berkeley.edu}{shizhe\_zhang@berkeley.edu}}
+
+\date{\today}
+
+% --- Main text ---
+% --- Document starts here ---
+
+\begin{document}
+% Set link colors for labeled items and URLs (blue) 
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue}
+\maketitle
+
+Science is an iteration between theory and data.
+And statistics is tools that help us learn from those data, but it is not about finding the absolute truth.
+All models are simplifications, only to help us understand the world better.
+Fisher is the pioneer of statistics, and we should learn from his attitude towards data in our lives.
+We should always be skeptical about models and question ourselves about the underlying mechanism behind the data.
+
+Statistics is not mathematics; it is a science that requires subject-matter knowledge, evolving with new methods.
+Statistics is not a set of formal procedures, either; it requires judgment and context.
+
+The world is growing more complex, and data are becoming more abundant.
+Statistician need to adapt to the changing world and meet new challenges.
+
+
+% --- Document ends here ---
+\end{document}
