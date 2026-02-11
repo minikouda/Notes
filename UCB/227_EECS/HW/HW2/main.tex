@@ -1,0 +1,749 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% fphw Assignment
+% LaTeX Template
+% Version 1.0 (27/04/2019)
+%
+% This template originates from:
+% https://www.LaTeXTemplates.com
+%
+% Authors:
+% Class by Felipe Portales-Oliva (f.portales.oliva@gmail.com) with template 
+% content and modifications by Vel (vel@LaTeXTemplates.com)
+%
+% Template (this file) License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[
+  12pt,
+  %fleqn, % Default font size, values between 10pt-12pt are allowed
+  %letterpaper, % Uncomment for US letter paper size
+  %spanish, % Uncomment for Spanish
+]{fphw}
+
+% Template-specific packages
+\usepackage[utf8]{inputenc} % Required for inputting international characters
+\usepackage[T1]{fontenc} % Output font encoding for international characters
+\usepackage{mathpazo} % Use the Palatino font
+
+\usepackage{graphicx} % Required for including images
+
+\usepackage{booktabs} % Required for better horizontal rules in tables
+
+\usepackage{listings} % Required for insertion of code
+
+\usepackage{enumerate} % To modify the enumerate environment
+
+\usepackage{enumitem}
+
+\usepackage{amsmath}
+
+\usepackage{mathtools,amsthm}
+
+\usepackage{float}
+
+\usepackage{listings}
+
+\usepackage{hyperref}
+
+\lstdefinelanguage{R}{
+  keywords={if, else, repeat, while, function, for, in, next, break},
+  otherkeywords={TRUE, FALSE, NULL, NA, Inf, NaN},
+  sensitive=true,
+  morecomment=[l]\#,
+  morestring=[b]",
+}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+
+
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Homework \#2} % Assignment title
+
+\author{Shizhe Zhang} % Student name
+
+\date{\today} % Due date
+
+\institute{University of California, Berkeley \\ Department of Statistics} % Institute or school name
+
+\class{EECS 227AT} % Course or class name
+
+\professor{Gireeja Ranade} % Professor or teacher in charge of the assignment
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Output the assignment title, created automatically using the information in the custom commands above
+
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT CONTENT
+%----------------------------------------------------------------------------------------
+
+
+\section*{Problem 1. Proof of the Fundamental Theorem of Linear Algebra}
+\begin{problem}
+In this question, we will prove the fundamental theorem of linear algebra. For any
+$A \in \mathbb{R}^{m \times n}$, let $\mathcal{N}(A)$, $\mathcal{R}(A)$, and $\mathrm{rank}(A)$ denote
+the null space, range, and rank of $A$ respectively. For any subspace $S$ with dimension
+$\dim(S)$, let $S^\perp$ denote its orthogonal subspace.
+
+The fundamental theorem of linear algebra states that
+\[
+\mathcal{N}(A) \oplus \mathcal{R}(A^\top) = \mathbb{R}^n. \tag{1}
+\]
+
+The proof technique we employ will first show that
+\[
+\mathcal{N}(A) = \mathcal{R}(A^\top)^\perp. \tag{2}
+\]
+
+Then we will prove that we can find orthonormal vectors
+$\vec e_1, \vec e_2, \ldots, \vec e_n$ such that
+\[
+\mathcal{N}(A) = \mathrm{span}(\vec e_1, \vec e_2, \ldots, \vec e_\ell)
+\]
+and
+\[
+\mathcal{R}(A^\top) = \mathrm{span}(\vec e_{\ell+1}, \vec e_{\ell+2}, \ldots, \vec e_n).
+\]
+
+As a corollary, we get the rank–nullity theorem:
+\[
+\dim(\mathcal{N}(A)) + \mathrm{rank}(A) = n. \tag{3}
+\]
+
+\begin{enumerate}
+\item[(a)] First, show that $\mathcal{N}(A) \subseteq \mathcal{R}(A^\top)^\perp$.
+
+\textbf{HINT:} Consider $\vec u \in \mathcal{N}(A)$, $\vec v \in \mathcal{R}(A^\top)$
+and show that $\vec u^\top \vec v = 0$.
+
+\item[(b)] Now show that $\mathcal{R}(A^\top)^\perp \subseteq \mathcal{N}(A)$.
+
+\textbf{HINT:} Show that any vector $\vec v$ that is orthogonal to all vectors in the
+range of $A^\top$ satisfies $A \vec v = 0$. To do this, consider
+$\vec v \in \mathcal{R}(A^\top)^\perp$ and what it implies for $\vec v^\top A^\top$.
+
+\end{enumerate}
+
+\end{problem}
+
+\subsection*{Answer}
+
+\begin{enumerate}
+\item[(a)]
+
+Let $\vec u \in \mathcal{N}(A)$. Then we have, $A\vec u = \vec 0$.
+
+$\forall \vec v \in \mathcal{R}(A^\top)$, $\quad \exists \vec w, \quad s.t. \vec v = A^\top \vec w$.
+
+\[
+\vec u^\top \vec v = \vec u^\top A^\top \vec w = (A \vec u)^\top \vec w = \vec 0^\top \vec w = 0.
+\]
+Thus, $\vec u$ is orthogonal to every vector in $\mathcal{R}(A^\top)$, which implies
+\[
+\vec u \in \mathcal{R}(A^\top)^\perp.
+\]
+Hence,
+\[
+\mathcal{N}(A) \subseteq \mathcal{R}(A^\top)^\perp.
+\]
+
+\item[(b)]
+
+Let $\vec v \in \mathcal{R}(A^\top)^\perp$. Then $\forall \vec w$,
+\[
+\vec v^\top A^\top \vec w = 0.
+\]
+This implies
+\[
+(A \vec v)^\top \vec w = 0 \quad \text{for all } \vec w.
+\]
+
+Take $\vec w = A \vec v$, we have
+\[(A \vec v)^\top (A \vec v) = \norm{A \vec v}^2_{2}  = 0.\]
+
+Therefore,
+\[
+A \vec v = \vec 0,
+\]
+\[
+\mathcal{R}(A^\top)^\perp \subseteq \mathcal{N}(A).
+\]
+
+Combining parts (a) and (b), we have
+\[
+\mathcal{N}(A) = \mathcal{R}(A^\top)^\perp.
+\]
+
+\end{enumerate}
+
+\section*{Problem 1. cont'd} % (fold)
+
+\begin{problem}
+  \begin{enumerate}
+    \item[(c)] Note that we could apply the orthogonal decomposition theorem (Theorem 19 in
+    the course reader) at this point to complete the proof. However, instead we’ll work
+    through how to re-derive that result directly.
+    
+    Let $\dim(\mathcal{N}(A)) = \ell$ and let $\vec e_1, \ldots, \vec e_\ell$ be an orthonormal
+    basis for $\mathcal{N}(A)$. Consider an extension of the basis to an orthonormal basis
+    $\vec e_1, \ldots, \vec e_n$ for $\mathbb{R}^n$.
+    
+    We will prove that $\vec e_{\ell+1}, \ldots, \vec e_n$ form a basis for
+    $\mathcal{R}(A^\top)$ and as a consequence, the dimension of $\mathcal{R}(A^\top)$ is
+    $n - \ell$.
+    
+    \begin{enumerate}
+      \item[i.] Show that $\mathcal{R}(A^\top)$ lies in the span of
+      $\vec e_{\ell+1}, \ldots, \vec e_n$.
+      
+      \textbf{HINT:} Express any vector $\vec u \in \mathcal{R}(A^\top)$ as
+      $\vec u = \sum_{i=1}^n \alpha_i \vec e_i$. What are the values of $\alpha_i$?
+      
+      \item[ii.] From part (i) we know that
+      $\mathcal{R}(A^\top) \subseteq \mathrm{span}(\vec e_{\ell+1}, \ldots, \vec e_n)$, but we
+      want something stronger. Show that in fact
+      \[
+        \mathcal{R}(A^\top) = \mathrm{span}(\vec e_{\ell+1}, \ldots, \vec e_n).
+        \]
+        
+        \textbf{HINT:} First, prove
+        \[
+          \dim(\mathcal{R}(A^\top)) = \dim(\mathrm{span}(\vec e_{\ell+1}, \ldots, \vec e_n)) = n - \ell
+          \]
+          by contradiction. Assume $\dim(\mathcal{R}(A^\top)) = k < n - \ell$.
+          
+          Show that a vector $\vec u \in \mathrm{span}(\vec e_{\ell+1}, \ldots, \vec e_n)$ and
+          $\vec u \notin \mathcal{R}(A^\top)$ cannot exist.
+          
+          Specifically, let $\vec f_1, \ldots, \vec f_k$ be an orthonormal basis for
+          $\mathcal{R}(A^\top)$. We can find a non-zero vector
+          \[
+            \vec u^\perp = \vec u - \sum_{i=1}^k (\vec f_i^\top \vec u)\vec f_i
+            \]
+            that is orthogonal to $\mathcal{R}(A^\top)$.
+            
+            Does $\vec u^\perp$ lie in $\mathcal{N}(A)$? Does $\vec u^\perp$ also lie in
+            $\mathrm{span}(\vec e_{\ell+1}, \ldots, \vec e_n)$? Does this lead to a contradiction?
+            
+            Think of $n - \ell = 3$ and $k = 2$ for visualization.
+            
+            \textbf{HINT:} Second, you can use without proof the fact that for two subspaces
+            $S_1 \subseteq S_2$, if $\dim(S_1) = \dim(S_2)$ then $S_1 = S_2$.
+          \end{enumerate}
+          
+          \item[(d)] Using part (c), argue why
+          \[
+            \mathcal{N}(A) \oplus \mathcal{R}(A^\top) = \mathbb{R}^n
+            \]
+            and why the rank–nullity theorem holds.
+          \end{enumerate}
+          % \end{problem}
+          % subsection Problem 1. cont'd (end)
+\end{problem}
+
+\newpage
+\subsection*{Answer}
+        
+\begin{enumerate}
+\item[(c)]
+
+$\{\vec e_1, \ldots, \vec e_n\}$ for $\mathbb{R}^n$.
+
+\begin{enumerate}
+\item[(i)] $\forall \vec u \in \mathcal{R}(A^\top)$. Since
+$\{\vec e_1, \ldots, \vec e_n\}$ is a basis for $\mathbb{R}^n$,
+\[
+\vec u = \sum_{i=1}^n \alpha_i \vec e_i.
+\]
+
+We multiply both sides by $\vec e_i^\top$, since $\vec e_i$ are orthonormal and $\vec e_i \in \mathcal{R}(A^\top)^\perp$,
+\[
+\alpha_i = \vec e_i^\top \vec u = 0 \quad \text{for } i = 1, \ldots, \ell.
+\]
+Therefore, 
+\[
+\vec u = \sum_{i=\ell+1}^n \alpha_i \vec e_i,
+\]
+\[
+\mathcal{R}(A^\top) \subseteq \mathrm{span}(\vec e_{\ell+1}, \ldots, \vec e_n).
+\]
+
+\item[(ii)]
+
+The dimension of $\mathrm{span}(\vec e_{\ell+1}, \ldots, \vec e_n)$ is $n - \ell$.
+
+Suppose for contradiction that
+\[
+\dim(\mathcal{R}(A^\top)) = k < n - \ell.
+\]
+Let $\{\vec f_1, \ldots, \vec f_k\}$ be an orthonormal basis for $\mathcal{R}(A^\top)$.
+Choose a nonzero vector
+\[
+\vec u \in \mathrm{span}(\vec e_{\ell+1}, \ldots, \vec e_n)
+\quad \text{with} \quad
+\vec u \notin \mathcal{R}(A^\top).
+\]
+Define
+\[
+\vec u^\perp = \vec u - \sum_{i=1}^k (\vec f_i^\top \vec u)\vec f_i.
+\]
+Then $\vec u^\perp \neq \vec 0$ and $\vec u^\perp \perp \mathcal{R}(A^\top)$, so
+\[
+\vec u^\perp \in \mathcal{R}(A^\top)^\perp = \mathcal{N}(A).
+\]
+At the same time, $\vec u^\perp$ lies in
+$\mathrm{span}(\vec e_{\ell+1}, \ldots, \vec e_n)$ by construction.
+This contradicts the orthogonality between
+$\mathcal{N}(A) = \mathrm{span}(\vec e_1, \ldots, \vec e_\ell)$
+and $\mathrm{span}(\vec e_{\ell+1}, \ldots, \vec e_n)$.
+
+Hence,
+\[
+\dim(\mathcal{R}(A^\top)) = n - \ell,
+\]
+and therefore,
+\[
+\mathcal{R}(A^\top) = \mathrm{span}(\vec e_{\ell+1}, \ldots, \vec e_n).
+\]
+\end{enumerate}
+
+\item[(d)] From part (c), we have an orthonormal basis of $\mathbb{R}^n$ such that
+\[
+\mathbb{R}^n
+=
+\mathrm{span}(\vec e_1, \ldots, \vec e_\ell)
+\oplus
+\mathrm{span}(\vec e_{\ell+1}, \ldots, \vec e_n)
+=
+\mathcal{N}(A) \oplus \mathcal{R}(A^\top).
+\]
+This proves the fundamental theorem of linear algebra.
+
+Since $\dim(\mathcal{N}(A)) = \ell$ and
+$\dim(\mathcal{R}(A^\top)) = \mathrm{rank}(A)$,
+\[
+\dim(\mathcal{N}(A)) + \mathrm{rank}(A) = n.
+\]
+\end{enumerate}
+
+\section*{Problem 2. Eigenvalues of Symmetric Matrices}
+\begin{problem}
+Let $A \in \mathbb{S}^n$ (i.e., the set of $n \times n$ real symmetric matrices) with
+eigenvalues $\lambda_i$.
+
+Prove that all of the eigenvalues of $A$ are real, i.e.,
+$\lambda_i \in \mathbb{R}$ for each $i$.
+
+\textbf{HINT:} Consider the quantity $(A v)^* v$ for eigenvector $v$, where $^*$ denotes
+the conjugate transpose. Note that this is the Hermitian inner product between $A v$ and
+$v$.
+
+\textbf{NOTE:} This exercise is part of the proof of the spectral theorem.
+\end{problem}
+
+\subsection*{Answer}
+
+Let $\lambda$ be an eigenvalue of $A$ with (possibly complex) eigenvector $v \neq 0$, so
+\[
+Av = \lambda v.
+\]
+Consider
+\[
+(Av)^* v = (\lambda v)^* v = \overline{\lambda}\, v^* v.
+\]
+On the other hand, since $A$ is real symmetric, we have $A^* = A$, and therefore
+\[
+(Av)^* v = v^* A^* v = v^* A v = \lambda \, v^* v.
+\]
+Thus,
+\[
+\overline{\lambda}\, v^* v = \lambda\, v^* v.
+\]
+Since $v \neq 0$, we have $v^* v > 0$, so
+\[
+\overline{\lambda} = \lambda,
+\]
+which implies $\lambda \in \mathbb{R}$.
+
+
+\newpage
+\section*{Problem 3. Distinct Eigenvalues, Orthogonal Eigenspaces}
+\begin{problem}
+Let $A \in \mathbb{S}^n$ (i.e., the set of $n \times n$ real symmetric matrices) and
+$(\lambda_1, \vec u_1)$, $(\lambda_2, \vec u_2)$ with $\lambda_1 \neq \lambda_2$ be
+distinct eigen-pairs of $A$.
+
+Show that $\vec u_1^\top \vec u_2 = 0$, i.e., eigenspaces corresponding to distinct
+eigenvalues are mutually orthogonal.
+
+\textbf{HINT:} First try to prove that
+\[
+\lambda_1 \vec u_1^\top \vec u_2 = \lambda_2 \vec u_1^\top \vec u_2,
+\]
+then show that this implies $\vec u_1^\top \vec u_2 = 0$.
+
+\textbf{NOTE:} This exercise is part of the proof of the spectral theorem.
+\end{problem}
+
+\subsection*{Answer}
+Let
+\[
+A\vec u_1 = \lambda_1 \vec u_1,
+\qquad
+A\vec u_2 = \lambda_2 \vec u_2.
+\]
+Consider the scalar $\vec u_1^\top A \vec u_2$. On one hand,
+\[
+\vec u_1^\top A \vec u_2 = \vec u_1^\top (\lambda_2 \vec u_2) = \lambda_2 \vec u_1^\top \vec u_2.
+\]
+On the other hand, since $A$ is symmetric, $A^\top = A$, so
+\[
+\vec u_1^\top A \vec u_2 = \vec u_1^\top A^\top \vec u_2
+= \lambda_1 \vec u_1^\top \vec u_2.
+\]
+Therefore,
+\[
+\lambda_2 \vec u_1^\top \vec u_2 = \lambda_1 \vec u_1^\top \vec u_2
+\quad\Longrightarrow\quad
+(\lambda_2 - \lambda_1)\,\vec u_1^\top \vec u_2 = 0.
+\]
+$$\lambda_1 \neq \lambda_2 \Longrightarrow \vec u_1^\top \vec u_2 = 0.$$
+
+
+\section*{Problem 4. Gram–Schmidt}
+\begin{problem}
+Any set of $n$ linearly independent vectors in $\mathbb{R}^n$ could be used as a basis for
+$\mathbb{R}^n$. However, certain bases could be more suitable for certain operations than
+others. For example, an orthonormal basis could facilitate solving linear equations.
+
+\begin{enumerate}
+\item[(a)] Given a matrix $A \in \mathbb{R}^{n \times n}$, it could be represented as
+\[
+A = Q R, \tag{4}
+\]
+where $Q \in \mathbb{R}^{n \times n}$ is an orthonormal matrix and
+$R \in \mathbb{R}^{n \times n}$ is an upper-triangular matrix.
+
+For the matrix $A$, describe how the Gram–Schmidt process could be used to find the
+$Q$ and $R$ matrices, and apply this to
+\[
+A =
+\begin{bmatrix}
+3 & -3 & 1 \\
+4 & -4 & -7 \\
+0 & 3 & 3
+\end{bmatrix}. \tag{5}
+\]
+
+\item[(b)] Given an invertible matrix $A \in \mathbb{R}^{n \times n}$ and an observation
+vector $\vec b \in \mathbb{R}^n$, the solution to
+\[
+A \vec x = \vec b \tag{6}
+\]
+is given by $\vec x = A^{-1} \vec b$.
+
+For the matrix $A = Q R$ from part (a), assume that we want to solve
+\[
+A \vec x =
+\begin{bmatrix}
+8 \\ -6 \\ 3
+\end{bmatrix}. \tag{7}
+\]
+
+By using the fact that $Q$ is orthonormal, find $\vec v$ such that
+\[
+R \vec x = \vec v. \tag{8}
+\]
+
+Then, given the upper-triangular matrix $R$ and $\vec v$, find the elements of $\vec x$
+sequentially.
+
+\item[(c)] Given an invertible matrix $B \in \mathbb{R}^{n \times n}$ and an observation
+vector $\vec c \in \mathbb{R}^n$, find the computational cost of finding the solution
+$\vec z$ to
+\[
+B \vec z = \vec c
+\]
+using the QR decomposition of $B$.
+
+Assume that $Q$ and $R$ are available, and adding, multiplying, and dividing scalars take
+one unit of computation.
+
+As examples:
+Computing an inner product $\vec a^\top \vec b$ is $O(n)$;
+Matrix–vector multiplication is $O(n^2)$;
+Matrix inversion is $O(n^3)$.
+
+This is why $A^{-1} \vec b$ is usually not computed directly.
+\end{enumerate}
+\end{problem}
+
+\subsection*{Answer}
+
+\begin{enumerate}
+\item[(a)] 
+For
+\[
+A =
+\begin{bmatrix}
+3 & -3 & 1 \\
+4 & -4 & -7 \\
+0 & 3 & 3
+\end{bmatrix},
+\quad
+a_1=
+\begin{bmatrix}3\\4\\0\end{bmatrix},
+\ a_2=
+\begin{bmatrix}-3\\-4\\3\end{bmatrix},
+\ a_3=
+\begin{bmatrix}1\\-7\\3\end{bmatrix},
+\]
+we compute $\|a_1\|=5$, so
+$ q_1=\frac{1}{5}\begin{bmatrix}3\\4\\0\end{bmatrix}. $ 
+
+Next,
+\[
+r_{12}=q_1^\top a_2=\frac{1}{5}(3,-4,0)\cdot(-3,-4,3)= -5,
+\quad
+u_2=a_2-r_{12}q_1=a_2+5q_1=\begin{bmatrix}0\\0\\3\end{bmatrix},
+\]
+so $\|u_2\|=3$ and
+$ q_2=\begin{bmatrix}0\\0\\1\end{bmatrix}. $ 
+
+For the third vector,
+\[
+r_{13}=q_1^\top a_3=\frac{1}{5}(3,4,0)\cdot(1,-7,3)=-5,
+\quad
+r_{23}=q_2^\top a_3=(0,0,1)\cdot(1,-7,3)=3,
+\]
+\[
+u_3=a_3-r_{13}q_1-r_{23}q_2=a_3+5q_1-3q_2
+=\begin{bmatrix}4\\-3\\0\end{bmatrix},
+\quad \|u_3\|=5,
+\quad
+q_3=\frac{1}{5}\begin{bmatrix}4\\-3\\0\end{bmatrix}.
+\]
+Thus one valid QR decomposition is
+\[
+Q=
+\begin{bmatrix}
+\frac{3}{5} & 0 & \frac{4}{5}\\
+\frac{4}{5} & 0 & -\frac{3}{5}\\
+0 & 1 & 0
+\end{bmatrix},
+\qquad
+R=Q^\top A=
+\begin{bmatrix}
+5 & -5 & -5\\
+0 & 3 & 3\\
+0 & 0 & 5
+\end{bmatrix}.
+\]
+
+\item[(b)] 
+\[
+Q^\top A\vec x = Q^\top \vec b
+\quad\Longrightarrow\quad
+(Q^\top Q)R\vec x = Q^\top \vec b
+\quad\Longrightarrow\quad
+R\vec x = \vec v,
+\]
+where
+\[
+\vec v = Q^\top \vec b.
+\]
+Plug in the values:
+\[
+\vec v = Q^\top \vec b
+=
+\begin{bmatrix}
+\frac{3}{5} & \frac{4}{5} & 0\\
+0 & 0 & 1\\
+\frac{4}{5} & -\frac{3}{5} & 0
+\end{bmatrix}
+\begin{bmatrix}8\\-6\\3\end{bmatrix}
+=
+\begin{bmatrix}0\\3\\10\end{bmatrix}.
+\]
+Solve $R\vec x=\vec v$ by backward substitution:
+\[
+\begin{bmatrix}
+5 & -5 & -5\\
+0 & 3 & 3\\
+0 & 0 & 5
+\end{bmatrix}
+\begin{bmatrix}x_1\\x_2\\x_3\end{bmatrix}
+=
+\begin{bmatrix}0\\3\\10\end{bmatrix}.
+\]
+From the last row: $5x_3=10 \Rightarrow x_3=2$.
+\\From the second row: $3x_2+3x_3=3 \Rightarrow x_2=-1$.
+\\From the first row: $5x_1-5x_2-5x_3=0 \Rightarrow x_1=1$.
+\[
+\vec x=\begin{bmatrix}1\\-1\\2\end{bmatrix}.
+\]
+
+\item[(c)] Given $B=QR$ and $\vec c$, to solve $B\vec z=\vec c$ we compute
+\[
+QR\vec z=\vec c \ \Longrightarrow\ R\vec z = Q^\top \vec c.
+\]
+
+\begin{itemize}
+\item $\vec y=Q^\top \vec c$: this is $n$ inner products of length $n$.
+Each inner product costs $n$ multiplications and $(n-1)$ additions.
+Total cost is
+\[
+n^2 \text{ multiplications } + n(n-1) \text{ additions } = 2n^2 - n.
+\]
+
+\item Solve the upper-triangular system backward.
+For row $i$, forming $\sum_{j=i+1}^n r_{ij}z_j$ uses $(n-i)$ multiplications and $(n-i)$ additions/subtractions,
+and 1 division.
+Summing over $i=1,\dots,n$ gives
+$ n^2 $.
+\end{itemize}
+
+Therefore, assuming $Q$ and $R$ are already available, solving $B\vec z=\vec c$ via QR costs $O(n^2)$ operations. ($3n^2 - n$)
+\end{enumerate}
+
+
+
+\section*{Problem 5. Determinants}
+\begin{problem}
+Consider a unit box $B$ in $\mathbb{R}^2$, i.e., the square with corners
+\[
+\begin{bmatrix}0 \\ 0\end{bmatrix},
+\begin{bmatrix}0 \\ 1\end{bmatrix},
+\begin{bmatrix}1 \\ 0\end{bmatrix},
+\begin{bmatrix}1 \\ 1\end{bmatrix}.
+\]
+
+Define $A(B)$ as the parallelogram generated by applying matrix $A$ to every point in $B$.
+
+\begin{enumerate}
+\item[(a)] For
+\[
+A =
+\begin{bmatrix}
+1 & 2 \\
+3 & 4
+\end{bmatrix},
+\]
+calculate the location of each corner of $A(B)$.
+
+\item[(b)] Write the area of $A(B)$ as a function of $\det(A)$.
+
+\textbf{HINT:} How are the basis vectors
+$\begin{bmatrix}0 \\ 1\end{bmatrix}$ and
+$\begin{bmatrix}1 \\ 0\end{bmatrix}$
+transformed by matrix multiplication?
+
+\item[(c)] Calculate the area of $A(B)$ for each of the following:
+\begin{enumerate}
+\item[i.] $
+\begin{bmatrix}
+1 & 2 \\
+3 & 4
+\end{bmatrix}
+$
+\item[ii.] $
+\begin{bmatrix}
+2 & 1 \\
+4 & 3
+\end{bmatrix}
+$
+\item[iii.] $
+\begin{bmatrix}
+1 & 2 \\
+2 & 4
+\end{bmatrix}
+$
+\item[iv.] $
+\begin{bmatrix}
+0 & -1 \\
+1 & 0
+\end{bmatrix}
+$
+\end{enumerate}
+\end{enumerate}
+\end{problem}
+
+\subsection*{Answer}
+
+\begin{enumerate}
+\item[(a)] The corners of $B$ are
+\[
+\vec p_1=\begin{bmatrix}0\\0\end{bmatrix},\ 
+\vec p_2=\begin{bmatrix}0\\1\end{bmatrix},\ 
+\vec p_3=\begin{bmatrix}1\\0\end{bmatrix},\ 
+\vec p_4=\begin{bmatrix}1\\1\end{bmatrix}.
+\]
+With $A=\begin{bmatrix}1&2\\3&4\end{bmatrix}$, their images are:
+\[
+A\vec p_1=\begin{bmatrix}0\\0\end{bmatrix},\quad
+A\vec p_2=\begin{bmatrix}2\\4\end{bmatrix},\quad
+A\vec p_3=\begin{bmatrix}1\\3\end{bmatrix},\quad
+A\vec p_4=\begin{bmatrix}3\\7\end{bmatrix}.
+\]
+So the corners of $A(B)$ are
+$\begin{bmatrix}0\\0\end{bmatrix}$,
+$\begin{bmatrix}2\\4\end{bmatrix}$,
+$\begin{bmatrix}1\\3\end{bmatrix}$,
+$\begin{bmatrix}3\\7\end{bmatrix}$.
+
+\item[(b)]
+
+The unit square $B$ is spanned by the standard basis vectors
+$e_1=\begin{bmatrix}1\\0\end{bmatrix}$ and $e_2=\begin{bmatrix}0\\1\end{bmatrix}$.
+Under $A$, these become $Ae_1$ and $Ae_2$, which form adjacent sides of the parallelogram $A(B)$.
+
+Thus, the area of $A(B)$ is given by the magnitude of the cross product of $Ae_1$ and $Ae_2$:
+\[\mathrm{Area}(A(B)) = \|Ae_1 \times Ae_2\|.\]
+which equals the absolute value of the determinant of the matrix formed by $Ae_1$ and $Ae_2$ as columns:
+\[\mathrm{Area}(A(B)) = \left| \det\begin{bmatrix}Ae_1 & Ae_2\end{bmatrix} \right|.\] 
+Since
+\[\begin{bmatrix}Ae_1 & Ae_2\end{bmatrix} = A \begin{bmatrix}e_1 & e_2\end{bmatrix} = A I = A,\]
+we have
+\[\mathrm{Area}(A(B)) = |\det(A)| \cdot \mathrm{Area}(B) = |\det(A)| \cdot 1 = |\det(A)|.\]
+
+\item[(c)] Compute $\det(A)$ and take absolute value.
+
+\begin{enumerate}
+\item[i.] $\det\!\begin{bmatrix}1&2\\3&4\end{bmatrix}=1\cdot4-2\cdot3= -2$, so $\mathrm{Area}=|-2|=2$.
+\item[ii.] $\det\!\begin{bmatrix}2&1\\4&3\end{bmatrix}=2\cdot3-1\cdot4=2$, so $\mathrm{Area}=|2|=2$.
+\item[iii.] $\det\!\begin{bmatrix}1&2\\2&4\end{bmatrix}=1\cdot4-2\cdot2=0$, so $\mathrm{Area}=0$.
+\item[iv.] $\det\!\begin{bmatrix}0&-1\\1&0\end{bmatrix}=0\cdot0-(-1)\cdot1=1$, so $\mathrm{Area}=1$.
+\end{enumerate}
+\end{enumerate}
+
+
+
+
+
+\section*{Problem 6. Homework Process}
+\begin{problem}
+With whom did you work on this homework? List the names and SIDs of your group members.
+
+\textbf{NOTE:} If you didn’t work with anyone, you can put ``none'' as your answer.
+\end{problem}
+
+\subsection*{Answer}
+none
+
+
+
+\end{document}
