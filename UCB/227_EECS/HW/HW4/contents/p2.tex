@@ -1,0 +1,154 @@
+\section*{Problem 2 Neural Networks and Backpropagation}
+
+Neural networks are parametric functions that have been widely used to fit complex patterns in vision and
+natural languages. Given some training data of the form $(\vec{x}_i, y_i)$, a neural network $N$ is trained to minimize
+a loss function on the data. This is often done using gradient descent, an optimization method we will cover
+later in this class. Gradient descent requires us to compute the gradients of the loss function with respect to
+the parameters of the neural network. In practice, computational frameworks for neural networks compute the
+gradients automatically and efficiently via back-propagation, which uses the chain rule to recursively compute
+the gradients of the loss function. In this problem, we study a toy neural network trained on a single data point
+$(\vec{x}, y)$.
+
+In particular, consider the following simplified three-layer neural network $N$, representing a map from $\mathbb{R}^d$
+to $\mathbb{R}$ whose parameters are $(\vec{w}_1, w_2, w_3) \in \mathbb{R}^d \times \mathbb{R} \times \mathbb{R}$:
+
+\begin{align}
+p_1 &= \vec{w}_1^\top \vec{x} \tag{4} \\
+h_1 &= \sigma(p_1) \tag{5} \\
+p_2 &= w_2 h_1 \tag{6} \\
+h_2 &= \sigma(p_2) \tag{7} \\
+z &= w_3 h_2 \tag{8}
+\end{align}
+
+where $\sigma : \mathbb{R} \to \mathbb{R}$ is a nonlinear function (also called the “activation function”), whose derivative is denoted by $\sigma' : \mathbb{R} \to \mathbb{R}$.
+
+We want the output of the network $z = N(\vec{x})$ to match the true label $y$. A natural choice of the loss function
+encouraging this behavior is the squared loss:
+
+\[
+L(y, z) \overset{\text{def}}{=} \frac{1}{2}(y - z)^2. \tag{9}
+\]
+
+In the parts that follow, we will compute the derivative of $L$ with respect to the parameters $\vec{w}_1, w_2, w_3$.
+
+\begin{enumerate}
+\item[(a)] Compute the following gradients and partial derivatives sequentially from left-to-right:
+\[
+\frac{\partial L}{\partial z},\ 
+\frac{\partial L}{\partial w_3},\ 
+\frac{\partial L}{\partial h_2},\ 
+\frac{\partial L}{\partial p_2},\ 
+\frac{\partial L}{\partial w_2},\ 
+\frac{\partial L}{\partial h_1},\ 
+\frac{\partial L}{\partial p_1},\ 
+\nabla_{\vec{w}_1} L,\ 
+\nabla_{\vec{x}} L. \tag{10}
+\]
+
+Here $\nabla_{\vec{x}} L$ is the gradient whose entries are the derivatives of $L$ with respect to the entries of $\vec{x}$, etc. We compute the first 4 derivatives for you.
+
+\[
+    \frac{\partial L}{\partial z} = z - y,  \frac{\partial L}{\partial w_3} = \frac{\partial L}{\partial z} h_2, \\
+    \frac{\partial L}{\partial h_2} = \frac{\partial L}{\partial z} w_3,  \frac{\partial L}{\partial p_2} = \frac{\partial L}{\partial h_2} \sigma'(p_2). \tag{11}
+\]
+
+Note how $\frac{\partial L}{\partial w_3}$ can be calculated using $\frac{\partial L}{\partial z}$ and $\frac{\partial L}{\partial p_2}$ can be calculated using $\frac{\partial L}{\partial h_2}$. In numerical computation, the result of $\frac{\partial L}{\partial z}$ and $\frac{\partial L}{\partial h_2}$ can thus be reused. This technique of saving computations for calculating the derivatives of a neural network is called back-propagation.
+
+Use the chain rule to calculate the 5 remaining derivatives $\frac{\partial L}{\partial w_2}$, $\frac{\partial L}{\partial h_1}$, $\frac{\partial L}{\partial p_1}$, $\nabla_{\vec{w}_1} L$, and $\nabla_{\vec{x}} L$.
+
+\item[(b)] Now suppose that Equation (8) is written as
+
+\[
+z' = w_3 h_2 + h_1. \tag{12}
+\]
+
+That is, we define a new neural network $N'$ with parameters $(\vec{w}_1, w_2, w_3) \in \mathbb{R}^d \times \mathbb{R} \times \mathbb{R}$ as follows:
+
+\begin{align}
+p_1 &= \vec{w}_1^\top \vec{x} \tag{13} \\
+h_1 &= \sigma(p_1) \tag{14} \\
+p_2 &= w_2 h_1 \tag{15} \\
+h_2 &= \sigma(p_2) \tag{16} \\
+z' &= w_3 h_2 + h_1. \tag{17}
+\end{align}
+
+This introduces a change in the network architecture, called the skip connection.
+
+Again, compute the following gradients and partial derivatives with respect to the loss function
+\[
+L(y, z') = \frac{1}{2}(y - z')^2:
+\]
+
+\[
+\frac{\partial L}{\partial z'},\ 
+\frac{\partial L}{\partial w_3},\ 
+\frac{\partial L}{\partial h_2},\ 
+\frac{\partial L}{\partial p_2},\ 
+\frac{\partial L}{\partial w_2},\ 
+\frac{\partial L}{\partial h_1},\ 
+\frac{\partial L}{\partial p_1},\ 
+\nabla_{\vec{w}_1} L,\ 
+\nabla_{\vec{x}} L. \tag{18}
+\]
+
+We compute the first 4 derivatives for you.
+
+\begin{align}
+\frac{\partial L}{\partial z'} &= z' - y, \\
+\frac{\partial L}{\partial w_3} &= \frac{\partial L}{\partial z'} h_2, \\
+\frac{\partial L}{\partial h_2} &= \frac{\partial L}{\partial z'} w_3, \\
+\frac{\partial L}{\partial p_2} &= \frac{\partial L}{\partial h_2} \sigma'(p_2). \tag{19}
+\end{align}
+Use the chain rule to calculate the 5 remaining derivatives $\frac{\partial L}{\partial w_2}$, $\frac{\partial L}{\partial h_1}$, $\frac{\partial L}{\partial p_1}$, $\nabla_{\vec{w}_1} L$, and $\nabla_{\vec{x}} L$.
+
+\item[(c)] In optimizing a neural network using gradient descent, we need the gradient of the loss function with
+respect to the parameters of the network. Please express $\frac{\partial L}{\partial w_3}$,
+$\frac{\partial L}{\partial w_2}$, and $\nabla_{\vec{w}_1} L$ for $N$ and $N'$ respectively
+with no dependence on partial derivatives of other variables. We compute $\frac{\partial L}{\partial w_3}$ for you, as follows.
+
+\begin{itemize}
+\item For $N$, we have $\frac{\partial L}{\partial w_3} = \frac{\partial L}{\partial z} h_2 = (z - y)h_2$.
+\item For $N'$, we have $\frac{\partial L}{\partial w_3} = \frac{\partial L}{\partial z'} h_2 = (z' - y)h_2$.
+\end{itemize}
+
+Express the remaining derivatives $\frac{\partial L}{\partial w_2}$ and $\nabla_{\vec{w}_1} L$ within $N$ and $N'$.
+
+\item[(d)] Many activation functions $\sigma$ have the property that $\sigma' \le 1$. For example, the sigmoid function
+\[
+\sigma(p) = \frac{1}{1 + e^{-p}}
+\]
+is sometimes used as an activation function. Its derivative,
+\[
+\sigma'(p) = \frac{e^{-p}}{(1+e^{-p})^2}
+\]
+has the range $(0, 1/4]$. That is, $\sigma' < 1$.
+
+Consider the case when $\sigma'$ is much smaller than 1, such that $\sigma'(p)\sigma'(q) \approx 0$ for any $p, q$,
+but $\sigma'(p) \not\approx 0$ for any $p$. Consider the derivatives $\frac{\partial L}{\partial w_3}$,
+$\frac{\partial L}{\partial w_2}$, and $\nabla_{\vec{w}_1} L$ within the neural network $N$; with the above approximations, which of them will approximately be zero? Also answer this question for the neural network $N'$.
+
+NOTE: Some of the above gradients will indeed be approximately zero, and this is called the vanishing gradient problem in deep learning.
+\end{enumerate}
+
+\subsection*{Answer}
+
+\paragraph{(a)} % (fold)
+
+\[
+\dfrac{\partial L}{\partial z} = z - y, 
+\]
+
+\[
+\dfrac{\partial L}{\partial w_3} = \dfrac{\partial L}{\partial z} h_2 = (z - y)h_2
+\]
+
+\[
+\dfrac{\partial L}{\partial h_2} = \dfrac{\partial L}{\partial z} w_3 = (z - y) w_3 = 
+\dfrac{\partial L}{\partial z} w_3 = (z - y) w_3, 
+\]
+
+\[
+\quad \dfrac{\partial L}{\partial p_2} = \dfrac{\partial L}{\partial h_2} \sigma'(p_2).
+\]
+
+% paragraph (a) (end)

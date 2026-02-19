@@ -1,0 +1,330 @@
+\section*{Problem 1 Gradients, Jacobians, and Hessians }
+
+The gradient of a scalar-valued function $g: \mathbb{R}^n \to \mathbb{R}$ is the column vector of length $n$, denoted as $\nabla g$, containing
+the derivatives of components of $g$ with respect to the input variables:
+\[
+(\nabla g(\vec{x}))_i = \frac{\partial g}{\partial x_i}(\vec{x}), \quad i = 1, \ldots, n.
+\tag{1}
+\]
+
+The Hessian of a scalar-valued function $g: \mathbb{R}^n \to \mathbb{R}$ is the $n \times n$ matrix, denoted as $\nabla^2 g$, containing the second
+derivatives of components of $g$ with respect to the input variables:
+\[
+(\nabla^2 g(\vec{x}))_{ij} = \frac{\partial^2 g}{\partial x_i\partial x_j}(\vec{x}), \quad i = 1, \ldots, n,\ j = 1, \ldots, n.
+\tag{2}
+\]
+
+The Jacobian of a vector-valued function $\vec{g}: \mathbb{R}^n \to \mathbb{R}^m$ is the $m \times n$ matrix, denoted as $D\vec{g}$, containing the
+derivatives of components of $\vec{g}$ with respect to the input variables:
+\[
+(D\vec{g}(\vec{x}))_{ij} = \frac{\partial g_i}{\partial x_j}(\vec{x}), \quad i = 1, \ldots, m,\ j = 1, \ldots, n.
+\tag{3}
+\]
+
+For the remainder of the class, we will repeatedly have to take gradients, Hessians and Jacobians of functions we
+are trying to optimize. This exercise serves as a warm up for future problems.
+
+For the first two parts, suppose $A \in \mathbb{R}^{n \times n}$ is a square matrix whose entries are denoted $a_{ij}$ and whose rows are
+ denoted $\vec{a}_1^{\top}, \ldots, \vec{a}_n^{\top}$, and $\vec{b} \in \mathbb{R}^n$ is a vector whose entries are denoted $b_i$.
+
+(a) Compute the Jacobians for the following functions.
+\begin{enumerate}
+    \item[i.] $\vec{g}(\vec{x}) = A\vec{x}$.
+    \item[ii.] $\vec{g}(\vec{x}) = f(\vec{x})\vec{x}$ where $f : \mathbb{R}^n \to \mathbb{R}$ is differentiable.
+    \item[iii.] $\vec{g}(\vec{x}) = f(A\vec{x} + \vec{b})\vec{x}$ where $f : \mathbb{R}^n \to \mathbb{R}$ is differentiable.
+\end{enumerate}
+
+(b) Compute the gradients and Hessians for the following functions.
+\begin{enumerate}
+    \item[i.] $g_1(\vec{x}) = \vec{x}^{\top}A\vec{x}$.
+    \item[ii.] $g_2(\vec{x}) = \|\vec{x}\|_2^2$.
+    \item[iii.] $g_3(\vec{x}) = g_2(A\vec{x} - \vec{b}) = \|A\vec{x} - \vec{b}\|_2^2$. (Use the chain rule and the Jacobians computed in part 1(a).)
+    \item[iv.] $g_4(\vec{x}) = \log\!\left(\sum_{i=1}^n e^{x_i}\right)$.
+    \item[v.] $g_5(\vec{x}) = g_4(A\vec{x} - \vec{b}) = \log\!\left(\sum_{i=1}^n e^{\vec{a}_i^{\top}\vec{x}-b_i}\right)$. (Use the chain rule and the Jacobians computed in part
+    1(a); you can use the gradient $\nabla g_4$ and Hessian $\nabla^2 g_4$ in your answer without having to rewrite it.)
+    \item[vi.] $g_6(\vec{x}) = e^{\|\vec{x}\|_2^2} = e^{g_2(\vec{x})}$. (Use the chain rule and the Jacobians computed in part 1(a).)
+    \item[vii.] $g_7(\vec{x}) = e^{\|A\vec{x}-\vec{b}\|_2^2} = g_6(A\vec{x} - \vec{b})$. (Use the chain rule and the Jacobians computed in part 1(a); you
+    can use the gradient $\nabla g_6$ and Hessian $\nabla^2 g_6$ in your answer without having to rewrite it.)
+\end{enumerate}
+
+Consider the case now where all vectors and matrices above are scalar; do your answers above make sense?
+(No need to answer this in your submission.)
+
+(c) Plot/hand-draw the level sets of the following functions:
+\begin{enumerate}
+    \item[i.] $g(x_1, x_2) = \frac{x_1^2}{4} + \frac{x_2^2}{9}$
+    \item[ii.] $g(x_1, x_2) = x_1x_2$
+\end{enumerate}
+Also point out the gradient directions in the level-set diagram. Additionally, compute the first and second
+order Taylor series approximation around the point $(1, 1)$ for each function and comment on how accurately
+they approximate the true function.
+
+\subsection*{Answer}
+
+\paragraph{(a)} % (fold)
+\begin{enumerate}
+\item[(i)] 
+
+Consider $A = \begin{bmatrix}
+a_1\\ \vdots \\ a_i \\ \vdots \\a_n
+\end{bmatrix}$ where $a_i$ is the $i$-th row of $A$. Then
+\[
+g_i(\vec{x}) = a_i^\top \vec{x}
+\]
+\[
+\dfrac{\partial g_i}{\partial x_j}(\vec{x}) = a_{ij}
+\]
+
+Thus,
+\[
+D\vec{g}(\vec{x}) = A.
+\]
+
+
+\item[(ii)]
+\[
+g_i(\vec{x}) = f(\vec{x})\,x_i,
+\]
+
+For $i = j$,
+\[
+\frac{\partial g_i}{\partial x_j}(\vec{x})= \frac{\partial f}{\partial x_j}(\vec{x})\,x_i + f(\vec{x}),
+\]
+
+And for $i \neq j$,
+\[
+\frac{\partial g_i}{\partial x_j}(\vec{x})
+= \frac{\partial f}{\partial x_j}(\vec{x})\,x_i
+\]
+
+Thus,
+\[
+D\vec{g}(\vec{x}) = f(\vec{x})I + \vec{x}\,\nabla f(\vec{x})^\top.
+\]
+
+\item[(iii)] Let $h(\vec{x}) := f(A\vec{x}+\vec{b})$. Then $\vec{g}(\vec{x}) = h(\vec{x})\vec{x}$.
+\\From problem(ii), we have,
+\[
+D\vec{g}(\vec{x}) = h(\vec{x})I + \vec{x}\,\nabla h(\vec{x})^\top,
+\]
+
+By the chain rule,
+\[
+\nabla h(\vec{x}) = A^\top \nabla f(A\vec{x}+\vec{b}),
+\]
+so
+\[
+D\vec{g}(\vec{x}) = f(A\vec{x}+\vec{b})I + \vec{x}\,\big(A^\top \nabla f(A\vec{x}+\vec{b})\big)^\top.
+\]
+\end{enumerate}
+
+
+
+\paragraph{(b)} % (fold)
+Fact,
+\[
+f(\vec x) = \beta^\top \vec x \implies \nabla f(\vec x) = \beta
+\]
+
+
+\begin{enumerate}
+\item[(i)] $g_1(\vec{x})=\vec{x}^\top A\vec{x}$:
+\[
+\nabla g_1(\vec{x})=(A+A^\top)\vec{x},
+\qquad
+\nabla^2 g_1(\vec{x})=A+A^\top.
+\]
+
+\item[(ii)] $g_2(\vec{x})=\|\vec{x}\|_2^2=\vec{x}^\top\vec{x}$:
+\[
+\nabla g_2(\vec{x})=2\vec{x},
+\qquad
+\nabla^2 g_2(\vec{x})=2I.
+\]
+
+\item[(iii)] $g_3(\vec{x})=\|A\vec{x}-\vec{b}\|_2^2$:
+\[
+\nabla g_3(\vec{x})=2A^\top(A\vec{x}-\vec{b}),
+\qquad
+\nabla^2 g_3(\vec{x})=2A^\top A.
+\]
+
+\item[(iv)] $g_4(\vec{x})=\log\!\Big(\sum_{i=1}^n e^{x_i}\Big)$.
+
+Let $s(\vec{x})=\sum_{i=1}^n e^{x_i}$ and $p_i(\vec{x})=\frac{e^{x_i}}{s(\vec{x})}$.
+
+Then
+\[
+\nabla g_4(\vec{x}) = \vec{p}(\vec{x}),
+\]
+
+For the Hessian, if $i = j$,
+\[
+(\nabla^2 g_4(\vec{x}))_{ij} = p_i(\vec{x})(1-p_i(\vec{x})),
+\]
+and if $i \neq j$,
+\[
+(\nabla^2 g_4(\vec{x}))_{ij} = -p_i(\vec{x})p_j(\vec{x}).
+\]
+
+Thus,
+\[
+\nabla^2 g_4(\vec{x}) = \operatorname{diag}(\vec{p}(\vec{x})) - \vec{p}(\vec{x})\vec{p}(\vec{x})^\top.
+\]
+
+\item[(v)] $g_5(\vec{x})=g_4(A\vec{x}-\vec{b})$:
+\[
+\nabla g_5(\vec{x})=A^\top \nabla g_4(A\vec{x}-\vec{b}) = A^\top \vec{p}(A\vec{x}-\vec{b}),
+\]
+\[
+\nabla^2 g_5(\vec{x})=A^\top \nabla^2 g_4(A\vec{x}-\vec{b})\,A.
+\]
+
+\item[(vi)] $g_6(\vec{x})=e^{\|\vec{x}\|_2^2}$.
+Let $f(\vec{x})=\|\vec{x}\|_2^2 = \vec{x}^\top\vec{x}$. Thus, $\nabla f=2\vec{x}$ and $\nabla^2 f=2I$,
+\[
+\nabla g_6(\vec{x}) = e^{f(\vec{x})}\nabla f(\vec{x}) = 2e^{\|\vec{x}\|_2^2}\vec{x},
+\]
+\[
+\nabla^2 g_6(\vec{x})
+= e^{f(\vec{x})}\big(\nabla f(\vec{x})\nabla f(\vec{x})^\top + \nabla^2 f(\vec{x})\big)
+= e^{\|\vec{x}\|_2^2}\big(4\vec{x}\vec{x}^\top+2I\big).
+\]
+
+\item[(vii)] $g_7(\vec{x})=g_6(A\vec{x}-\vec{b})$.
+
+\[
+\nabla g_7(\vec{x}) = A^\top \nabla g_6(A\vec{x}-\vec{b})
+\]
+
+Applying the result in 1(a),
+\[
+\nabla^2 g_7(\vec{x}) = A^\top \nabla^2 g_6(A\vec{x}-\vec{b})\,A
+\]
+\end{enumerate}
+
+
+\paragraph{(c)} % (fold)
+
+% --- Figure (i): g(x1,x2) = x1^2/4 + x2^2/9 ---
+
+% \begin{figure}[H]
+% \centering
+% \begin{tikzpicture}
+% \begin{axis}[
+%     xlabel={$x_1$}, ylabel={$x_2$},
+%     xmin=-5.5, xmax=5.5, ymin=-5.5, ymax=5.5,
+%     axis equal image,
+%     title={$g(x_1,x_2)=\tfrac{x_1^2}{4}+\tfrac{x_2^2}{9}$},
+% ]
+% % Level-set ellipses (2D parametric): c in {0.5,1,2,3}
+% \addplot[no marks,thick,blue,domain=0:360,samples=60,smooth]
+%   ({2*sqrt(0.5)*cos(x)},{3*sqrt(0.5)*sin(x)});
+% \addplot[no marks,thick,blue,domain=0:360,samples=60,smooth]
+%   ({2*sqrt(1)*cos(x)},{3*sqrt(1)*sin(x)});
+% \addplot[no marks,thick,blue,domain=0:360,samples=60,smooth]
+%   ({2*sqrt(2)*cos(x)},{3*sqrt(2)*sin(x)});
+% \addplot[no marks,thick,blue,domain=0:360,samples=60,smooth]
+%   ({2*sqrt(3)*cos(x)},{3*sqrt(3)*sin(x)});
+% % Gradient field: nabla g = (x1/2, 2*x2/9)
+% \addplot[
+%     quiver={u={x/2}, v={2*y/9}, scale arrows=0.35},
+%     -stealth, red, thin,
+%     domain=-4:4, y domain=-4:4, samples=8, samples y=8,
+% ] (x,y);
+% \end{axis}
+% \end{tikzpicture}
+% \caption{Level sets (blue) and gradient directions (red) of
+%   $g(x_1,x_2)=\tfrac{x_1^2}{4}+\tfrac{x_2^2}{9}$.
+%   Gradients point outward, perpendicular to each ellipse.}
+% \end{figure}
+
+% % --- Figure (ii): g(x1,x2) = x1*x2 ---
+% \begin{figure}[H]
+% \centering
+% \begin{tikzpicture}
+% \begin{axis}[
+%     xlabel={$x_1$}, ylabel={$x_2$},
+%     xmin=-3, xmax=3, ymin=-3, ymax=3,
+%     axis equal image,
+%     title={$g(x_1,x_2)=x_1 x_2$},
+% ]
+% % Positive-c hyperbolas (c=0.5,1,2): x2=c/x1
+% \addplot[no marks,thick,blue,domain=0.17:3,samples=50,smooth] {0.5/x};
+% \addplot[no marks,thick,blue,domain=-3:-0.17,samples=50,smooth] {0.5/x};
+% \addplot[no marks,thick,blue,domain=0.34:3,samples=50,smooth] {1/x};
+% \addplot[no marks,thick,blue,domain=-3:-0.34,samples=50,smooth] {1/x};
+% \addplot[no marks,thick,blue,domain=0.67:3,samples=50,smooth] {2/x};
+% \addplot[no marks,thick,blue,domain=-3:-0.67,samples=50,smooth] {2/x};
+% % Negative-c hyperbolas: x2=-c/x1
+% \addplot[no marks,thick,blue!50,domain=0.17:3,samples=50,smooth] {-0.5/x};
+% \addplot[no marks,thick,blue!50,domain=-3:-0.17,samples=50,smooth] {-0.5/x};
+% \addplot[no marks,thick,blue!50,domain=0.34:3,samples=50,smooth] {-1/x};
+% \addplot[no marks,thick,blue!50,domain=-3:-0.34,samples=50,smooth] {-1/x};
+% \addplot[no marks,thick,blue!50,domain=0.67:3,samples=50,smooth] {-2/x};
+% \addplot[no marks,thick,blue!50,domain=-3:-0.67,samples=50,smooth] {-2/x};
+% % c=0 level set: coordinate axes
+% \addplot[no marks,thick,blue!30,domain=-3:3] {0};
+% \addplot[no marks,thick,blue!30] coordinates {(0,-3)(0,3)};
+% % Gradient field: nabla g = (x2, x1)
+% \addplot[
+%     quiver={u={y}, v={x}, scale arrows=0.12},
+%     -stealth, red, thin,
+%     domain=-2.5:2.5, y domain=-2.5:2.5, samples=7, samples y=7,
+% ] (x,y);
+% \end{axis}
+% \end{tikzpicture}
+% \caption{Level sets (blue) and gradient directions (red) of $g(x_1,x_2)=x_1 x_2$.
+%   Gradients are symmetric about the line $x_1=x_2$ and point toward higher-value hyperbolas.}
+% \end{figure}
+
+\begin{enumerate}
+\item[(i)] $g(x_1,x_2)=\frac{x_1^2}{4}+\frac{x_2^2}{9}$.
+Level sets $\{(x_1,x_2): \frac{x_1^2}{4}+\frac{x_2^2}{9}=c\}$ are ellipses centered at $(0,0)$.
+\[
+\nabla g(x_1,x_2)=\begin{bmatrix} \frac{x_1}{2} \\ \frac{2x_2}{9} \end{bmatrix},
+\qquad
+\nabla^2 g(x_1,x_2)=\begin{bmatrix} \frac12 & 0 \\ 0 & \frac{2}{9}\end{bmatrix}.
+\]
+At $(1,1)$:
+\[
+g(1,1)=\frac14+\frac19=\frac{13}{36},\qquad
+\nabla g(1,1)=\begin{bmatrix}\frac12\\ \frac{2}{9}\end{bmatrix}.
+\]
+First-order Taylor at $(1,1)$:
+\[
+T_1(x_1,x_2)=\frac{13}{36}+\frac12(x_1-1)+\frac{2}{9}(x_2-1) = - \frac{13}{36} + \frac12 x_1 + \frac29 x_2.
+\]
+Second-order Taylor at $(1,1)$:
+\[
+T_2(x_1,x_2)=T_1(x_1,x_2)+\frac12
+\begin{bmatrix}x_1-1 & x_2-1\end{bmatrix}
+\begin{bmatrix} \frac12 & 0 \\ 0 & \frac{2}{9}\end{bmatrix}
+\begin{bmatrix}x_1-1 \\ x_2-1\end{bmatrix}.
+\]
+Since $g$ is quadratic, $T_2 = g$ ; $T_1$ is a local linear approximation.
+
+\item[(ii)] $g(x_1,x_2)=x_1x_2$.
+Level sets $\{(x_1,x_2): x_1x_2=c\}$ are rectangular hyperbolas.
+\[
+\nabla g(x_1,x_2)=\begin{bmatrix} x_2 \\ x_1 \end{bmatrix},
+\qquad
+\nabla^2 g(x_1,x_2)=\begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}.
+\]
+At $(1,1)$:
+\[
+g(1,1)=1,\qquad \nabla g(1,1)=\begin{bmatrix}1\\1\end{bmatrix}.
+\]
+First-order Taylor at $(1,1)$:
+\[
+T_1(x_1,x_2)=1+(x_1-1)+(x_2-1)=x_1+x_2-1.
+\]
+Second-order Taylor at $(1,1)$:
+\begin{align*}
+T_2(x_1,x_2)&=T_1(x_1,x_2)+\frac12\cdot 2(x_1-1)(x_2-1) \\
+            &=1+(x_1-1)+(x_2-1)+(x_1-1)(x_2-1) \\
+            &=x_1x_2.
+\end{align*}
+Again, $T_2$ is exact because $g$ is a degree-2 polynomial; $T_1$ is only locally accurate.
+\end{enumerate}
+

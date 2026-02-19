@@ -1,0 +1,97 @@
+\section*{Problem 3 PCA and Senate Voting Data} 
+
+In this problem, we consider a matrix of senate voting data, which we manipulate in Python. The data is
+contained in a $n \times d$ data matrix $X$, where each row corresponds to a senator and each column to a bill. Each
+entry of $X$ is either $1$, $-1$ or $0$, depending on whether the senator voted for the bill, against the bill, or abstained,
+respectively.
+
+\begin{enumerate}
+
+\item[(a)] Suppose we want to assign a score to each senator based on their voting pattern, and then observe the
+empirical variance of these scores. To describe this, let us choose a $\vec{a} \in \mathbb{R}^d$ and a scalar $b \in \mathbb{R}$. We define
+the score for senator $i$ as:
+
+\begin{equation}
+f(\vec{x}_i, \vec{a}, b) = \vec{x}_i^\top \vec{a} + b, \quad i = 1, 2, \ldots, n. \tag{20}
+\end{equation}
+
+Note that $\vec{x}_i^\top$ denotes the $i$th row of $X$ and is a row vector of length $d$, as in the previous problem.
+
+Let us denote by $\vec{z} = f(X, \vec{a}, b)$ the column vector of length $n$ obtained by stacking the scores for each
+senator. Then
+
+\begin{equation}
+\vec{z} = f(X, \vec{a}, b) = X\vec{a} + b\vec{1} \in \mathbb{R}^n \tag{21}
+\end{equation}
+
+where $\vec{1}$ is a vector with all entries equal to $1$. Let us denote the mean value of $\vec{z}$ by
+$\mu(\vec{z}) = \frac{1}{n} \vec{1}^\top \vec{z}$. Let $\vec{\mu}(X) \in \mathbb{R}^d$ denote the vector containing the mean of each column of $X$. Then
+
+\begin{align}
+\mu(\vec{z}) &= \frac{1}{n} \sum_{i=1}^n z_i \tag{22} \\
+&= \frac{1}{n} \sum_{i=1}^n (\vec{a}^\top \vec{x}_i + b) \tag{23} \\
+&= \vec{a}^\top \left( \frac{1}{n} \sum_{i=1}^n \vec{x}_i \right) + b \tag{24} \\
+&= \vec{a}^\top \vec{\mu}(X) + b. \tag{25}
+\end{align}
+
+The empirical variance of the scores can then be obtained as
+
+\begin{align}
+\sigma^2(\vec{z}) &= \frac{1}{n} (\vec{z} - \mu(\vec{z})\vec{1})^\top (\vec{z} - \mu(\vec{z})\vec{1}) \tag{26} \\
+&= \frac{1}{n} ((X\vec{a} + b\vec{1}) - (\vec{a}^\top \vec{\mu}(X) + b)\vec{1})^\top ((X\vec{a} + b\vec{1}) - (\vec{a}^\top \vec{\mu}(X) + b)\vec{1}) \tag{27} \\
+&= \frac{1}{n} (X\vec{a} + b\vec{1} - (\vec{a}^\top \vec{\mu}(X))\vec{1} - b\vec{1})^\top (X\vec{a} + b\vec{1} - (\vec{a}^\top \vec{\mu}(X))\vec{1} - b\vec{1}) \tag{28} \\
+&= \frac{1}{n} (X\vec{a} - (\vec{a}^\top \vec{\mu}(X))\vec{1})^\top (X\vec{a} - (\vec{a}^\top \vec{\mu}(X))\vec{1}) \tag{29} \\
+&= \frac{1}{n} (X\vec{a} - \vec{1}\vec{\mu}(X)^\top \vec{a})^\top (X\vec{a} - \vec{1}\vec{\mu}(X)^\top \vec{a}) \tag{30} \\
+&= \frac{1}{n} ((X - \vec{1}\vec{\mu}(X)^\top)\vec{a})^\top ((X - \vec{1}\vec{\mu}(X)^\top)\vec{a}) \tag{31} \\
+&= \frac{1}{n} \vec{a}^\top (X - \vec{1}\vec{\mu}(X)^\top)^\top (X - \vec{1}\vec{\mu}(X)^\top) \vec{a}. \tag{32}
+\end{align}
+
+Note that this variance is therefore a function of the “centered” data matrix $X - \vec{1}\vec{\mu}(X)^\top$ in which the
+mean of each column is zero. It also does not depend on $b$.
+
+For the remainder of this problem, we assume that the data has been pre-centered (i.e., $\vec{\mu}(X) = \vec{0}$); note
+that this has been pre-computed for you in the code notebook. Assume also that $b = 0$, so that $\mu(\vec{z}) = 0$.
+Defining $f(X, \vec{a}) \overset{\text{def}}{=} f(X, \vec{a}, 0)$ and replacing $\vec{z}$ with $f(X, \vec{a})$, we can then write the simpler empirical
+variance formula
+
+\begin{equation}
+\sigma^2(f(X, \vec{a})) = \frac{1}{n} \vec{a}^\top X^\top X \vec{a}. \tag{33}
+\end{equation}
+
+Suppose we restrict $\vec{a}$ to have unit-norm. In the provided code, find the maximum empirical variance
+$\sigma^2(f(X, \vec{a}))$ over all unit-norm $\vec{a}$, and find the $\vec{a}$ that maximizes it.
+
+\item[(b)] We next consider party affiliation as a predictor for how a senator will vote. Follow the instructions in
+the notebook to compute the mean voting vector for each party and relate it to the direction of maximum
+variance.
+\item[(c)] Recall from problem 1 that given a vector $\vec{z} = X\vec{u}$ (i.e., the vector of scalar projections of each row of $X$
+along $\vec{u}$), we can compute its empirical variance as
+
+\begin{equation}
+\sigma^2(\vec{z}) = \vec{u}^\top \Sigma \vec{u}, \tag{34}
+\end{equation}
+
+where $\Sigma(X) = \frac{1}{n} X^\top X$ is the empirical covariance matrix of $X$. We will show in a future homework problem
+that the variance along each principal component $\vec{a}_i$ is precisely its corresponding eigenvalue of $\Sigma(X)$,
+i.e., $\lambda_i\{\Sigma(X)\}$. (For now, just note that this fact should make intuitive sense, since PCA is searching for
+directions of maximum variance of the data, and these occur along the covariance matrix’s eigenvectors.)
+
+In the Notebook, compute the sum of the variance along $\vec{a}_1$ and $\vec{a}_2$ and plot the data projected on the $\vec{a}_1$–$\vec{a}_2$
+plane.
+
+\item[(d)] Suppose we want to find the bills that are most and least contentious — i.e., those that have high variability
+in senators’ votes, and those for which voting was almost unanimous. Follow the instructions in the
+notebook to compute a measure of “contentiousness” for each bill, plot the vote counts for exemplar bills,
+and comment on the voting trends.
+
+\item[(e)] Suppose we want to infer the political affiliations of two senators whose voting records are known to us.
+Follow the instructions in the notebook to infer the political affiliation of the Green and Grey colored
+senators using PCA.
+
+\item[(f)] Finally, we can use the defined score $f(X, \vec{a}, b)$, computed along the first principal component $\vec{a}_1$ to classify
+the most and least “extreme” senators based on their voting record. Follow the instructions in the Notebook
+to compute these scores and comment on their relationship to partisan affiliation.
+\end{enumerate}
+
+\subsection*{Answer}
+

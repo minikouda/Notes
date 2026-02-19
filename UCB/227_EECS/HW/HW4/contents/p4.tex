@@ -1,0 +1,32 @@
+\section*{Problem 4 SVD Transformation}
+\begin{problem}
+
+In this problem we will interpret the linear map defined by matrix $A \in \mathbb{R}^{n \times n}$ by looking at its singular value
+decomposition, $A = U D V^\top$. Recall that here $U, D, V \in \mathbb{R}^{n \times n}$ and $U, V$ are orthonormal matrices while
+$D$ is a diagonal matrix. We will first look at how $V^\top$, $D$ and $U$ each separately transform the unit circle
+$$C = \{(x, y) \in \mathbb{R}^2 \mid x^2 + y^2 \le 1\}$$ and then look at their effect as a whole.
+
+\begin{enumerate}
+    \item[(a)]
+Let $\vec{x} \in \mathbb{R}^n$ and $\vec{z} = V^\top \vec{x}$. Show that
+\[
+\vec{x} = \sum_{i=1}^n z_i \vec{v}_i,
+\]
+where $\vec{z} = [z_1 \ \cdots \ z_n]^\top$
+and $V = [\vec{v}_1 \ \cdots \ \vec{v}_n]$.
+This shows that $\vec{z}$ is the vector of coordinates that represents $\vec{x}$ in the basis defined
+by the columns of $V$.
+
+For the rest of the problem we restrict ourselves to the case where $A \in \mathbb{R}^{2 \times 2}$
+and move to the notebook.
+\end{enumerate}
+\end{problem}
+
+\subsection*{Answer}
+
+Since $V$ is an orthonormal matrix, we have $V^\top V = I$. Therefore,
+\[
+\vec{z} = V^\top \vec{x} \implies V \vec{z} = V V^\top \vec{x} = \vec{x}.
+\]
+
+where $V \vec{z} = z_1 \vec{v}_1 + \cdots + z_n \vec{v}_n$ is the linear combination of the columns of $V$ with coefficients given by the entries of $\vec{z}$.
