@@ -206,78 +206,72 @@ Applying the result in 1(a),
 
 \paragraph{(c)} % (fold)
 
-% --- Figure (i): g(x1,x2) = x1^2/4 + x2^2/9 ---
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.45\textwidth,
+  axis equal image,
+  xmin=-4,xmax=4,
+  ymin=-4,ymax=4,
+  xlabel={$x_1$}, ylabel={$x_2$},
+  title={$g(x_1,x_2)=\frac{x_1^2}{4}+\frac{x_2^2}{9}$},
+  grid=both,
+]
 
-% \begin{figure}[H]
-% \centering
-% \begin{tikzpicture}
-% \begin{axis}[
-%     xlabel={$x_1$}, ylabel={$x_2$},
-%     xmin=-5.5, xmax=5.5, ymin=-5.5, ymax=5.5,
-%     axis equal image,
-%     title={$g(x_1,x_2)=\tfrac{x_1^2}{4}+\tfrac{x_2^2}{9}$},
-% ]
-% % Level-set ellipses (2D parametric): c in {0.5,1,2,3}
-% \addplot[no marks,thick,blue,domain=0:360,samples=60,smooth]
-%   ({2*sqrt(0.5)*cos(x)},{3*sqrt(0.5)*sin(x)});
-% \addplot[no marks,thick,blue,domain=0:360,samples=60,smooth]
-%   ({2*sqrt(1)*cos(x)},{3*sqrt(1)*sin(x)});
-% \addplot[no marks,thick,blue,domain=0:360,samples=60,smooth]
-%   ({2*sqrt(2)*cos(x)},{3*sqrt(2)*sin(x)});
-% \addplot[no marks,thick,blue,domain=0:360,samples=60,smooth]
-%   ({2*sqrt(3)*cos(x)},{3*sqrt(3)*sin(x)});
-% % Gradient field: nabla g = (x1/2, 2*x2/9)
-% \addplot[
-%     quiver={u={x/2}, v={2*y/9}, scale arrows=0.35},
-%     -stealth, red, thin,
-%     domain=-4:4, y domain=-4:4, samples=8, samples y=8,
-% ] (x,y);
-% \end{axis}
-% \end{tikzpicture}
-% \caption{Level sets (blue) and gradient directions (red) of
-%   $g(x_1,x_2)=\tfrac{x_1^2}{4}+\tfrac{x_2^2}{9}$.
-%   Gradients point outward, perpendicular to each ellipse.}
-% \end{figure}
+\foreach \c in {0.25,0.5,1,2,3} {
+  \addplot[domain=0:360,samples=200,thick]
+    ({2*sqrt(\c)*cos(x)},{3*sqrt(\c)*sin(x)});
+}
 
-% % --- Figure (ii): g(x1,x2) = x1*x2 ---
-% \begin{figure}[H]
-% \centering
-% \begin{tikzpicture}
-% \begin{axis}[
-%     xlabel={$x_1$}, ylabel={$x_2$},
-%     xmin=-3, xmax=3, ymin=-3, ymax=3,
-%     axis equal image,
-%     title={$g(x_1,x_2)=x_1 x_2$},
-% ]
-% % Positive-c hyperbolas (c=0.5,1,2): x2=c/x1
-% \addplot[no marks,thick,blue,domain=0.17:3,samples=50,smooth] {0.5/x};
-% \addplot[no marks,thick,blue,domain=-3:-0.17,samples=50,smooth] {0.5/x};
-% \addplot[no marks,thick,blue,domain=0.34:3,samples=50,smooth] {1/x};
-% \addplot[no marks,thick,blue,domain=-3:-0.34,samples=50,smooth] {1/x};
-% \addplot[no marks,thick,blue,domain=0.67:3,samples=50,smooth] {2/x};
-% \addplot[no marks,thick,blue,domain=-3:-0.67,samples=50,smooth] {2/x};
-% % Negative-c hyperbolas: x2=-c/x1
-% \addplot[no marks,thick,blue!50,domain=0.17:3,samples=50,smooth] {-0.5/x};
-% \addplot[no marks,thick,blue!50,domain=-3:-0.17,samples=50,smooth] {-0.5/x};
-% \addplot[no marks,thick,blue!50,domain=0.34:3,samples=50,smooth] {-1/x};
-% \addplot[no marks,thick,blue!50,domain=-3:-0.34,samples=50,smooth] {-1/x};
-% \addplot[no marks,thick,blue!50,domain=0.67:3,samples=50,smooth] {-2/x};
-% \addplot[no marks,thick,blue!50,domain=-3:-0.67,samples=50,smooth] {-2/x};
-% % c=0 level set: coordinate axes
-% \addplot[no marks,thick,blue!30,domain=-3:3] {0};
-% \addplot[no marks,thick,blue!30] coordinates {(0,-3)(0,3)};
-% % Gradient field: nabla g = (x2, x1)
-% \addplot[
-%     quiver={u={y}, v={x}, scale arrows=0.12},
-%     -stealth, red, thin,
-%     domain=-2.5:2.5, y domain=-2.5:2.5, samples=7, samples y=7,
-% ] (x,y);
-% \end{axis}
-% \end{tikzpicture}
-% \caption{Level sets (blue) and gradient directions (red) of $g(x_1,x_2)=x_1 x_2$.
-%   Gradients are symmetric about the line $x_1=x_2$ and point toward higher-value hyperbolas.}
-% \end{figure}
+% Gradient arrows
+\def\s{0.8}
+\foreach \px/\py in {1/1, 2/0.5, -1/1.5, -2/-1} {
+  \pgfmathsetmacro{\dx}{\s*(\px/2)}
+  \pgfmathsetmacro{\dy}{\s*(2*\py/9)}
+  \addplot[-{Stealth[length=2mm]},very thick]
+    coordinates {(\px,\py) (\px+\dx,\py+\dy)};
+}
 
+\end{axis}
+
+% =========================
+% (ii) Hyperbola case
+% =========================
+\begin{axis}[
+  at={(6.5cm,0)},
+  width=0.45\textwidth,
+  axis equal image,
+  xmin=-4,xmax=4,
+  ymin=-4,ymax=4,
+  xlabel={$x_1$}, ylabel={$x_2$},
+  title={$g(x_1,x_2)=x_1x_2$},
+  grid=both,
+]
+
+\foreach \c in {0.5,1,2} {
+  \addplot[domain=0.4:4,samples=200,thick] ({x},{\c/x});
+  \addplot[domain=-4:-0.4,samples=200,thick] ({x},{\c/x});
+}
+
+\foreach \c in {-0.5,-1,-2} {
+  \addplot[domain=-4:-0.4,samples=200,thick] ({x},{\c/x});
+  \addplot[domain=0.4:4,samples=200,thick] ({x},{\c/x});
+}
+
+% Gradient arrows
+\def\t{0.4}
+\foreach \px/\py in {1/1, 2/0.5, -1/2, -2/-1} {
+  \pgfmathsetmacro{\dx}{\t*(\py)}
+  \pgfmathsetmacro{\dy}{\t*(\px)}
+  \addplot[-{Stealth[length=2mm]},very thick]
+    coordinates {(\px,\py) (\px+\dx,\py+\dy)};
+}
+
+\end{axis}
+
+\end{tikzpicture}
+\end{figure}
 \begin{enumerate}
 \item[(i)] $g(x_1,x_2)=\frac{x_1^2}{4}+\frac{x_2^2}{9}$.
 Level sets $\{(x_1,x_2): \frac{x_1^2}{4}+\frac{x_2^2}{9}=c\}$ are ellipses centered at $(0,0)$.

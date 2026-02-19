@@ -95,3 +95,25 @@ to compute these scores and comment on their relationship to partisan affiliatio
 
 \subsection*{Answer}
 
+\paragraph{(a)} % (fold)
+\[
+\sigma^2(\vec{z})=\frac{1}{n}\vec{a}^\top X^\top X\vec{a}
+=\vec{a}^\top \Sigma(X)\vec{a},
+\qquad
+\Sigma(X)\overset{\mathrm{def}}{=}\frac{1}{n}X^\top X.
+\]
+Maximizing variance over $\|\vec{a}\|_2=1$ is the Rayleigh quotient problem
+\[
+\max_{\|\vec{a}\|_2=1}\ \vec{a}^\top \Sigma(X)\vec{a}.
+\]
+Let $\lambda_1\ge \lambda_2\ge\cdots\ge \lambda_d\ge 0$ be the eigenvalues of $\Sigma(X)$ with orthonormal eigenvectors
+$\{\vec{a}_1,\ldots,\vec{a}_d\}$.
+\[
+\max_{\|\vec{a}\|_2=1}\ \vec{a}^\top \Sigma(X)\vec{a}=\lambda_1,
+\quad\text{achieved by }\vec{a}=\pm \vec{a}_1.
+\]
+
+\paragraph{(b)-(f)} % (fold)
+
+c.f. notebook.
+

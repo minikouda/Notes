@@ -134,21 +134,165 @@ NOTE: Some of the above gradients will indeed be approximately zero, and this is
 
 \paragraph{(a)} % (fold)
 
+\begin{align*}
+p_1 &= \vec{w}_1^\top \vec{x}, \\
+h_1 &= \sigma(p_1),\\
+p_2 &= w_2 h_1, \\
+h_2 &= \sigma(p_2),\\
+z &= w_3 h_2,
+\end{align*}
 \[
-\dfrac{\partial L}{\partial z} = z - y, 
+L(y,z) = \frac12 (y-z)^2.
+\]
+
+\begin{align*}
+\frac{\partial L}{\partial z} &= z-y,\\
+\frac{\partial L}{\partial w_3} &= \frac{\partial L}{\partial z}\frac{\partial z}{\partial w_3}
+= (z-y)\,h_2,\\
+\frac{\partial L}{\partial h_2} &= \frac{\partial L}{\partial z}\frac{\partial z}{\partial h_2}
+= (z-y)\,w_3,\\
+\frac{\partial L}{\partial p_2} &= \frac{\partial L}{\partial h_2}\frac{\partial h_2}{\partial p_2}
+= (z-y)\,w_3\,\sigma'(p_2).
+\end{align*}
+
+\[
+\frac{\partial L}{\partial w_2}
+= \frac{\partial L}{\partial p_2}\frac{\partial p_2}{\partial w_2}
+= \frac{\partial L}{\partial p_2}\, h_1
+= (z-y)\,w_3\,\sigma'(p_2)\,h_1.
 \]
 
 \[
-\dfrac{\partial L}{\partial w_3} = \dfrac{\partial L}{\partial z} h_2 = (z - y)h_2
+\frac{\partial L}{\partial h_1}
+= \frac{\partial L}{\partial p_2}\frac{\partial p_2}{\partial h_1}
+= \frac{\partial L}{\partial p_2}\, w_2
+= (z-y)\,w_3\,\sigma'(p_2)\,w_2.
 \]
 
 \[
-\dfrac{\partial L}{\partial h_2} = \dfrac{\partial L}{\partial z} w_3 = (z - y) w_3 = 
-\dfrac{\partial L}{\partial z} w_3 = (z - y) w_3, 
+\frac{\partial L}{\partial p_1}
+= \frac{\partial L}{\partial h_1}\frac{\partial h_1}{\partial p_1}
+= \frac{\partial L}{\partial h_1}\,\sigma'(p_1)
+= (z-y)\,w_3\,\sigma'(p_2)\,w_2\,\sigma'(p_1).
 \]
 
+$\displaystyle \nabla_{\vec{w}_1} L$.
+Since $p_1=\vec{w}_1^\top \vec{x}$, we have $\nabla_{\vec{w}_1} p_1=\vec{x}$, hence
 \[
-\quad \dfrac{\partial L}{\partial p_2} = \dfrac{\partial L}{\partial h_2} \sigma'(p_2).
+\nabla_{\vec{w}_1} L
+= \frac{\partial L}{\partial p_1}\,\nabla_{\vec{w}_1} p_1
+= \frac{\partial L}{\partial p_1}\,\vec{x}
+= (z-y)\,w_3\,\sigma'(p_2)\,w_2\,\sigma'(p_1)\,\vec{x}.
 \]
 
+$\displaystyle \nabla_{\vec{x}} L$.
+Since $\nabla_{\vec{x}} p_1=\vec{w}_1$,
+\[
+\nabla_{\vec{x}} L
+= \frac{\partial L}{\partial p_1}\,\nabla_{\vec{x}} p_1
+= \frac{\partial L}{\partial p_1}\,\vec{w}_1
+= (z-y)\,w_3\,\sigma'(p_2)\,w_2\,\sigma'(p_1)\,\vec{w}_1.
+\]
 % paragraph (a) (end)
+\paragraph{(b)} % (fold)
+
+\[
+\frac{\partial L}{\partial w_2}
+= \frac{\partial L}{\partial p_2}\frac{\partial p_2}{\partial w_2}
+= \frac{\partial L}{\partial p_2}\,h_1
+= (z'-y)\,w_3\,\sigma'(p_2)\,h_1.
+\]
+
+\[
+\frac{\partial L}{\partial h_1}
+= \frac{\partial L}{\partial z'}\frac{\partial z'}{\partial h_1}
++ \frac{\partial L}{\partial p_2}\frac{\partial p_2}{\partial h_1}.
+\]
+Since $\frac{\partial z'}{\partial h_1}=1$ and $\frac{\partial p_2}{\partial h_1}=w_2$, we get
+\[
+\frac{\partial L}{\partial h_1}
+= (z'-y)\cdot 1 + \big((z'-y)\,w_3\,\sigma'(p_2)\big)\,w_2
+= (z'-y)\Big(1 + w_2 w_3 \sigma'(p_2)\Big).
+\]
+
+\[
+\frac{\partial L}{\partial p_1}
+= \frac{\partial L}{\partial h_1}\frac{\partial h_1}{\partial p_1}
+= \frac{\partial L}{\partial h_1}\,\sigma'(p_1)
+= (z'-y)\Big(1 + w_2 w_3 \sigma'(p_2)\Big)\sigma'(p_1).
+\]
+
+\[
+\nabla_{\vec{w}_1} L
+= \frac{\partial L}{\partial p_1}\,\nabla_{\vec{w}_1} p_1
+= \frac{\partial L}{\partial p_1}\,\vec{x}
+= (z'-y)\Big(1 + w_2 w_3 \sigma'(p_2)\Big)\sigma'(p_1)\,\vec{x}.
+\]
+
+\[
+\nabla_{\vec{x}} L
+= \frac{\partial L}{\partial p_1}\,\nabla_{\vec{x}} p_1
+= \frac{\partial L}{\partial p_1}\,\vec{w}_1
+= (z'-y)\Big(1 + w_2 w_3 \sigma'(p_2)\Big)\sigma'(p_1)\,\vec{w}_1.
+\]
+
+% paragraph (b) (end)
+
+
+\paragraph{(c)} % (fold)
+\paragraph{Network $N$.}
+\[
+\frac{\partial L}{\partial w_2}=(z-y)\,w_3\,\sigma'(p_2)\,h_1,
+\qquad
+\nabla_{\vec{w}_1}L=(z-y)\,w_3\,\sigma'(p_2)\,w_2\,\sigma'(p_1)\,\vec{x}.
+\]
+
+\paragraph{Network $N'$.}
+\[
+\frac{\partial L}{\partial w_2}=(z'-y)\,w_3\,\sigma'(p_2)\,h_1,
+\qquad
+\nabla_{\vec{w}_1}L=(z'-y)\Big(1+w_2w_3\sigma'(p_2)\Big)\sigma'(p_1)\,\vec{x}.
+\]
+
+
+
+\paragraph{(d)} % (fold)
+
+\paragraph{Network $N$.}
+From part (c),
+\[
+\frac{\partial L}{\partial w_3}=(z-y)h_2,
+\qquad
+\frac{\partial L}{\partial w_2}=(z-y)\,w_3\,\sigma'(p_2)\,h_1,
+\qquad
+\nabla_{\vec{w}_1}L=(z-y)\,w_3\,\sigma'(p_2)\,w_2\,\sigma'(p_1)\,\vec{x}.
+\]
+Under the approximation $\sigma'(p_2)\sigma'(p_1)\approx 0$, we have
+\[
+\nabla_{\vec{w}_1}L \approx \vec{0}.
+\]
+\[
+\frac{\partial L}{\partial w_2}\not\approx 0,\qquad \frac{\partial L}{\partial w_3}\not\approx 0
+\]
+
+\paragraph{Network $N'$.}
+From part (c),
+\[
+\frac{\partial L}{\partial w_3}=(z'-y)h_2,
+\qquad
+\frac{\partial L}{\partial w_2}=(z'-y)\,w_3\,\sigma'(p_2)\,h_1,
+\]
+\[
+\nabla_{\vec{w}_1}L=(z'-y)\Big(1+w_2w_3\sigma'(p_2)\Big)\sigma'(p_1)\,\vec{x}.
+\]
+\[
+\nabla_{\vec{w}_1}L
+=(z'-y)\sigma'(p_1)\vec{x}
+\;+\;
+(z'-y)\,w_2w_3\,\sigma'(p_2)\sigma'(p_1)\,\vec{x}.
+\]
+\[
+\nabla_{\vec{w}_1}L \approx (z'-y)\sigma'(p_1)\vec{x},
+\]
+which is \emph{not} approximately zero in general (since $\sigma'(p_1)\not\approx 0$).
+As in $N$, $\frac{\partial L}{\partial w_2}$ has only one $\sigma'$ factor and $\frac{\partial L}{\partial w_3}$ has none, so none of them will be approximately zero in general.
