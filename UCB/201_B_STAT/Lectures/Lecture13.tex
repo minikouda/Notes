@@ -77,6 +77,186 @@ T(X) = \sum\limits_{j=1}^{K} \dfrac{(Y_j - n p_j(\lambda))^2}{np_j(\lambda)} \ov
 
 \end{eb}
 
+\subsection{Multiple Testing and Error Control}
+
+Suppose we simultaneously test $m > 1$ null hypotheses:
+\[
+H_{0,1}, H_{0,2}, \dots, H_{0,m}.
+\]
+
+For each test, define
+\[
+R = \text{total number of rejections}, 
+\qquad
+V = \text{number of false rejections}.
+\]
+
+A Type I error occurs when a true null hypothesis is rejected.
+
+\subsubsection*{Inflation of Type I Error}
+
+If each test is conducted at level $\alpha$, then even if all null hypotheses are true,
+\[
+P(V \ge 1)
+= P\Big( \bigcup_{i=1}^m \{\text{Type I error in test } i\} \Big).
+\]
+
+If the tests are independent,
+\[
+P(V = 0) = (1-\alpha)^m,
+\qquad
+P(V \ge 1) = 1 - (1-\alpha)^m.
+\]
+
+For large $m$,
+\[
+1 - (1-\alpha)^m \approx 1 - e^{-m\alpha},
+\]
+which can be close to 1 even for moderate $\alpha$.
+
+Therefore, naïvely performing $m$ tests dramatically inflates the probability of false discoveries.
+
+%----------------------------------------------------------------------------------------
+\subsection{Family-Wise Error Rate (FWER)}
+
+The \textbf{Family-Wise Error Rate} is defined as
+\[
+\text{FWER} = P(V \ge 1).
+\]
+
+FWER controls the probability of making even a single false rejection.
+
+\subsubsection*{Bonferroni Correction}
+
+Using the union bound,
+\[
+P(V \ge 1)
+= P\Big( \bigcup_{i=1}^m A_i \Big)
+\le \sum_{i=1}^m P(A_i).
+\]
+
+If each test is conducted at level $\alpha/m$, then
+\[
+P(V \ge 1)
+\le \sum_{i=1}^m \frac{\alpha}{m}
+= \alpha.
+\]
+
+Thus the Bonferroni method controls FWER at level $\alpha$ regardless of dependence.
+
+\subsubsection*{Properties}
+
+\begin{itemize}
+\item Valid under arbitrary dependence.
+\item Very conservative when $m$ is large.
+\item Power decreases because critical values become extreme.
+\end{itemize}
+
+The conservativeness arises because the union bound is typically loose:
+\[
+P\Big( \bigcup_i A_i \Big) \ll \sum_i P(A_i).
+\]
+
+%----------------------------------------------------------------------------------------
+\subsection{False Discovery Rate (FDR)}
+
+Instead of controlling $P(V \ge 1)$, we may control the expected proportion of false discoveries among all rejections.
+
+\subsubsection*{Definition}
+
+The \textbf{False Discovery Rate} is
+\[
+\text{FDR} = \mathbb{E}\!\left( \frac{V}{R} \right),
+\]
+with the convention that $V/R = 0$ when $R=0$.
+
+Interpretation:
+\[
+\text{FDR} = \text{expected fraction of rejected hypotheses that are false}.
+\]
+
+Note that
+\[
+\frac{V}{R} \le 1_{\{V \ge 1\}},
+\]
+so
+\[
+\text{FDR} \le \text{FWER}.
+\]
+
+Thus FDR control is weaker than FWER control.
+
+%----------------------------------------------------------------------------------------
+\subsection{Benjamini–Hochberg Procedure}
+
+Let $P_1, \dots, P_m$ be the p-values.
+
+\subsubsection*{Step 1: Ordering}
+
+Order them:
+\[
+P_{(1)} \le P_{(2)} \le \dots \le P_{(m)}.
+\]
+
+\subsubsection*{Step 2: Data-Dependent Threshold}
+
+Define
+\[
+R = \max \left\{ i : P_{(i)} \le \frac{i}{m}\alpha \right\}.
+\]
+
+\subsubsection*{Step 3: Rejection Rule}
+
+Reject all hypotheses with
+\[
+P_j \le P_{(R)}.
+\]
+
+\subsubsection*{Why It Works (Sketch)}
+
+Assume independence and let $m_0$ denote the number of true nulls.
+
+Under $H_0$, p-values are $\text{Unif}(0,1)$:
+\[
+P(P_i \le t) = t.
+\]
+
+The expected number of false rejections is approximately
+\[
+\mathbb{E}[V] \approx m_0 \frac{R}{m}\alpha.
+\]
+
+Since $\mathbb{E}[R] \ge R$ in expectation,
+\[
+\text{FDR}
+= \mathbb{E}\!\left(\frac{V}{R}\right)
+\le \frac{m_0}{m} \alpha
+\le \alpha.
+\]
+
+Thus BH controls FDR at level $\alpha$ under independence.
+
+%----------------------------------------------------------------------------------------
+\begin{center}
+\begin{tabular}{lcc}
+\hline
+Method & Controls & Strength \\
+\hline
+Bonferroni & $P(V \ge 1)$ & Strong, conservative \\
+Benjamini--Hochberg & $\mathbb{E}(V/R)$ & Weaker, more powerful \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection*{When to Use Which}
+
+\begin{itemize}
+\item Use Bonferroni when any false positive is unacceptable.
+\item Use BH when large-scale inference is performed and some false discoveries are tolerable.
+\item BH is standard in genomics, neuroscience, A/B testing, and machine learning.
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
 
 \subsection{Bayesian Statistics}
 
