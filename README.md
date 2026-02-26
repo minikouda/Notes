@@ -12,7 +12,6 @@ Lecture notes and homework from graduate courses at UC Berkeley. Written in LaTe
 | `UCB/227_EECS/` | EECS 227 — Optimization | Convex optimization, gradient methods, duality |
 | `UCB/241_STAT/` | CS 281A — Statistical Learning Theory | SGD, learning theory |
 | `UCB/270_MATH/` | MATH 270 — Neural Networks | Introduction to neural networks |
-| `UCB/259_INFO/` | INFO 259 — NLP | Natural language processing |
 
 ## Structure
 
