@@ -1,0 +1,78 @@
+% --- LaTeX Essay Template - S. Venkatraman ---
+
+% --- Set document class and font size ---
+
+\documentclass[letterpaper, 11pt]{article}
+
+% --- Package imports ---
+
+% lipsum is just for generating placeholder text and can be removed
+\usepackage{hyperref, lipsum} 
+
+% --- Fonts (Set to Palatino or Times New Roman if desired) ---
+
+% \usepackage{newpxtext, newpxmath}
+% \usepackage{times}
+
+% --- Page layout settiings ---
+
+% Set page margins
+\usepackage[left=1.2in, right=1.2in, top=.9in, bottom=.9in]{geometry}
+
+% Anchor footnotes to the bottom of the page
+\usepackage[bottom]{footmisc}
+\usepackage{setspace}
+\setstretch{1.15}
+% Set line spacing
+\renewcommand{\baselinestretch}{1.2}
+
+% Use this for a one-off '*' footnote (e.g., a URL in a heading)
+\newcommand{\starfootnote}[1]{%
+\begingroup
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}%
+\footnote{#1}%
+\endgroup
+\addtocounter{footnote}{-1}%
+}
+
+% Set spacing between paragraphs
+\setlength{\parskip}{2mm}
+
+% --- Page formatting settings ---
+
+
+
+% --- Essay title and author ---
+\title{\vspace{-1.5cm} Summary of \textit{Veridical Data Science}, Chapters 12 \footnote{\url{https://vdsbook.com/}}}
+
+\date{\today}
+
+% --- Main text ---
+% --- Document starts here ---
+
+\begin{document}
+% Set link colors for labeled items and URLs (blue) 
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue}
+\maketitle
+
+\section*{Chapter 12: Decision Trees and Random Forests}
+
+Chapter 12 introduces tree models and ensemble learning (Random Forests).
+
+Trees are great data structure which store data in a hierarchical way.
+CART, which recursively partition the feature space using greedy optimization algorithms, which select splits that maximize homogeneity of the resulting subsets.
+For regression trees, splits are chosen to reduce within-node variation (e.g., variance or squared error); for classification trees, splits are chosen to increase purity using criteria such as Gini impurity or entropy.
+Trees are highly interpretable, but single trees can be unstable: small data perturbations or minor preprocessing choices can change the structure dramatically, leading to high variance and poor generalization.
+To prevent overfitting, the chapter discusses hyperparameters (depth, minimum leaf size, pruning).
+
+Random forests (RF) is a powerful ensemble method that builds on trees to improve predictability and stability by averaging many trees trained on perturbed versions of the data.
+RF introduces randomness through bootstrap resampling of observations for each tree and random subsampling of candidate features.
+Since we use bootstrap samples, out-of-bag (OOB) predictions can be used to estimate generalization performance without needing a separate test set.
+To interpret RF, we can look at feature importance measures (e.g. permutation importance) to identify which features contribute most to predictions.
+
+Finally, the chapter studies PCS in RF by comparing it with logistics regressions.
+Due to the nonlinearity and interactions captured by RF, it can achieve better predictive performance than logistic regression, especially when the true relationship between features and response is complex.
+But we still need to be careful about overfitting and interpretability when using RF, and the chapter discusses methods for tuning and interpreting RF models.
+
+% --- Document ends here ---
+\end{document}
