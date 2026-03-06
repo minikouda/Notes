@@ -1,0 +1,766 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% fphw Assignment
+% LaTeX Template
+% Version 1.0 (27/04/2019)
+%
+% This template originates from:
+% https://www.LaTeXTemplates.com
+%
+% Authors:
+% Class by Felipe Portales-Oliva (f.portales.oliva@gmail.com) with template 
+% content and modifications by Vel (vel@LaTeXTemplates.com)
+%
+% Template (this file) License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[
+  12pt,
+  %fleqn, % Default font size, values between 10pt-12pt are allowed
+  %letterpaper, % Uncomment for US letter paper size
+  %spanish, % Uncomment for Spanish
+]{fphw}
+
+% Template-specific packages
+\usepackage[utf8]{inputenc} % Required for inputting international characters
+\usepackage[T1]{fontenc} % Output font encoding for international characters
+\usepackage{mathpazo} % Use the Palatino font
+
+\usepackage{graphicx} % Required for including images
+
+\usepackage{booktabs} % Required for better horizontal rules in tables
+
+\usepackage{listings} % Required for insertion of code
+
+\usepackage{enumerate} % To modify the enumerate environment
+
+\usepackage{enumitem}
+
+\usepackage{amsmath}
+
+\usepackage{mathtools,amsthm}
+
+\usepackage{float}
+
+\usepackage{listings}
+
+\usepackage{hyperref}
+
+\lstdefinelanguage{R}{
+  keywords={if, else, repeat, while, function, for, in, next, break},
+  otherkeywords={TRUE, FALSE, NULL, NA, Inf, NaN},
+  sensitive=true,
+  morecomment=[l]\#,
+  morestring=[b]",
+}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+
+
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Homework \#6} % Assignment title
+
+\author{Shizhe Zhang} % Student name
+
+\date{\today} % Due date
+
+\institute{University of California, Berkeley \\ Department of Statistics} % Institute or school name
+
+\class{EECS 227AT} % Course or class name
+
+\professor{Gireeja Ranade} % Professor or teacher in charge of the assignment
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Output the assignment title, created automatically using the information in the custom commands above
+
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT CONTENT
+%----------------------------------------------------------------------------------------
+
+\section*{Problem 1. Best Approximation}
+We start by recalling the Eckart-Young Theorem: Consider any square matrix $C \in \mathbb{R}^{n\times n}$ and assume that we
+can write its full singular value decomposition as $C = U\Sigma V^\top$ where $\Sigma$ is the $n\times n$ diagonal matrix with distinct
+diagonal entries $\sigma_1 > \sigma_2 > \cdots > \sigma_n > 0$. Then, for $0 \le k \le n$, the Eckart-Young Theorem for Frobenius
+norm states that
+\[
+C_k = U_k \Sigma_k V_k^\top
+= \underset{B \in \mathbb{R}^{n\times n}, \ \operatorname{rank}(B)\le k}{\operatorname{argmin}} \|C - B\|_F
+\]
+where $U_k \in \mathbb{R}^{n\times k}$ is the matrix consisting of the first $k$ columns of $U$, 
+$V_k \in \mathbb{R}^{n\times k}$ is the matrix consisting of the first $k$ columns of $V$, 
+and $\Sigma_k$ is the $k\times k$ diagonal matrix with the top-$k$ singular values 
+$\sigma_1 > \cdots > \sigma_k$ as its diagonal entries.
+
+(a) Now, consider any square matrix $C \in \mathbb{R}^{n\times n}$ and let $C_k \in \mathbb{R}^{n\times n}$ denote its best rank-$k$ approximation in
+the Frobenius norm. Then, for any orthonormal matrix $W \in \mathbb{R}^{n\times n}$, show that
+\[
+W C_k W^\top
+=
+\arg\min_{B \in \mathbb{R}^{n\times n}, \ \operatorname{rank}(B)\le k}
+\|W C W^\top - B\|_F .
+\]
+
+For the remainder of this problem, we consider a square matrix $A \in \mathbb{R}^{n\times n}$ and assume $A$ has full rank. Using
+Gram-Schmidt Orthonormalization (GSO), we can write the matrix $A$ as
+\[
+A = QR \tag{1}
+\]
+where $Q \in \mathbb{R}^{n\times n}$ is an orthonormal matrix and $R \in \mathbb{R}^{n\times n}$ is an upper triangular matrix.
+
+(b) Find the best rank-$n$ approximation to $AA^\top$ in the Frobenius norm. Justify your answer.
+
+(c) Recall that $A \in \mathbb{R}^{n\times n}$ is a square matrix with full rank, and we can write the matrix $A$ as
+\[
+A = QR \tag{2}
+\]
+where $Q \in \mathbb{R}^{n\times n}$ is an orthonormal matrix and $R \in \mathbb{R}^{n\times n}$ is an upper triangular matrix.
+
+Assume that $R = \operatorname{diag}(r_1, r_2, \dots, r_n) \in \mathbb{R}^{n\times n}$ is a diagonal matrix with
+\[
+|r_1| > |r_2| > \cdots > |r_n|,
+\]
+and all $r_1, r_2, \dots, r_n$ are real numbers. Let $k < n$. Then, show that the best rank-$k$ approximation to $AA^\top$
+in the Frobenius norm is $Q S Q^\top$, where $S$ is a diagonal matrix defined as
+\[
+S = \operatorname{diag}(r_1^2, \dots, r_k^2, 0, \dots, 0) \in \mathbb{R}^{n\times n}.
+\]
+
+(d) Recall that $A \in \mathbb{R}^{n\times n}$ is a square matrix with full rank, and we can write the matrix $A$ as
+\[
+A = QR \tag{3}
+\]
+where $Q \in \mathbb{R}^{n\times n}$ is an orthonormal matrix and $R \in \mathbb{R}^{n\times n}$ is an upper triangular matrix.
+
+Now, we no longer assume that $R$ is diagonal. Let $k < n$ and assume that the best rank-$k$ approximation to
+$RR^\top \in \mathbb{R}^{n\times n}$ in the Frobenius norm is given by $G \in \mathbb{R}^{n\times n}$. Then, using the result of part (a), show that
+the best rank-$k$ approximation to $AA^\top$ in the Frobenius norm is given by $Q G Q^\top$.
+
+
+\subsection*{Answer}
+
+\begin{enumerate}
+\item[(a)] Let $W\in\mathbb{R}^{n\times n}$ be orthonormal, i.e. $W^\top W = WW^\top = I$.
+Consider the optimization problem
+\[
+\min_{B:\ \operatorname{rank}(B)\le k}\ \|WCW^\top - B\|_F.
+\]
+Define the change of variables
+\[
+\widetilde{B} \doteq W^\top B W.
+\]
+Then $\operatorname{rank}(\widetilde{B})=\operatorname{rank}(B)$ because multiplication by an invertible matrix
+(on the left or right) does not change rank. Hence $\operatorname{rank}(B)\le k$ iff $\operatorname{rank}(\widetilde{B})\le k$.
+
+Moreover, using unitary (orthonormal) invariance of the Frobenius norm,
+\[
+\|WCW^\top - B\|_F
+=
+\|W^\top(WCW^\top - B)W\|_F
+=
+\|C - W^\top B W\|_F
+=
+\|C - \widetilde{B}\|_F.
+\]
+Therefore the objective and constraint become
+\[
+\min_{\widetilde{B}:\ \operatorname{rank}(\widetilde{B})\le k}\ \|C-\widetilde{B}\|_F.
+\]
+By definition of $C_k$, a minimizer is $\widetilde{B}^\star = C_k$.
+Transforming back gives
+\[
+B^\star = W\widetilde{B}^\star W^\top = WC_kW^\top.
+\]
+Hence
+\[
+WC_kW^\top
+=
+\arg\min_{B:\ \operatorname{rank}(B)\le k}\ \|WCW^\top - B\|_F,
+\]
+as required.
+
+\item[(b)] Since $A$ has full rank, $\operatorname{rank}(A)=n$. Then $AA^\top\in\mathbb{R}^{n\times n}$ is symmetric positive definite
+and in particular $\operatorname{rank}(AA^\top)=n$. The feasible set for ``rank-$n$ approximation'' is
+So we can choose $B=AA^\top$, which yields objective value $\|AA^\top-AA^\top\|_F=0$.
+
+\item[(c)] Under the stated assumptions, $R=\operatorname{diag}(r_1,\dots,r_n)$, so
+\[
+AA^\top = (QR)(QR)^\top = QRR^\top Q^\top
+= Q\,\operatorname{diag}(r_1^2,\dots,r_n^2)\,Q^\top.
+\]
+Thus $AA^\top$ is symmetric PSD with eigen-decomposition $Q\Lambda Q^\top$, where
+\[
+\Lambda=\operatorname{diag}(r_1^2,\dots,r_n^2),
+\qquad
+r_1^2>r_2^2>\cdots>r_n^2>0
+\]
+(using $|r_1|>\cdots>|r_n|$ and $r_i\in\mathbb{R}$).
+
+From part (a), the problem is equivalent to finding the best rank-$k$ approximation to $\Lambda$ in Frobenius norm, and then conjugating by $Q$.
+
+Thus, the best rank-$k$ approximation is obtained by keeping the top $k$ singular values:
+\[
+(AA^\top)_k = Q S Q^\top,
+\qquad
+S=\operatorname{diag}(r_1^2,\dots,r_k^2,0,\dots,0).
+\]
+
+\item[(d)] In general,
+\[
+AA^\top = (QR)(QR)^\top = QRR^\top Q^\top.
+\]
+Let $G$ be the best rank-$k$ approximation to $RR^\top$ in Frobenius norm:
+\[
+G \in \arg\min_{B:\ \operatorname{rank}(B)\le k}\ \|RR^\top - B\|_F.
+\]
+Apply part (a) with $C=RR^\top$ and $W=Q$ (orthonormal). Then
+\[
+QGQ^\top
+=
+\arg\min_{B:\ \operatorname{rank}(B)\le k}\ \|Q(RR^\top)Q^\top - B\|_F.
+\]
+Since $Q(RR^\top)Q^\top = AA^\top$, this shows that the best rank-$k$ approximation to $AA^\top$ is $QGQ^\top$.
+\end{enumerate}
+
+
+
+
+%----------------------------------------------------------------------------------------
+\newpage
+\section*{Problem 2. Convexity of Functions}
+
+(a) Non-negative weighted sum.
+
+Show that the non-negative weighted sum of convex functions is convex: i.e. if $f_1, \dots, f_n$ are $n$ convex
+functions from $\mathbb{R}^n$ to $\mathbb{R}$ and $w_1, \dots, w_n \in \mathbb{R}_+$ are $n$ positive scalars, then the function:
+\[
+f = \sum_{i=1}^n w_i f_i \tag{4}
+\]
+is convex. To make the question easier, you can assume that the functions $f_1, \dots, f_n$ are twice-differentiable.
+
+A set $C$ is convex if and only if the line segment between any two points in $C$ lies in $C$:
+\[
+C \text{ is convex } \Longleftrightarrow
+\forall \vec{x}_1, \vec{x}_2 \in C, \ \forall \theta \in [0,1],
+\theta \vec{x}_1 + (1-\theta)\vec{x}_2 \in C. \tag{5}
+\]
+
+(b) Prove the convexity of a hyperplane, 
+\[
+L = \{\vec{x} \mid \vec{a}^\top \vec{x} = b\}.
+\]
+
+(c) Prove the convexity of a halfspace,
+\[
+H = \{\vec{x} \mid \vec{a}^\top \vec{x} \le b\}.
+\]
+
+(d) A function $f : \mathbb{R}^n \to \mathbb{R}^m$ is affine if it is the sum of a linear function and a constant,
+\[
+f(\vec{x}) = A\vec{x} + \vec{b}, \tag{6}
+\]
+for $A \in \mathbb{R}^{m\times n}$ and $\vec{b} \in \mathbb{R}^m$.
+
+Prove that if $S \subseteq \mathbb{R}^n$ is convex, then the image of $S$ under an affine function $f$,
+\[
+f(S) = \{ f(\vec{x}) \mid \vec{x} \in S \}, \tag{7}
+\]
+is convex.
+
+\subsection*{Answer}
+
+\begin{enumerate}
+\item[(a)] Since each $f_i$ is convex, for all $x,y \in \mathbb{R}^n$ and $\theta \in [0,1]$,
+\[
+f_i(\theta x + (1-\theta)y)
+\le
+\theta f_i(x) + (1-\theta) f_i(y).
+\]
+\[
+w_i f_i(\theta x + (1-\theta)y)
+\le
+\theta w_i f_i(x) + (1-\theta) w_i f_i(y).
+\]
+Summing over $i=1,\dots,n$ gives
+\[
+\sum_{i=1}^n w_i f_i(\theta x + (1-\theta)y)
+\le
+\theta \sum_{i=1}^n w_i f_i(x)
++
+(1-\theta) \sum_{i=1}^n w_i f_i(y).
+\]
+Thus
+\[
+f(\theta x + (1-\theta)y)
+\le
+\theta f(x) + (1-\theta) f(y),
+\]
+so $f$ is convex.
+
+\item[(b)] Let $\vec{x}_1, \vec{x}_2 \in L$. Then
+\[
+\vec{a}^\top \vec{x}_1 = b,
+\qquad
+\vec{a}^\top \vec{x}_2 = b.
+\]
+For any $\theta \in [0,1]$,
+\[
+\vec{a}^\top(\theta \vec{x}_1 + (1-\theta)\vec{x}_2)
+=
+\theta \vec{a}^\top \vec{x}_1
++
+(1-\theta)\vec{a}^\top \vec{x}_2
+=
+\theta b + (1-\theta)b
+=
+b.
+\]
+Thus $\theta \vec{x}_1 + (1-\theta)\vec{x}_2 \in L$.
+Therefore $L$ is convex.
+
+\item[(c)] Let $\vec{x}_1, \vec{x}_2 \in H$. Then
+\[
+\vec{a}^\top \vec{x}_1 \le b,
+\qquad
+\vec{a}^\top \vec{x}_2 \le b.
+\]
+For $\theta \in [0,1]$,
+\[
+\vec{a}^\top(\theta \vec{x}_1 + (1-\theta)\vec{x}_2)
+=
+\theta \vec{a}^\top \vec{x}_1
++
+(1-\theta)\vec{a}^\top \vec{x}_2
+\le
+\theta b + (1-\theta)b
+=
+b.
+\]
+Hence $\theta \vec{x}_1 + (1-\theta)\vec{x}_2 \in H$.
+Therefore $H$ is convex.
+
+\item[(d)] Let $\vec{x}_1, \vec{x}_2 \in S$.
+Since $S$ is convex,
+\[
+\theta \vec{x}_1 + (1-\theta)\vec{x}_2 \in S
+\quad \forall \theta \in [0,1].
+\]
+Apply $f$:
+\begin{align*}
+f(\theta \vec{x}_1 + (1-\theta)\vec{x}_2) & = A(\theta \vec{x}_1 + (1-\theta)\vec{x}_2) + \vec{b} \\
+ & = \theta (A\vec{x}_1 + \vec{b}) + (1-\theta)(A\vec{x}_2 + \vec{b}) \\
+ & = \theta f(\vec{x}_1) + (1-\theta) f(\vec{x}_2).
+ \end{align*}
+Thus,  for any convex combination of points in $f(S)$, it remains in $f(S)$.
+\\$\Rightarrow f(S)$ is convex.
+\end{enumerate}
+
+%----------------------------------------------------------------------------------------
+
+\newpage
+\section*{Problem 3. Perspective function}
+
+Let $f : \mathbb{R}^n \to \mathbb{R}$ be a differentiable convex function, with domain the entire space $\mathbb{R}^n$.
+
+(a) Show that we can represent $f$ as a pointwise maximum of affine functions, specifically
+\[
+\forall x \in \mathbb{R}^n :
+f(x) = \max_{(a,b)\in \mathcal{A}} a^\top x + b, \tag{8}
+\]
+where $\mathcal{A} \subseteq \mathbb{R}^{n+1}$ is to be determined.
+
+Hint: For every $x, y \in \mathbb{R}^n$:
+\[
+f(x) \ge f(y) + (x-y)^\top \nabla f(y).
+\]
+
+(b) We define the perspective of $f$ as the function $g : \mathbb{R}^n \times \mathbb{R} \to \mathbb{R}$ with values
+\[
+g(x,t) =
+\begin{cases}
+t f(x/t) & \text{if } t>0, \\
++\infty & \text{otherwise}.
+\end{cases}
+\]
+
+Prove that $g$ is convex.
+
+Hint: Use (8).
+
+(c) Show that the function $h : \mathbb{R}^n \to \mathbb{R}$ with values
+\[
+h(x) =
+\begin{cases}
+\frac{(a^\top x + b)^2}{c^\top x + d} & \text{if } c^\top x + d > 0, \\
++\infty & \text{otherwise},
+\end{cases}
+\]
+is convex.
+
+Hint: Consider the perspective function of $f(z)=z^2$ on $\mathbb{R}$.
+
+\subsection*{Answer}
+\begin{enumerate}
+\item[(a)] For any fixed $y\in\mathbb{R}^n$, define the affine function $\ell_y:\mathbb{R}^n\to\mathbb{R}$ by
+\[
+\ell_y(x) \doteq f(y) + \nabla f(y)^\top (x-y)
+= (\nabla f(y))^\top x + \big(f(y)-\nabla f(y)^\top y\big).
+\]
+By the first-order condition for differentiable convex functions (supporting hyperplane inequality),
+\[
+f(x)\ge \ell_y(x)\qquad \forall x\in\mathbb{R}^n,\ \forall y\in\mathbb{R}^n. \tag{*}
+\]
+In particular, for each fixed $x$,
+\[
+f(x)\ge \sup_{y\in\mathbb{R}^n} \ell_y(x).
+\]
+On the other hand, choosing $y=x$ gives $\ell_x(x)=f(x)$, so
+\[
+\sup_{y\in\mathbb{R}^n}\ell_y(x)\ge \ell_x(x)=f(x).
+\]
+Thus
+\[
+f(x)=\sup_{y\in\mathbb{R}^n}\ell_y(x).
+\]
+Now define
+\[
+A \doteq \left\{(a,b)\in\mathbb{R}^{n+1}:\ \exists\,y\in\mathbb{R}^n \text{ such that } a=\nabla f(y),\ b=f(y)-\nabla f(y)^\top y\right\}.
+\]
+Then $\ell_y(x)=a^\top x+b$ for $(a,b)$ generated by $y$, and the previous identity becomes
+\[
+f(x)=\max_{(a,b)\in A} a^\top x+b,
+\]
+where $\max$ may be interpreted as $\sup$ if the maximum is not attained. This proves (8).
+
+\item[(b)] Using (8), for $t>0$ we have
+\begin{align*}
+g(x,t)
+&= t f(x/t)
+= t \max_{(a,b)\in A}\left(a^\top (x/t)+b\right) \\
+&= \max_{(a,b)\in A}\left( a^\top x + bt \right).
+\end{align*}
+For each fixed $(a,b)\in A$, the map $(x,t)\mapsto a^\top x+bt$ is affine on $\mathbb{R}^n\times\mathbb{R}$.
+A pointwise maximum of affine functions is convex, hence the function
+\[
+(x,t)\mapsto \max_{(a,b)\in A}(a^\top x+bt)
+\]
+is convex on $\{(x,t):t>0\}$. Extending $g$ by $+\infty$ on $\{t\le 0\}$ preserves convexity (equivalently, $\operatorname{epi}(g)$ remains convex),
+so $g$ is convex on $\mathbb{R}^n\times\mathbb{R}$.
+
+\item[(c)] Consider $f:\mathbb{R}\to\mathbb{R}$ given by $f(z)=z^2$, which is convex and differentiable on $\mathbb{R}$.
+By part (b), its perspective $p:\mathbb{R}\times\mathbb{R}\to\mathbb{R}$ defined by
+\[
+p(z,t)=
+\begin{cases}
+t f(z/t) & t>0,\\
++\infty & \text{otherwise},
+\end{cases}
+\]
+is convex. For $t>0$,
+\[
+p(z,t)=t\left(\frac{z}{t}\right)^2=\frac{z^2}{t}.
+\]
+Now define the affine map $\phi:\mathbb{R}^n\to\mathbb{R}\times\mathbb{R}$ by
+\[
+\phi(x) \doteq (z(x),t(x)) = (a^\top x+b,\ c^\top x+d).
+\]
+Then $h$ can be written as the composition
+\[
+h(x)=p(\phi(x))=p(a^\top x+b,\ c^\top x+d).
+\]
+Since $p$ is convex and $\phi$ is affine, the composition $p\circ\phi$ is convex. Writing it out yields exactly
+\[
+h(x)=
+\begin{cases}
+\dfrac{(a^\top x+b)^2}{c^\top x+d} & \text{if } c^\top x+d>0,\\[6pt]
++\infty & \text{otherwise},
+\end{cases}
+\]
+so $h$ is convex.
+\end{enumerate}
+
+%----------------------------------------------------------------------------------------
+\newpage
+\section*{Problem 4. Convexity of Sets}
+
+Determine if each set $C$ given below is convex. Prove that each set is convex or provide an example to show that
+it is not convex. You may use any techniques used in class or discussion to demonstrate or disprove convexity.
+
+(a) $C = \{\vec{x} \in \mathbb{R}^2 \mid x_1 x_2 \ge 0\}$, where $\vec{x} = [x_1 \ x_2]^\top$.
+
+(b) $C = \{X \in S^n \mid \lambda_{\min}(X) \ge 2\}$, where $S^n$ is the set of symmetric matrices in $\mathbb{R}^{n\times n}$ and $\lambda_{\min}(X)$ is the minimum eigenvalue of $X$.
+
+(c) Let $H(\vec{w})$ denote the hyperplane with normal direction $\vec{w} \in \mathbb{R}^n$, i.e.,
+\[
+H(\vec{w}) = \{\vec{x} \in \mathbb{R}^n \mid \vec{x}^\top \vec{w} = 0\}. \tag{9}
+\]
+
+Let $P : \mathbb{R}^n \to \mathbb{R}^n$ be given by
+\[
+P(\vec{x}) = \arg\min_{\vec{y} \in H(\vec{w})} \|\vec{y} - \vec{x}\|_2. \tag{10}
+\]
+
+Let
+\[
+C = \{ P(\vec{x}) \mid \vec{x} \in B \}, \tag{11}
+\]
+where $B = \{\vec{x} \in \mathbb{R}^n \mid \|\vec{x}\|_2 \le 1\}$.
+
+\subsection*{Answer}
+
+\begin{enumerate}
+\item[(a)] The set $C$ is not convex.
+\[
+\vec{x}_1=\begin{bmatrix}1\\[2pt]0\end{bmatrix}\in C
+\qquad
+\vec{x}_2=\begin{bmatrix}0\\[2pt]-1\end{bmatrix}\in C
+\]
+For $\theta=\tfrac12$,
+\[
+\vec{x}_\theta=\frac12\vec{x}_1+\frac12\vec{x}_2
+=\begin{bmatrix}\tfrac12\\[2pt]-\tfrac12\end{bmatrix},
+\qquad
+(\vec{x}_\theta)_1(\vec{x}_\theta)_2
+=
+\left(\tfrac12\right)\left(-\tfrac12\right)
+=
+-\tfrac14
+<0,
+\]
+so $\vec{x}_\theta\notin C$. Hence $C$ is not convex.
+
+\item[(b)] The set $C$ is convex.
+
+Let $X_1,X_2\in C$ and $\theta\in[0,1]$, and define $X_\theta=\theta X_1+(1-\theta)X_2$.
+Using the Rayleigh quotient characterization,
+\[
+\lambda_{\min}(X)=\min_{\|v\|_2=1} v^\top X v.
+\]
+Fix any $v$ with $\|v\|_2=1$. Since $X_1,X_2\in C$, we have
+\[
+v^\top X_1 v \ge \lambda_{\min}(X_1)\ge 2,
+\qquad
+v^\top X_2 v \ge \lambda_{\min}(X_2)\ge 2.
+\]
+Therefore
+\[
+v^\top X_\theta v
+=
+\theta v^\top X_1 v + (1-\theta) v^\top X_2 v
+\ge
+\theta\cdot 2 + (1-\theta)\cdot 2
+=
+2.
+\]
+Since this holds for all unit $v$,
+\[
+\lambda_{\min}(X_\theta)
+=
+\min_{\|v\|_2=1} v^\top X_\theta v
+\ge 2,
+\]
+so $X_\theta\in C$. Hence $C$ is convex.
+
+\item[(c)] The set $C$ is convex.
+
+First, note that $P(\vec{x})$ is the Euclidean projection of $\vec{x}$ onto the hyperplane $H(\vec{w})$.
+We can compute it explicitly. Let $\vec{w}\neq \vec{0}$ and write $\vec{y}=\vec{x}-\alpha \vec{w}$.
+The constraint $\vec{y}^\top \vec{w}=0$ gives
+\[
+(\vec{x}-\alpha \vec{w})^\top \vec{w}=0
+\quad\Longrightarrow\quad
+\vec{x}^\top \vec{w}-\alpha \|\vec{w}\|_2^2=0
+\quad\Longrightarrow\quad
+\alpha=\frac{\vec{x}^\top \vec{w}}{\|\vec{w}\|_2^2}.
+\]
+Thus
+\[
+P(\vec{x})
+=
+\vec{x}-\frac{\vec{x}^\top \vec{w}}{\|\vec{w}\|_2^2}\,\vec{w}
+=
+\left(I-\frac{\vec{w}\vec{w}^\top}{\|\vec{w}\|_2^2}\right)\vec{x}.
+\]
+Hence $P$ is linear (and therefore affine).
+
+Since $B=\{\vec{x}\in\mathbb{R}^n:\|\vec{x}\|_2\le 1\}$ is convex, and the image of a convex set under an affine map is convex.
+\end{enumerate}
+
+%----------------------------------------------------------------------------------------
+\newpage
+\section*{Problem 5. PSD Matrices}
+
+In this problem, we will analyze properties of positive semidefinite (PSD) matrices. A symmetric matrix
+$M \in \mathbb{R}^{n\times n}$ is a PSD matrix if $\vec{x}^\top M \vec{x} \ge 0$ for all $\vec{x} \in \mathbb{R}^n$, and we denote that as
+$M \succeq 0$ or $M \in S^n_+$.
+
+Assume $A \in \mathbb{R}^{n\times n}$ is a symmetric matrix.
+
+(a) Show that $A \succeq 0$ if and only if all eigenvalues of $A$ are non-negative.
+
+(b) Show that if $A \succeq 0$ then all diagonal entries of $A$ are non-negative, $A_{ii} \ge 0$.
+
+Now we will show that $A \in S^n_+$ (i.e., $A \in \mathbb{R}^{n\times n}$ and $A \succeq 0$) if and only if there exists $P \in S^n_+$ such that
+\[
+A = P^\top P = P^2.
+\]
+Such a matrix $P$ is known as a PSD square root of $A$.
+
+(c) First, show that if $A \in S^n_+$, then there exists $P \in S^n_+$ such that $A = P^2$.
+
+(d) Now, show that for any matrix $Q \in \mathbb{R}^{m\times n}$, if $A = Q^\top Q$ then $A \in S^n_+$.
+
+NOTE: If we take $Q = P \in S^n_+$, we have $A = P^2 \in S^n_+$; this proves the other direction of the above
+“if-and-only-if.”
+
+We will use positive semidefinite matrices to construct the singular value decomposition (SVD). One can construct
+the SVD of a matrix $B \in \mathbb{R}^{m\times n}$ in two ways, using either the matrices $BB^\top \in \mathbb{R}^{m\times m}$ or $B^\top B \in \mathbb{R}^{n\times n}$, and
+usually one chooses the method depending on which matrix is smaller. The following result shows that the
+singular values will be the same no matter what construction you use.
+
+(e) Let $B \in \mathbb{R}^{m\times n}$ be an arbitrary matrix (not necessarily PSD or even square). From the previous parts of
+this problem, $BB^\top$ and $B^\top B$ are PSD, thus having real non-negative eigenvalues. Prove that the non-zero
+eigenvalues of $BB^\top$ are the same as the non-zero eigenvalues of $B^\top B$.
+
+
+\subsection*{Answer}
+
+\begin{enumerate}
+\item[(a)] Since $A$ is symmetric, it has an orthonormal eigen-decomposition
+\[
+A = U\Lambda U^\top,
+\]
+where $U$ is orthonormal and $\Lambda=\operatorname{diag}(\lambda_1,\dots,\lambda_n)$ contains the real eigenvalues of $A$.
+
+\emph{($\Rightarrow$)} Suppose $A\succeq 0$. Let $\lambda_i$ be an eigenvalue with eigenvector $\vec{u}_i$ (the $i$th column of $U$),
+so $A\vec{u}_i=\lambda_i \vec{u}_i$ and $\|\vec{u}_i\|_2=1$. Then
+\[
+0 \le \vec{u}_i^\top A \vec{u}_i = \vec{u}_i^\top (\lambda_i \vec{u}_i)=\lambda_i \|\vec{u}_i\|_2^2=\lambda_i,
+\]
+so $\lambda_i\ge 0$ for all $i$.
+
+\emph{($\Leftarrow$)} Conversely, suppose all eigenvalues satisfy $\lambda_i\ge 0$. For any $\vec{x}\in\mathbb{R}^n$, write $\vec{x}=U\vec{z}$ where
+$\vec{z}=U^\top \vec{x}$. Then
+\[
+\vec{x}^\top A \vec{x}
+=
+(U\vec{z})^\top (U\Lambda U^\top)(U\vec{z})
+=
+\vec{z}^\top \Lambda \vec{z}
+=
+\sum_{i=1}^n \lambda_i z_i^2
+\ge 0,
+\]
+since $\lambda_i\ge 0$ and $z_i^2\ge 0$. Hence $A\succeq 0$.
+
+\item[(b)] Let $\vec{e}_i$ be the $i$th standard basis vector. If $A\succeq 0$, then for all $i$,
+\[
+0 \le \vec{e}_i^\top A \vec{e}_i = A_{ii}.
+\]
+Thus $A_{ii}\ge 0$ for all $i$.
+
+\item[(c)] Assume $A\in S^n_+$, i.e. $A$ is symmetric and PSD. By part (a), all eigenvalues of $A$ are non-negative.
+Let
+\[
+A = U\Lambda U^\top,
+\qquad
+\Lambda=\operatorname{diag}(\lambda_1,\dots,\lambda_n),\ \lambda_i\ge 0.
+\]
+Define
+\[
+\Lambda^{1/2} \doteq \operatorname{diag}(\sqrt{\lambda_1},\dots,\sqrt{\lambda_n}),
+\qquad
+P \doteq U\Lambda^{1/2}U^\top.
+\]
+Then $P$ is symmetric. Moreover,
+\[
+P^2
+=
+(U\Lambda^{1/2}U^\top)(U\Lambda^{1/2}U^\top)
+=
+U\Lambda^{1/2}(U^\top U)\Lambda^{1/2}U^\top
+=
+U\Lambda U^\top
+=
+A.
+\]
+Finally, $P\succeq 0$ because its eigenvalues are $\sqrt{\lambda_i}\ge 0$ (again by part (a) applied to $P$).
+Thus there exists $P\in S^n_+$ such that $A=P^2$.
+
+\item[(d)] Let $Q\in\mathbb{R}^{m\times n}$ and define $A=Q^\top Q$. Then $A$ is symmetric since
+\[
+A^\top = (Q^\top Q)^\top = Q^\top Q = A.
+\]
+For any $\vec{x}\in\mathbb{R}^n$,
+\[
+\vec{x}^\top A \vec{x}
+=
+\vec{x}^\top Q^\top Q \vec{x}
+=
+(Q\vec{x})^\top (Q\vec{x})
+=
+\|Q\vec{x}\|_2^2
+\ge 0.
+\]
+Hence $A\succeq 0$, i.e. $A\in S^n_+$.
+
+\item[(e)] Let $B\in\mathbb{R}^{m\times n}$ be arbitrary. From (d), both $BB^\top$ and $B^\top B$ are PSD and hence have real non-negative eigenvalues.
+
+We show that the \emph{non-zero} eigenvalues of $BB^\top$ and $B^\top B$ coincide (including algebraic multiplicity).
+
+First, let $\lambda>0$ and suppose $\lambda$ is an eigenvalue of $B^\top B$ with eigenvector $\vec{v}\neq \vec{0}$:
+\[
+B^\top B \vec{v} = \lambda \vec{v}. \tag{$\ast$}
+\]
+Then $B\vec{v}\neq \vec{0}$; otherwise if $B\vec{v}=\vec{0}$, multiplying by $B^\top$ gives $B^\top B\vec{v}=\vec{0}$, contradicting $\lambda>0$ and $\vec{v}\neq 0$.
+Multiply ($\ast$) on the left by $B$:
+\[
+BB^\top (B\vec{v}) = B(B^\top B\vec{v}) = B(\lambda \vec{v}) = \lambda (B\vec{v}).
+\]
+Thus $\lambda$ is an eigenvalue of $BB^\top$ with eigenvector $B\vec{v}\neq 0$.
+
+Conversely, let $\lambda>0$ and suppose $\lambda$ is an eigenvalue of $BB^\top$ with eigenvector $\vec{u}\neq \vec{0}$:
+\[
+BB^\top \vec{u} = \lambda \vec{u}. \tag{$\dagger$}
+\]
+Then $B^\top \vec{u}\neq \vec{0}$ (same reasoning: if $B^\top \vec{u}=0$, then $BB^\top \vec{u}=0$, contradicting $\lambda>0$).
+Multiply ($\dagger$) on the left by $B^\top$:
+\[
+B^\top B (B^\top \vec{u}) = B^\top (BB^\top \vec{u}) = B^\top (\lambda \vec{u}) = \lambda (B^\top \vec{u}).
+\]
+Thus $\lambda$ is an eigenvalue of $B^\top B$ with eigenvector $B^\top \vec{u}\neq 0$.
+
+Therefore, $\lambda>0$ is an eigenvalue of $B^\top B$ if and only if it is an eigenvalue of $BB^\top$.
+
+To match multiplicities: 
+for real symmetric matrices, the algebraic and geometric multiplicities coincide, so the eigenspaces $E_\lambda(B^\top B)$ and $E_\lambda(BB^\top)$ have dimensions equal to the multiplicity of $\lambda$ as an eigenvalue of $B^\top B$ and $BB^\top$, respectively. 
+
+Hence $\dim E_\lambda(B^\top B)=\dim E_\lambda(BB^\top)$ for every $\lambda>0$, so the non-zero eigenvalues coincide with the same multiplicities.
+\end{enumerate}
+%----------------------------------------------------------------------------------------
+
+\newpage
+\section*{Problem 6. Homework Process}
+
+With whom did you work on this homework? List the names and SIDs of your group members.
+
+NOTE: If you didn’t work with anyone, you can put “none” as your answer.
+
+\subsection*{Answer}
+none
+
+%----------------------------------------------------------------------------------------
+\end{document}
