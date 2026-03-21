@@ -1,0 +1,1303 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% fphw Assignment
+% LaTeX Template
+% Version 1.0 (27/04/2019)
+%
+% This template originates from:
+% https://www.LaTeXTemplates.com
+%
+% Authors:
+% Class by Felipe Portales-Oliva (f.portales.oliva@gmail.com) with template 
+% content and modifications by Vel (vel@LaTeXTemplates.com)
+%
+% Template (this file) License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[
+	12pt,
+	%fleqn, % Default font size, values between 10pt-12pt are allowed
+	%letterpaper, % Uncomment for US letter paper size
+	%spanish, % Uncomment for Spanish
+]{fphw}
+
+% Template-specific packages
+\usepackage[utf8]{inputenc} % Required for inputting international characters
+\usepackage[T1]{fontenc} % Output font encoding for international characters
+\usepackage{mathpazo} % Use the Palatino font
+
+\usepackage{graphicx} % Required for including images
+
+\usepackage{booktabs} % Required for better horizontal rules in tables
+
+\usepackage{listings} % Required for insertion of code
+
+\usepackage{enumerate} % To modify the enumerate environment
+
+\usepackage{enumitem}
+
+\usepackage{amsmath}
+
+\usepackage{mathtools,amsthm}
+
+\usepackage{float}
+
+\usepackage{listings}
+
+\usepackage{hyperref}
+
+\lstdefinelanguage{R}{
+  keywords={if, else, repeat, while, function, for, in, next, break},
+  otherkeywords={TRUE, FALSE, NULL, NA, Inf, NaN},
+  sensitive=true,
+  morecomment=[l]\#,
+  morestring=[b]",
+}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+
+
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Homework \#1} % Assignment title
+
+\author{Shizhe Zhang} % Student name
+
+\date{\today} % Due date
+
+\institute{University of California, Berkeley \\ Department of Statistics} % Institute or school name
+
+\class{EECS 227AT} % Course or class name
+
+\professor{Gireeja Ranade} % Professor or teacher in charge of the assignment
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Output the assignment title, created automatically using the information in the custom commands above
+
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT CONTENT
+%----------------------------------------------------------------------------------------
+
+\section*{Problem 1. Optimizing Over Multiple Variables}
+
+
+In this exercise, we consider several problems in which we optimize over two variables, $\vec{x} \in \mathbb{R}^n$ and $\vec{y} \in \mathbb{R}^m$, and a general (possibly nonconvex) objective function $F_0(\vec{x}, \vec{y})$. Suppose also that $\vec{x}$ and $\vec{y}$ are constrained to different feasible sets $X$ and $Y$, respectively, which may or may not be convex.
+
+\begin{enumerate}
+\item[(a)] Show that
+\[
+\min_{\vec{x}\in X}\min_{\vec{y}\in Y} F_0(\vec{x},\vec{y})
+=
+\min_{\vec{y}\in Y}\min_{\vec{x}\in X} F_0(\vec{x},\vec{y}),
+\]
+i.e., if we minimize over both $\vec{x}$ and $\vec{y}$, then we can exchange the minimization order without altering the optimal value.
+
+\item[(b)] Show that $p^\star \ge d^\star$, where
+\[
+p^\star := \min_{\vec{x}\in X}\max_{\vec{y}\in Y} F_0(\vec{x},\vec{y})
+\]
+
+\[
+d^\star := \max_{\vec{y}\in Y}\min_{\vec{x}\in X} F_0(\vec{x},\vec{y})
+\]
+
+This statement is referred to as the min-max theorem.
+\end{enumerate}
+
+\subsection*{Answer}
+
+\textbf{(a)}
+
+Let
+\[
+a = \min_{\vec{x}\in X}\min_{\vec{y}\in Y} F_0(\vec{x},\vec{y}),
+\quad
+b = \min_{\vec{y}\in Y}\min_{\vec{x}\in X} F_0(\vec{x},\vec{y}).
+\]
+
+Both expressions represent the minimum value of the same function over the same joint feasible set:
+\[
+(\vec{x},\vec{y}) \in X \times Y .
+\]
+
+Indeed,
+\[
+\min_{\vec{x}\in X}\min_{\vec{y}\in Y} F_0(\vec{x},\vec{y})
+=
+\min_{(\vec{x},\vec{y})\in X\times Y} F_0(\vec{x},\vec{y}).
+\]
+
+Similarly,
+\[
+\min_{\vec{y}\in Y}\min_{\vec{x}\in X} F_0(\vec{x},\vec{y})
+=
+\min_{(\vec{x},\vec{y})\in X\times Y} F_0(\vec{x},\vec{y}).
+\]
+
+Thus the order of minimization does not affect the optimal value.
+
+\bigskip
+
+\textbf{(b)}
+
+Define
+\[
+p^\star = \min_{\vec{x}\in X}\max_{\vec{y}\in Y} F_0(\vec{x},\vec{y}),
+\quad
+d^\star = \max_{\vec{y}\in Y}\min_{\vec{x}\in X} F_0(\vec{x},\vec{y}).
+\]
+
+For any $\vec{x}\in X$ and $\vec{y}\in Y$, we have
+\[
+\min_{\vec{x}'\in X} F_0(\vec{x}',\vec{y}) \le F_0(\vec{x},\vec{y})
+\le \max_{\vec{y}'\in Y} F_0(\vec{x},\vec{y}').
+\]
+
+Taking the maximum over $\vec{y}$ on the left inequality gives
+\[
+\max_{\vec{y}\in Y} \min_{\vec{x}\in X} F_0(\vec{x},\vec{y})
+\le
+\max_{\vec{y}\in Y} F_0(\vec{x},\vec{y})
+\]
+
+for every $\vec{x}$.
+
+Now take the minimum over $\vec{x}$ on the right-hand side:
+
+\[
+\max_{\vec{y}\in Y} \min_{\vec{x}\in X} F_0(\vec{x},\vec{y})
+\le
+\min_{\vec{x}\in X} \max_{\vec{y}\in Y} F_0(\vec{x},\vec{y}).
+\]
+
+Therefore
+\[
+d^\star \le p^\star.
+\]
+
+%----------------------------------------------------------------------------------------
+
+\newpage
+\section*{Problem 2. Duality}
+
+
+Consider the function
+\[
+f(\vec{x}) = \vec{x}^T A \vec{x} - 2\vec{b}^T \vec{x}.
+\]
+
+First, we consider the unconstrained optimization problem
+\[
+p^\star = \min_{\vec{x}\in\mathbb{R}^n} f(\vec{x})
+= \min_{\vec{x}\in\mathbb{R}^n} \vec{x}^T A \vec{x} - 2\vec{b}^T \vec{x}
+\]
+
+for a real $n\times n$ symmetric matrix $A\in S^n$ and $\vec{b}\in\mathbb{R}^n$.  
+If the problem is unbounded below, then we say $p^\star = -\infty$.  
+Let $\vec{x}^\star$ denote the minimizing argument.
+
+\begin{enumerate}
+\item[(a)] Suppose $A\succeq 0$ and $\vec{b}\in \mathcal{R}(A)$. Let $\mathrm{rank}(A)=n$. Find $p^\star$.
+
+Hint: What does $A\succeq0$ tell you about the function $f$? How can you leverage the rank of $A$ to compute $p^\star$?
+
+\item[(b)] Suppose $A\succeq0$ and $\vec{b}\in R(A)$ as before. Let $A$ be rank-deficient, i.e., $\mathrm{rank}(A)=r<n$. Let $A$ have compact/thin and full SVD
+
+\[
+A = U_r\Lambda_rU_r^T =
+\begin{bmatrix}
+U_r & U_1
+\end{bmatrix}
+\begin{bmatrix}
+\Lambda_r & 0 \\
+0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+U_r^T \\
+U_1^T
+\end{bmatrix}
+\]
+
+Show that the minimizer $\vec{x}^\star$ is not unique by finding the family of solutions in terms of $U_r, U_1, \Lambda_r, \vec{b}$.
+
+Hint: Any $\vec{x}\in\mathbb{R}^n$ can be written as
+\[
+\vec{x}=U_r\vec{\alpha}+U_1\vec{\beta}.
+\]
+
+\item[(c)] If $A\not\succeq0$, show that $p^\star=-\infty$ by finding $\vec{v}$ such that $f(\alpha\vec{v})\to -\infty$ as $\alpha\to\infty$.
+
+Hint: $A\not\succeq0$ means there exists $\vec{v}$ such that $\vec{v}^TA\vec{v}<0$.
+
+\item[(d)] Suppose $A\succeq0$ and $\vec{b}\notin R(A)$. Find $p^\star$.
+
+Hint: From FTLA,
+\[
+\mathbb{R}^n = R(A^T) \oplus N(A).
+\]
+
+\item[(e)] Consider the constrained problem
+
+\[
+p^\star = \min_{\vec{x}\in\mathbb{R}^n} \vec{x}^T A \vec{x} - 2\vec{b}^T \vec{x}
+\]
+
+subject to
+
+\[
+\vec{x}^T\vec{x} \ge 1.
+\]
+
+Write the Lagrangian $L(\vec{x},\lambda)$.
+
+\item[(f)] For any matrix $C\in\mathbb{R}^{n\times n}$ with compact SVD
+
+\[
+C = U_r\Lambda_rV_r^T
+\]
+
+define the pseudoinverse
+
+\[
+C^\dagger = V_r\Lambda_r^{-1}U_r^T.
+\]
+
+Show that the dual problem to (7) can be written as
+
+\[
+d^\star = \max_{\lambda\ge0}
+\]
+
+subject to
+
+\[
+A-\lambda I\succeq0,\quad \vec{b}\in R(A-\lambda I)
+\]
+
+\[
+-b^T(A-\lambda I)^\dagger b + \lambda.
+\]
+
+Hint: Compute $g(\lambda)$ and analyze its behavior under the constraints.
+\end{enumerate}
+
+\subsection*{Answer}
+
+\textbf{(a)}
+
+Suppose $A \succeq 0$ and $\mathrm{rank}(A)=n$. Then $A$ is positive definite and invertible.
+
+The objective is
+\[
+f(\vec{x}) = \vec{x}^T A \vec{x} - 2\vec{b}^T \vec{x}.
+\]
+
+Set the gradient to zero:
+
+\[
+\nabla f(\vec{x}) = 2A\vec{x} - 2\vec{b} = 0
+\]
+
+\[
+A\vec{x} = \vec{b}.
+\]
+
+Since $A$ is invertible,
+
+\[
+\vec{x}^\star = A^{-1}\vec{b}.
+\]
+
+Substitute into the objective:
+
+\[
+p^\star
+= (A^{-1}\vec{b})^T A (A^{-1}\vec{b}) - 2\vec{b}^T(A^{-1}\vec{b})
+\]
+
+\[
+= \vec{b}^T A^{-1}\vec{b} - 2\vec{b}^T A^{-1}\vec{b}
+\]
+
+\[
+p^\star = -\vec{b}^T A^{-1}\vec{b}.
+\]
+
+\textbf{(b)}
+
+Let $A$ have compact SVD
+
+\[
+A = U_r \Lambda_r U_r^T,
+\]
+
+with $\mathrm{rank}(A)=r<n$.
+
+Since $\vec{b}\in R(A)$, we can write
+
+\[
+\vec{b} = U_r \vec{c}
+\]
+
+for some vector $\vec{c}$.
+
+Write any $\vec{x}\in\mathbb{R}^n$ as
+
+\[
+\vec{x} = U_r \vec{\alpha} + U_1 \vec{\beta}.
+\]
+
+Then
+
+\[
+f(\vec{x})
+= (U_r\vec{\alpha}+U_1\vec{\beta})^T
+A
+(U_r\vec{\alpha}+U_1\vec{\beta})
+-2\vec{b}^T(U_r\vec{\alpha}+U_1\vec{\beta}).
+\]
+
+Since $AU_1=0$ and $U_1^T U_r=0$,
+
+\[
+f(\vec{x})
+=
+\vec{\alpha}^T \Lambda_r \vec{\alpha}
+-2\vec{c}^T\vec{\alpha}.
+\]
+
+Thus the objective depends only on $\vec{\alpha}$.
+
+Minimizing gives
+
+\[
+\vec{\alpha}^\star = \Lambda_r^{-1}\vec{c}.
+\]
+
+Hence
+
+\[
+\vec{x}^\star
+=
+U_r \Lambda_r^{-1} \vec{c}
++
+U_1 \vec{\beta}
+\]
+
+Since $\vec{c}=U_r^T\vec{b}$,
+
+\[
+\vec{x}^\star = U_r \Lambda_r^{-1} U_r^T \vec{b} + U_1 \vec{\beta},\quad \forall \vec{\beta}
+\]
+
+which shows the minimizer is not unique.
+
+\bigskip
+
+\textbf{(c)}
+
+If $A \not\succeq 0$, then there exists $\vec{v}$ such that
+
+\[
+\vec{v}^T A \vec{v} < 0.
+\]
+
+Consider $\vec{x}=\alpha \vec{v}$.
+
+Then
+
+\[
+f(\alpha\vec{v})
+=
+\alpha^2 \vec{v}^T A \vec{v}
+-2\alpha \vec{b}^T \vec{v}.
+\]
+
+The dominant term as $\alpha\to\infty$ is
+
+\[
+\alpha^2 \vec{v}^T A \vec{v}.
+\]
+
+Since $\vec{v}^T A \vec{v}<0$,
+
+\[
+f(\alpha\vec{v}) \to -\infty.
+\]
+
+\textbf{(d)}
+
+Suppose $A\succeq0$ but $\vec{b}\notin R(A)$.
+
+Decompose
+
+\[
+\vec{b} = \vec{v}_1 + \vec{v}_2
+\]
+
+where
+
+\[
+\vec{v}_1 \in R(A), \quad \vec{v}_2 \in N(A).
+\]
+
+Choose $\vec{x}=t\vec{v}_2$.
+
+
+\[
+f(t\vec{v}_2)
+=
+t^2 \vec{v}_2^T A \vec{v}_2
+-
+2t \vec{b}^T \vec{v}_2.
+\]
+
+Since $A\vec{v}_2=0$,
+
+\[
+f(t\vec{v}_2) = -2t \vec{b}^T \vec{v}_2.
+\]
+
+But
+
+\[
+\vec{b}^T\vec{v}_2 = \vec{v}_2^T\vec{v}_2 >0.
+\]
+
+Thus
+
+\[
+f(t\vec{v}_2) \to -\infty
+\]
+
+as $t\to\infty$.
+Therefore
+$ p^\star = -\infty. $
+
+\bigskip
+
+\textbf{(e)}
+
+The constraint is
+
+\[
+\vec{x}^T\vec{x} \ge 1.
+\]
+
+Rewrite as
+
+\[
+1-\vec{x}^T\vec{x} \le 0.
+\]
+
+The Lagrangian is
+
+\[
+L(\vec{x},\lambda)
+=
+\vec{x}^T A \vec{x}
+-2\vec{b}^T\vec{x}
++\lambda(1-\vec{x}^T\vec{x})
+\]
+
+\[
+=
+\vec{x}^T(A-\lambda I)\vec{x}
+-2\vec{b}^T\vec{x}
++\lambda.
+\]
+
+\bigskip
+
+\textbf{(f)}
+
+The dual function is
+
+\[
+g(\lambda)=\min_{\vec{x}} L(\vec{x},\lambda).
+\]
+
+If $A-\lambda I \not\succeq 0$, the quadratic is unbounded below, so
+
+\[
+g(\lambda)=-\infty.
+\]
+
+If $A-\lambda I\succeq0$, set the gradient to zero:
+
+\[
+2(A-\lambda I)\vec{x}-2\vec{b}=0.
+\]
+
+Thus
+
+\[
+(A-\lambda I)\vec{x}=\vec{b}.
+\]
+
+A solution exists only if
+
+\[
+\vec{b}\in R(A-\lambda I).
+\]
+
+The minimizing solution is
+
+\[
+\vec{x}=(A-\lambda I)^\dagger \vec{b}.
+\]
+
+Substitute into $L$:
+
+\[
+g(\lambda)
+=
+-\vec{b}^T (A-\lambda I)^\dagger \vec{b}
++\lambda.
+\]
+
+Thus the dual problem is
+
+\[
+d^\star =
+\max_{\lambda\ge0}
+\;
+-\vec{b}^T (A-\lambda I)^\dagger \vec{b} + \lambda
+\]
+
+subject to
+
+\[
+A-\lambda I\succeq0, \qquad \vec{b}\in R(A-\lambda I).
+\]
+
+%----------------------------------------------------------------------------------------
+
+\newpage
+\section*{Problem 3. Minimizing a Sum of Logarithms}
+
+Consider the following problem, which arises in estimation of transition probabilities of a discrete-time Markov chain:
+
+\[
+p^\star = \max_{\vec{x}\in\mathbb{R}^n} \sum_{i=1}^n \alpha_i \log(x_i)
+\]
+
+\[
+\text{s.t. } \vec{x} \ge 0, \quad \mathbf{1}^T \vec{x} = c,
+\]
+
+where $c > 0$ and $\alpha_i > 0$, $i = 1, \dots, n$. (Recall that if $\vec{x}$ is a vector then by “$\vec{x} \ge 0$” we mean “$x_i \ge 0$ for each $i$.”) We will determine in closed-form a minimizer, and show that the optimal objective value of this problem is
+
+\[
+p^\star = \alpha \log(c/\alpha) + \sum_{i=1}^n \alpha_i \log(\alpha_i),
+\]
+
+where
+\[
+\alpha := \sum_{i=1}^n \alpha_i.
+\]
+
+We will show this in a series of steps.
+
+\begin{enumerate}
+
+\item[(a)] First, express the problem as a minimization problem which has optimal value $p^\star_{\min}$.
+
+\item[(b)] In optimization, we often “relax” problems of the form 
+\[
+p^\star_{\min} = \min_{\vec{x}\in X} f_0(\vec{x}),
+\]
+i.e., replacing the constraint set $X$ with a larger constraint set $X_r$, and instead solving
+\[
+p^\star_r = \min_{\vec{x}\in X_r} f_0(\vec{x}),
+\]
+then showing a connection between $p^\star_{\min}$ and $p^\star_r$.
+
+In this problem, a particular relaxation we will use is to replace the equality constraint $\mathbf{1}^T \vec{x} = c$ with an inequality constraint $\mathbf{1}^T \vec{x} \le c$.
+
+Show that the relaxed problem has the same optimal value as the original problem, i.e., $p^\star_r = p^\star_{\min}$, and the two problems have the same solutions.
+
+Hint: First argue that $p^\star_r \le p^\star_{\min}$. Then, suppose for the sake of contradiction that $p^\star_r < p^\star_{\min}$. Let $\vec{x}_r$ be a solution to the relaxed minimization problem which has objective value $p^\star_r$. Consider the vector $\vec{x}$ given by
+
+\[
+\vec{x} :=
+\begin{bmatrix}
+c - \mathbf{1}^T \vec{x}_r + x_{r1} \\
+x_{r2} \\
+\vdots \\
+x_{rn}
+\end{bmatrix}.
+\]
+
+Show that $\vec{x}$ is feasible for the original problem and has objective value $< p^\star_r$. Argue that this implies $p^\star_{\min} < p^\star_r$ and derive a contradiction. Finally, argue that any solution to the relaxed problem is a solution to the original problem, and vice-versa — you might need to use a construction similar to $\vec{x}$.
+
+\item[(c)] After relaxing the equality constraint to an inequality constraint, form the Lagrangian $L(\vec{x}, \vec{\lambda}, \mu)$ for the relaxed minimization problem, where $\lambda_i$ is the dual variable corresponding to the inequality $x_i \ge 0$, and $\mu$ is the dual variable corresponding to the inequality constraint $\mathbf{1}^T \vec{x} \le c$.
+
+\item[(d)] Now derive the dual function $g(\vec{\lambda}, \mu)$ for the relaxed minimization problem, and solve the dual problem
+
+\[
+d^\star_r = \max_{\vec{\lambda} \ge 0,\, \mu \ge 0} g(\vec{\lambda}, \mu).
+\]
+
+What are the optimal dual variables $\vec{\lambda}^\star, \mu^\star$?
+
+\item[(e)] Show that strong duality holds for the relaxed problem, so $p^\star_r = d^\star_r$.
+
+\item[(f)] From the $\vec{\lambda}^\star, \mu^\star$ obtained in the previous part, how do we obtain the optimal primal variable $\vec{x}^\star$? What is the optimal objective function value $p^\star_r$? Finally, what is $p^\star$?
+
+\end{enumerate}
+
+\subsection*{Answer}
+
+\textbf{(a)}
+
+\[
+p^\star_{\min}
+=
+\min_{\vec{x}} -\sum_{i=1}^n \alpha_i \log(x_i)
+\]
+
+subject to
+
+\[
+\vec{x} \ge 0, \qquad \mathbf{1}^T\vec{x} = c.
+\]
+
+Thus
+
+\[
+p^\star_{\min} = -p^\star.
+\]
+
+\textbf{(b)}
+
+Let the relaxed optimal value be $p_r^\star$.
+
+Since the relaxed problem has a larger feasible set,
+
+\[
+p_r^\star \le p_{\min}^\star.
+\]
+
+Assume for contradiction that
+
+\[
+p_r^\star < p_{\min}^\star.
+\]
+
+Let $\vec{x}_r$ be the optimal solution of the relaxed problem.
+
+Define
+
+\[
+\vec{x} =
+\begin{bmatrix}
+c - \mathbf{1}^T\vec{x}_r + x_{r1} \\
+x_{r2} \\
+\vdots \\
+x_{rn}
+\end{bmatrix}.
+\]
+
+Then
+
+\[
+\mathbf{1}^T\vec{x} = c,
+\]
+
+so $\vec{x}$ is feasible for the original problem.
+
+Since $\log(x)$ is increasing, increasing one component increases the objective of the maximization problem (or decreases the minimization objective). Therefore
+
+\[
+-\sum_i \alpha_i\log(x_i) < -\sum_i \alpha_i\log(x_{ri}) = p_r^\star,
+\]
+
+which implies
+
+\[
+p_{\min}^\star < p_r^\star,
+\]
+
+a contradiction.
+
+Thus
+
+\[
+p_r^\star = p_{\min}^\star,
+\]
+
+and both problems share the same solutions.
+
+\bigskip
+
+\textbf{(c)}
+
+The relaxed minimization problem is
+
+\[
+\min_{\vec{x}} -\sum_{i=1}^n \alpha_i\log(x_i)
+\]
+
+subject to
+
+\[
+x_i \ge 0, \qquad \mathbf{1}^T\vec{x} \le c.
+\]
+
+The Lagrangian is
+
+\[
+L(\vec{x},\vec{\lambda},\mu)
+=
+-\sum_{i=1}^n \alpha_i\log(x_i)
+-
+\sum_{i=1}^n \lambda_i x_i
++
+\mu(\mathbf{1}^T\vec{x}-c),
+\]
+
+where
+
+\[
+\lambda_i \ge 0, \qquad \mu \ge 0.
+\]
+
+\bigskip
+
+\textbf{(d)}
+
+The dual function is
+
+\[
+g(\vec{\lambda},\mu)
+=
+\inf_{\vec{x}} L(\vec{x},\vec{\lambda},\mu).
+\]
+
+Rearranging,
+
+\[
+L
+=
+-\sum_i \alpha_i\log(x_i)
++
+\sum_i (\mu-\lambda_i)x_i
+-
+\mu c.
+\]
+
+Minimize with respect to $x_i$:
+
+\[
+\frac{\partial L}{\partial x_i}
+=
+-\frac{\alpha_i}{x_i} + \mu - \lambda_i = 0.
+\]
+
+Thus
+
+\[
+x_i = \frac{\alpha_i}{\mu - \lambda_i}.
+\]
+
+Substitute into $L$:
+
+\[
+g(\lambda,\mu)
+=
+-\sum_i \alpha_i\log\!\left(\frac{\alpha_i}{\mu-\lambda_i}\right)
++
+\sum_i \alpha_i
+-
+\mu c.
+\]
+
+Maximizing this with $\lambda_i \ge 0$ yields the optimum at
+
+\[
+\lambda_i^\star = 0.
+\]
+
+Then
+
+\[
+x_i = \frac{\alpha_i}{\mu}.
+\]
+
+Using the constraint
+
+\[
+\mathbf{1}^T x = c,
+\]
+
+we obtain
+
+\[
+\frac{1}{\mu}\sum_i \alpha_i = c.
+\]
+
+Let
+
+\[
+\alpha = \sum_i \alpha_i.
+\]
+
+Thus
+
+\[
+\mu^\star = \frac{\alpha}{c}.
+\]
+
+\bigskip
+
+\textbf{(e)}
+
+The objective $-\sum \alpha_i\log(x_i)$ is convex and the constraints are linear.
+
+Since there exists a strictly feasible point (e.g., $x_i = c/n >0$), Slater's condition holds.
+
+Therefore strong duality holds:
+
+\[
+p_r^\star = d_r^\star.
+\]
+
+\bigskip
+
+\textbf{(f)}
+
+Using the optimal dual variables,
+
+\[
+x_i^\star = \frac{\alpha_i}{\mu^\star}
+= \frac{c\alpha_i}{\alpha}.
+\]
+
+\[
+p^\star
+=
+\sum_i \alpha_i
+\log\!\left(\frac{c\alpha_i}{\alpha}\right).
+\]
+
+Expanding,
+
+\[
+p^\star
+=
+\sum_i \alpha_i
+\left(
+\log(c/\alpha) + \log(\alpha_i)
+\right).
+\]
+
+Thus
+
+\[
+p^\star
+=
+\alpha\log(c/\alpha)
++
+\sum_{i=1}^n \alpha_i\log(\alpha_i),
+\]
+
+where
+
+\[
+\alpha = \sum_i \alpha_i.
+\]
+
+This matches the stated optimal objective value.
+%----------------------------------------------------------------------------------------
+
+\newpage
+\section*{Problem 4. Lagrangian Dual of a QP}
+
+
+Consider the convex quadratic program
+
+\[
+\min_{\vec{x}} \frac{1}{2}\vec{x}^TQ\vec{x}
+\]
+
+subject to
+
+\[
+A\vec{x} \le \vec{b}
+\]
+
+where $Q\succ0$.
+
+\begin{enumerate}
+\item[(a)] Write the Lagrangian $L(\vec{x},\vec{\lambda})$.
+
+\item[(b)] Write the Lagrangian dual function $g(\vec{\lambda})$.
+
+\item[(c)] Show the dual problem is convex by writing it in standard QP form. Is the Lagrangian dual problem convex in general?
+\end{enumerate}
+
+\subsection*{Answer}
+
+\textbf{(a)}
+
+\[
+L(\vec{x},\vec{\lambda})
+=
+\frac{1}{2}\vec{x}^T Q \vec{x}
++
+\vec{\lambda}^T(A\vec{x}-\vec{b}).
+\]
+
+\bigskip
+
+\textbf{(b)}
+
+The dual function is
+
+\[
+g(\vec{\lambda}) = \inf_{\vec{x}} L(\vec{x},\vec{\lambda}).
+\]
+
+First rewrite the Lagrangian:
+
+\[
+L(\vec{x},\vec{\lambda})
+=
+\frac{1}{2}\vec{x}^T Q \vec{x}
++
+\vec{\lambda}^T A \vec{x}
+-
+\vec{\lambda}^T \vec{b}.
+\]
+
+Minimize with respect to $\vec{x}$.  
+Take the gradient:
+
+\[
+\nabla_x L = Q\vec{x} + A^T\vec{\lambda}.
+\]
+
+Set to zero:
+
+\[
+Q\vec{x} + A^T\vec{\lambda} = 0.
+\]
+
+Since $Q \succ 0$, it is invertible:
+
+\[
+\vec{x}^\star = -Q^{-1}A^T\vec{\lambda}.
+\]
+
+Substitute into the Lagrangian:
+
+\[
+g(\vec{\lambda})
+=
+\frac{1}{2}(-Q^{-1}A^T\vec{\lambda})^T
+Q
+(-Q^{-1}A^T\vec{\lambda})
++
+\vec{\lambda}^T A (-Q^{-1}A^T\vec{\lambda})
+-
+\vec{\lambda}^T\vec{b}.
+\]
+
+Simplifying,
+
+\[
+g(\vec{\lambda})
+=
+-\frac{1}{2}\vec{\lambda}^T A Q^{-1} A^T \vec{\lambda}
+-
+\vec{\lambda}^T \vec{b}.
+\]
+
+Thus the dual problem is
+
+\[
+\max_{\vec{\lambda} \ge 0}
+\;
+-\frac{1}{2}\vec{\lambda}^T A Q^{-1} A^T \vec{\lambda}
+-
+\vec{\lambda}^T \vec{b}.
+\]
+
+\bigskip
+
+\textbf{(c)}
+
+The dual problem can be written equivalently as a minimization problem:
+
+\[
+\min_{\vec{\lambda} \ge 0}
+\frac{1}{2}\vec{\lambda}^T A Q^{-1} A^T \vec{\lambda}
++
+\vec{\lambda}^T \vec{b}.
+\]
+
+This has the standard quadratic program form
+
+\[
+\min_{\vec{\lambda}}
+\frac{1}{2}\vec{\lambda}^T P \vec{\lambda} + \vec{b}^T\vec{\lambda}
+\]
+
+subject to
+
+\[
+\vec{\lambda} \ge 0,
+\]
+
+where
+
+\[
+P = A Q^{-1} A^T.
+\]
+
+Since $Q \succ 0$, we have $Q^{-1} \succ 0$, and therefore
+
+\[
+A Q^{-1} A^T \succeq 0.
+\]
+
+Thus the Hessian matrix $H$ is positive semidefinite, which means the dual problem is a convex quadratic program.
+
+In general, the Lagrangian dual problem is always convex, even if the primal problem is not convex.
+
+%----------------------------------------------------------------------------------------
+
+\newpage
+\section*{Problem 5. Dual of the Dual of a Linear Program}
+
+
+Consider the linear program
+
+\[
+\min_{\vec{x}} \vec{c}^T\vec{x}
+\]
+
+subject to
+
+\[
+A\vec{x}= \vec{b},\quad \vec{x}\ge0.
+\]
+
+\begin{enumerate}
+\item[(a)] Formulate the Lagrangian and write the dual problem (without $\vec{x}$).
+
+\item[(b)] Express the dual as an equivalent minimization problem. Find the dual of this minimization problem (dual of the dual) and compare it to the original LP.
+\end{enumerate}
+
+\subsection*{Answer}
+
+\textbf{(a)}
+
+The primal linear program is
+
+\[
+\min_{\vec{x}} \vec{c}^T\vec{x}
+\]
+
+subject to
+
+\[
+A\vec{x} = \vec{b}, \qquad \vec{x} \ge 0.
+\]
+
+Introduce dual variables:
+\[
+\vec{y} \in \mathbb{R}^m \quad \text{for } A\vec{x}=b,
+\]
+\[
+\vec{\lambda} \ge 0 \quad \text{for } x \ge 0.
+\]
+
+The Lagrangian is
+
+\[
+L(\vec{x},\vec{y},\vec{\lambda})
+=
+\vec{c}^T\vec{x}
++
+\vec{y}^T(A\vec{x}-\vec{b})
+-
+\vec{\lambda}^T\vec{x}.
+\]
+
+Rearranging,
+
+\[
+L
+=
+(c + A^T y - \lambda)^T x - y^T b.
+\]
+
+The dual function is
+
+\[
+g(y,\lambda) = \inf_x L(x,y,\lambda).
+\]
+
+If
+
+\[
+c + A^T y - \lambda \neq 0
+\]
+
+then the problem is unbounded. Therefore we require
+
+\[
+c + A^T y - \lambda = 0.
+\]
+
+Thus
+
+\[
+\lambda = c + A^T y.
+\]
+
+Since $\lambda \ge 0$,
+
+\[
+c + A^T y \ge 0.
+\]
+
+The dual function becomes
+
+\[
+g(y) = -b^T y.
+\]
+
+Thus the dual problem is
+
+\[
+\max_y -b^T y
+\]
+
+subject to
+
+\[
+A^T y + c \ge 0.
+\]
+
+Equivalently,
+
+\[
+\max_y \; b^T(-y)
+\quad
+\text{s.t. } A^T(-y) \le c
+\]
+
+which is the standard LP dual form.
+
+\textbf{(b)}
+
+Rewrite the dual as an equivalent minimization problem by negating the objective:
+
+\[
+\min_y b^T y
+\]
+
+subject to
+
+\[
+A^T y + c \ge 0.
+\]
+
+Introduce dual variables $\vec{x} \ge 0$ corresponding to the constraint
+
+\[
+A^T y + c \ge 0.
+\]
+
+The Lagrangian is
+
+\[
+L(y,x)
+=
+b^T y + x^T(-A^T y - c).
+\]
+
+Rearranging,
+
+\[
+L
+=
+(b - A x)^T y - c^T x.
+\]
+
+The dual function is finite only if
+
+\[
+b - A x = 0.
+\]
+
+Thus
+
+\[
+Ax = b.
+\]
+
+Substituting,
+
+\[
+g(x) = -c^T x.
+\]
+
+Therefore the dual of the dual is
+
+\[
+\max_x -c^T x
+\]
+
+subject to
+
+\[
+Ax = b, \quad x \ge 0.
+\]
+
+Multiplying the objective by $-1$ gives
+
+\[
+\min_x c^T x
+\]
+
+subject to
+
+\[
+Ax = b, \quad x \ge 0.
+\]
+
+This is exactly the original primal linear program.
+
+Thus, the dual of the dual of a linear program is the original linear program.
+
+%----------------------------------------------------------------------------------------
+
+\section*{Problem 6. Homework Process}
+
+
+With whom did you work on this homework? List the names and SIDs of your group members.
+
+NOTE: If you didn’t work with anyone, you can put “none”.
+
+\subsection*{Answer}
+none
+%----------------------------------------------------------------------------------------
+
+\end{document}
